@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable() // rest api이므로 csrf 보안이 필요없으므로 disable처리.
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt token으로 인증하므로 세션은 필요없으므로 생성안함.
                 .and()
+                .formLogin().disable() // 폼 기반 로그인 비활성화
                 .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")

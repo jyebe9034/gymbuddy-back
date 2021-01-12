@@ -11,4 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AnonymousController {
 
     private final AnonymousService anonymousService;
+
+   // 어느 시점에 비회원의 회원아이디를 생성해 주느냐에 대한 문제가 있음..
+   // 장바구니에 넣으려는 상황에서 즉석에서 아이디를 발급해서 넣어주는게 가능할지..?
+
 }
