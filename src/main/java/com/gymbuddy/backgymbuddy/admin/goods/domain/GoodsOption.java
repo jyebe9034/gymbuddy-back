@@ -7,26 +7,25 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class Goods extends BaseDomain {
+public class GoodsOption extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "goods_id")
+    @Column(name = "goods_option_id")
     private Long id;
 
     /**
-     * 굿즈 이름
+     * 색상
      */
-    private String goodsName;
+    private String color;
 
     /**
-     * 이미지 경로
+     * 사이즈
      */
-    private String imgPath;
+    private String size;
 
     /**
-     * 이미지 이름
+     * 재고
      */
-    private String imgName;
-
+    private String inventory;
 }
