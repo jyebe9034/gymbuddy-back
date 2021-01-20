@@ -58,10 +58,9 @@ public class NewsController {
 
     /**
      * 대외뉴스 삭제
-     * @param no 삭제할 글번호
      */
-    @GetMapping("/deleteNews/{no}")
-    public Map<String, Object> deleteNews(@PathVariable("no") int no) {
+    @GetMapping("/deleteNews")
+    public Map<String, Object> deleteNews(@RequestParam Map<String, Object> param) {
         return null;
     }
 }

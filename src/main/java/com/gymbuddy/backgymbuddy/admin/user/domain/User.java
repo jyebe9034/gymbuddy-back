@@ -1,5 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.user.domain;
 
+import com.gymbuddy.backgymbuddy.admin.base.Address;
+import com.gymbuddy.backgymbuddy.admin.cart.domain.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
 //    private String userId;
@@ -38,6 +42,12 @@ public class User implements UserDetails {
 //    private String phone;
 //
 //    private String grade;
+
+    @Embedded
+    private Address address;
+
+    @OneToMany(mappedBy = "user")
+    private List<Cart> cartList = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

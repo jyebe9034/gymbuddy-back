@@ -33,6 +33,14 @@ public class ReviewController {
     }
 
     /**
+     * 후기 삭제(관리자)
+     */
+    @GetMapping("/deleteReviewByAdmin")
+    public Map<String, Object> deleteReviewByAdmin(@RequestParam Map<String, Object> param) {
+        return null;
+    }
+
+    /**
      * 메인에 넣을 후기 설정
      */
     @PostMapping("/updateReviewForMain")

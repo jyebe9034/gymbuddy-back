@@ -58,10 +58,9 @@ public class NoticeController {
 
     /**
      * 공지사항 삭제
-     * @param no 삭제할 글번호
      */
-    @GetMapping("/deleteNotice/{no}")
-    public Map<String, Object> deleteNotice(@PathVariable("no") int no) {
+    @GetMapping("/deleteNotice")
+    public Map<String, Object> deleteNotice(@RequestParam Map<String, Object> param) {
         return null;
     }
 

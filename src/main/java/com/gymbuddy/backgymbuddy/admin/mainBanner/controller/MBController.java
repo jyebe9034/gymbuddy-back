@@ -51,10 +51,9 @@ public class MBController {
 
     /**
      * 메인 베너 삭제
-     * @param no 삭제할 글번호
      */
-    @GetMapping("/deleteMainBanner/{no}")
-    public Map<String, Object> deleteMainBanner(@PathVariable("no") int no) {
+    @GetMapping("/deleteMainBanner")
+    public Map<String, Object> deleteMainBanner(@RequestParam Map<String, Object> param) {
         return null;
     }
 }

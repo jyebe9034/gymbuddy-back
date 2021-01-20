@@ -34,6 +34,14 @@ public class QuestionController {
     }
 
     /**
+     * 1:1문의 삭제(관리자)
+     */
+    @GetMapping("/deleteQuestionByAdmin")
+    public Map<String, Object> deleteQuestionByAdmin(@RequestParam Map<String, Object> param) {
+        return null;
+    }
+
+    /**
      * 1:1문의 등록(사용자)
      */
     @PostMapping("/newQuestion")

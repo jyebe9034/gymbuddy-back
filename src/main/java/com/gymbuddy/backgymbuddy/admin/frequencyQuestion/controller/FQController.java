@@ -50,10 +50,9 @@ public class FQController {
 
     /**
      * 자주묻는질문 삭제
-     * @param no 삭제할 글번호
      */
-    @GetMapping("/deleteFq/{no}")
-    public Map<String, Object> deleteFq(@PathVariable("no") int no) {
+    @GetMapping("/deleteFq")
+    public Map<String, Object> deleteFq(@RequestParam Map<String, Object> param) {
         return null;
     }
 }
