@@ -4,6 +4,7 @@ import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -11,12 +12,13 @@ public class History extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "history_id")
     private Long id;
 
     @Column
-    private String historyDate;
+    private LocalDateTime historyDate;
 
-    @Column
+    @Column(length = 150)
     private String title;
 
 }

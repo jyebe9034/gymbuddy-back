@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.review.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.review.domain.Review;
 import com.gymbuddy.backgymbuddy.admin.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class ReviewController {
+public class ReviewController extends BaseController {
 
     private final ReviewService reviewService;
 

@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.history.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
 import com.gymbuddy.backgymbuddy.admin.history.service.HistoryService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class HistoryController {
+public class HistoryController extends BaseController {
 
     private final HistoryService historyService;
 

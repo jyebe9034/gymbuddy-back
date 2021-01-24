@@ -1,27 +1,27 @@
-package com.gymbuddy.backgymbuddy.admin.mainBanner.controller;
+package com.gymbuddy.backgymbuddy.admin.banner.controller;
 
-import com.gymbuddy.backgymbuddy.admin.mainBanner.domain.MainBanner;
-import com.gymbuddy.backgymbuddy.admin.mainBanner.service.MBService;
+import com.gymbuddy.backgymbuddy.admin.banner.domain.Banner;
+import com.gymbuddy.backgymbuddy.admin.banner.service.BannerService;
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class MBController {
+public class BannerController extends BaseController {
 
-    private final MBService mbService;
+    private final BannerService bannerService;
 
     /**
      * 메인 배너 조회
      */
     @GetMapping("/mainBannerList")
-    public List<MainBanner> selectMainBannerList() {
+    public List<Banner> selectMainBannerList() {
         return null;
     }
 

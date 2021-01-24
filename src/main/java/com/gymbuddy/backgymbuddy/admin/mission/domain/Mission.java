@@ -17,9 +17,20 @@ public class Mission extends BaseDomain {
     private String contents;
 
     @Column
-    private String imgPath;
+    private String imgPath1;
 
     @Column
-    private String imgName;
+    private String imgName1;
 
+    @Column
+    private String imgPath2;
+
+    @Column
+    private String imgName2;
+
+    @Column
+    private String imgPath3;
+
+    @Column
+    private String imgName3;
 }

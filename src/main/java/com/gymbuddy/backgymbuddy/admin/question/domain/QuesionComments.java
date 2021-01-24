@@ -3,18 +3,19 @@ package com.gymbuddy.backgymbuddy.admin.question.domain;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 @Data
-public class Question {
+public class QuesionComments {
 
-    @Id
+    @Id @GeneratedValue
     private Long id;
+
+    private Long question_id;
 
     private String title;
 
     private String contents;
-
-    // TODO 이미지 경로 추가
 }

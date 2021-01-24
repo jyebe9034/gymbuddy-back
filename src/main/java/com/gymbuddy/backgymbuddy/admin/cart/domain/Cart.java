@@ -17,4 +17,11 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    private Long program_id;
+
+    private Long goods_id;
+
+    private int count;
+
 }

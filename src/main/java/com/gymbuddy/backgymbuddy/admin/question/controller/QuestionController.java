@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.question.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
 import com.gymbuddy.backgymbuddy.admin.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class QuestionController {
+public class QuestionController extends BaseController {
 
     private final QuestionService questionService;
 

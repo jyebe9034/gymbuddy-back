@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.frequencyQuestion.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain.FreqeuncyQuestion;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.service.FQService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class FQController {
+public class FQController extends BaseController {
 
     private final FQService fqService;
 

@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.user.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.user.domain.User;
 import com.gymbuddy.backgymbuddy.admin.user.repository.UserRepository;
 import com.gymbuddy.backgymbuddy.security.JwtTokenProvider;
@@ -15,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class UserController extends BaseController {
 
 //    private final UserService userService;
 
@@ -39,7 +40,7 @@ public class UserController {
     /**
      * 로그인
      */
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     public String login(@RequestBody Map<String, Object> user, HttpServletResponse response) {
         User member = userRepository.findByEmail((String) user.get("email"))
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));

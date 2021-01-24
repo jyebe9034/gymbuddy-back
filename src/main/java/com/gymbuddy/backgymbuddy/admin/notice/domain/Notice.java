@@ -16,6 +16,8 @@ public class Notice extends BaseDomain {
     @Column
     private String title;
 
+    private String categoryId;
+
     @Column
     private String contents;
 
@@ -24,4 +26,6 @@ public class Notice extends BaseDomain {
 
     @Column
     private String imgName;
+
+    private String mainYn;
 }

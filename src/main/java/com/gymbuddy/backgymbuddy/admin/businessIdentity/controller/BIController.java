@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.businessIdentity.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.businessIdentity.service.BIService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class BIController {
+public class BIController extends BaseController {
 
     private final BIService biService;
 

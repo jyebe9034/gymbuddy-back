@@ -1,14 +1,16 @@
 package com.gymbuddy.backgymbuddy.admin.program.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
+import com.gymbuddy.backgymbuddy.admin.base.Product;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Program extends BaseDomain {
+public class Program extends Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,15 +46,5 @@ public class Program extends BaseDomain {
      * 내용
      */
     private String contents;
-
-    /**
-     * 이미지 경로
-     */
-    private String imgPath;
-
-    /**
-     * 이미지 이름
-     */
-    private String imgName;
 
 }

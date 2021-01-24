@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.news.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.news.domain.News;
 import com.gymbuddy.backgymbuddy.admin.news.service.NewsService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class NewsController {
+public class NewsController extends BaseController {
 
     private final NewsService newsService;
 

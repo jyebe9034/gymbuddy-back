@@ -20,9 +20,14 @@ public class News extends BaseDomain {
     private String contents;
 
     @Column
+    private String categoryId;
+
+    @Column
     private String imgPath;
 
     @Column
     private String imgName;
+
+    private String mainYn;
 
 }

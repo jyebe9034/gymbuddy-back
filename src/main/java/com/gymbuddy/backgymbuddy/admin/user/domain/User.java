@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private Long id;
 
-//    private String userId;
+//    private String identity;
 
     @Column(length = 100, nullable = false, unique = true)
     private String email;
@@ -41,13 +40,15 @@ public class User implements UserDetails {
 //
 //    private String phone;
 //
-//    private String grade;
+//    private Grade grade;
 
-    @Embedded
-    private Address address;
+//    @Embedded
+//    private Address address;
 
-    @OneToMany(mappedBy = "user")
-    private List<Cart> cartList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    private List<Cart> cartList = new ArrayList<>();
+
+    private String agreeYn;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

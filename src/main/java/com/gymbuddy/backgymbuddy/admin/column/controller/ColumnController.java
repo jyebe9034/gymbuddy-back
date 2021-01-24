@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.column.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.column.domain.Column;
 import com.gymbuddy.backgymbuddy.admin.column.service.ColumnService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class ColumnController {
+public class ColumnController extends BaseController {
 
     private final ColumnService columnService;
 

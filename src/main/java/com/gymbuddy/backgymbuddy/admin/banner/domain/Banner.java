@@ -1,4 +1,4 @@
-package com.gymbuddy.backgymbuddy.admin.mainBanner.domain;
+package com.gymbuddy.backgymbuddy.admin.banner.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class MainBanner extends BaseDomain {
+public class Banner extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -15,14 +15,9 @@ public class GoodsOption extends BaseDomain {
     private Long id;
 
     /**
-     * 색상
+     * 색상 & 사이즈
      */
-    private String color;
-
-    /**
-     * 사이즈
-     */
-    private String size;
+    private String colorAndSize;
 
     /**
      * 재고

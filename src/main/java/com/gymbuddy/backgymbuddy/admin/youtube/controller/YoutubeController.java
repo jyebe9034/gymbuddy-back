@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.youtube.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
 import com.gymbuddy.backgymbuddy.admin.youtube.service.YoutubeService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class YoutubeController {
+public class YoutubeController extends BaseController {
 
     private final YoutubeService youtubeService;
 

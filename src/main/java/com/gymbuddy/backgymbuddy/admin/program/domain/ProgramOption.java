@@ -15,14 +15,9 @@ public class ProgramOption extends BaseDomain {
     private Long id;
 
     /**
-     * 클래스가 열리는 날짜
+     * 클래스가 열리는 날짜 & 시간
      */
-    private String classDate;
-
-    /**
-     * 클래스가 열리는 시간
-     */
-    private String classTime;
+    private String classDateTime;
 
     /**
      * 인원수

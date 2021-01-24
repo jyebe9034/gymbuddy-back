@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.mission.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.mission.service.MissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class MissionController {
+public class MissionController extends BaseController {
 
     private final MissionService missionService;
 

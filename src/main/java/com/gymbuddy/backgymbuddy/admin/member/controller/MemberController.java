@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.member.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.member.domain.Member;
 import com.gymbuddy.backgymbuddy.admin.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberController extends BaseController {
 
     private final MemberService memberService;
 

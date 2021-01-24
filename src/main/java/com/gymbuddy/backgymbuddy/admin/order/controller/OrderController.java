@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.order.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.order.domain.Order;
 import com.gymbuddy.backgymbuddy.admin.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class OrderController {
+public class OrderController extends BaseController {
 
     private final OrderService orderService;
 

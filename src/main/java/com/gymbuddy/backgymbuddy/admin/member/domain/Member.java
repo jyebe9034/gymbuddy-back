@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.member.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
+import com.gymbuddy.backgymbuddy.admin.base.WebMobile;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,5 +19,7 @@ public class Member extends BaseDomain {
 
     @Column
     private String imgName;
+
+    private WebMobile webOrMobile;
 
 }

@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.term.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.term.domain.Term;
 import com.gymbuddy.backgymbuddy.admin.term.service.TermService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class TermController {
+public class TermController extends BaseController {
 
     private final TermService termService;
 

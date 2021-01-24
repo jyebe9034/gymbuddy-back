@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.cart.controller;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.cart.domain.Cart;
 import com.gymbuddy.backgymbuddy.admin.cart.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class CartController {
+public class CartController extends BaseController {
 
     private final CartService cartService;
 
