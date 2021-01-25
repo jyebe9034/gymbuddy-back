@@ -1,24 +1,32 @@
-package com.gymbuddy.backgymbuddy.admin.notice.domain;
+package com.gymbuddy.backgymbuddy.admin.column.domain;
 
-import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
+import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
-public class Notice extends BaseDomain {
+public class Columns {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notice_id")
+    @Column(name = "column_id")
     private Long id;
+
+    @Column
+    private int counts;
 
     @Column(length = 100)
     private String title;
 
     @Column
     private String contents;
+
+    @OneToMany(mappedBy = "columns")
+    private List<ColumnWriter> columnWriters = new ArrayList<>();
 
     @Column(length = 20)
     private String categoryId;

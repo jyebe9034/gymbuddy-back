@@ -10,9 +10,10 @@ public class Newsletter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "newsletter_id")
     private Long id;
 
-    @Column
+    @Column(length = 300)
     private String email;
 
 }

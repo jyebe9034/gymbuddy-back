@@ -12,15 +12,16 @@ public class BusinessIdentity extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "business_identity_id")
     private Long id;
 
-    @Column
+    @Column(length = 300)
     private String imgPath;
 
-    @Column
+    @Column(length = 50)
     private String imgName;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private WebMobile webOrMobile;
 
 }

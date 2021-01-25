@@ -1,7 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.order.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
-import com.gymbuddy.backgymbuddy.admin.order.domain.Order;
+import com.gymbuddy.backgymbuddy.admin.order.domain.Orders;
 import com.gymbuddy.backgymbuddy.admin.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class OrderController extends BaseController {
      * @param userId 해당 유저 아이디
      */
     @GetMapping("/orderDetail/{userId}")
-    public List<Order> selectOrderListByUserId(@PathVariable String userId) {
+    public List<Orders> selectOrderListByUserId(@PathVariable String userId) {
         return null;
     }
 

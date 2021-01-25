@@ -17,12 +17,13 @@ public class ProgramOption extends BaseDomain {
     /**
      * 클래스가 열리는 날짜 & 시간
      */
+    @Column(length = 200)
     private String classDateTime;
 
     /**
      * 인원수
      */
-    private String userCount;
-
+    @Column
+    private int userCount;
 
 }

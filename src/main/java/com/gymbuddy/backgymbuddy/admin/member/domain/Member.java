@@ -12,14 +12,16 @@ public class Member extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
-    @Column
+    @Column(length = 300)
     private String imgPath;
 
-    @Column
+    @Column(length = 50)
     private String imgName;
 
+    @Enumerated(EnumType.STRING)
     private WebMobile webOrMobile;
 
 }

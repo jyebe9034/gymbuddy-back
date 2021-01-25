@@ -17,10 +17,12 @@ public class GoodsOption extends BaseDomain {
     /**
      * 색상 & 사이즈
      */
+    @Column(length = 300)
     private String colorAndSize;
 
     /**
      * 재고
      */
-    private String inventory;
+    @Column
+    private int inventory;
 }

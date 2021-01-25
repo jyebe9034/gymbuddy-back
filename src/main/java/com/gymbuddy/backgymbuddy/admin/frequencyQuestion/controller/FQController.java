@@ -1,7 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.frequencyQuestion.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
-import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain.FreqeuncyQuestion;
+import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain.FrequencyQuestion;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.service.FQService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class FQController extends BaseController {
      * 전체 자주묻는질문 조회
      */
     @GetMapping("/allFq")
-    public List<FreqeuncyQuestion> selectFQList() {
+    public List<FrequencyQuestion> selectFQList() {
         return null;
     }
 

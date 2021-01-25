@@ -1,7 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.column.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
-import com.gymbuddy.backgymbuddy.admin.column.domain.Column;
+import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
 import com.gymbuddy.backgymbuddy.admin.column.service.ColumnService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class ColumnController extends BaseController {
      * 전체 칼럼 조회
      */
     @GetMapping("/allColumn")
-    public List<Column> selectColumnList() {
+    public List<Columns> selectColumnList() {
         return null;
     }
 

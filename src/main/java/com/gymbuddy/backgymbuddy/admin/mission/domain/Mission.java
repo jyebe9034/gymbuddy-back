@@ -11,26 +11,27 @@ public class Mission extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mission_id")
     private Long id;
 
     @Column
     private String contents;
 
-    @Column
+    @Column(length = 300)
     private String imgPath1;
 
-    @Column
+    @Column(length = 50)
     private String imgName1;
 
-    @Column
+    @Column(length = 300)
     private String imgPath2;
 
-    @Column
+    @Column(length = 50)
     private String imgName2;
 
-    @Column
+    @Column(length = 300)
     private String imgPath3;
 
-    @Column
+    @Column(length = 50)
     private String imgName3;
 }

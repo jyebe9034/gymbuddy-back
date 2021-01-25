@@ -9,26 +9,26 @@ import javax.persistence.*;
 @Data
 public class Banner extends BaseDomain {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "banner_id")
     private Long id;
 
-    @Column
+    @Column(length = 100)
     private String title;
 
-    @Column
+    @Column(length = 20)
     private String categoryId;
 
-    @Column
+    @Column(length = 500)
     private String link;
 
-    @Column
+    @Column(length = 20)
     private String btnTitle;
 
-    @Column
+    @Column(length = 300)
     private String imgPath;
 
-    @Column
+    @Column(length = 50)
     private String imgName;
 
 }

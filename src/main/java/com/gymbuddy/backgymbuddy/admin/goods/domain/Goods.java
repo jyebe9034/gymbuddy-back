@@ -2,6 +2,7 @@ package com.gymbuddy.backgymbuddy.admin.goods.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import com.gymbuddy.backgymbuddy.admin.base.Product;
+import com.gymbuddy.backgymbuddy.admin.cart.domain.Cart;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.math.BigInteger;
 
 @Entity
 @Data
+@DiscriminatorValue("GODDS")
 public class Goods extends Product {
 
     @Id
@@ -20,4 +22,8 @@ public class Goods extends Product {
      * 굿즈 이름
      */
     private String goodsName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 }

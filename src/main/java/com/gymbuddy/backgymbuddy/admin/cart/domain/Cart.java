@@ -1,9 +1,12 @@
 package com.gymbuddy.backgymbuddy.admin.cart.domain;
 
+import com.gymbuddy.backgymbuddy.admin.goods.domain.Goods;
+import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
 import com.gymbuddy.backgymbuddy.admin.user.domain.User;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,10 +21,13 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Long program_id;
+    @OneToMany(mappedBy = "cart")
+    private List<Program> programs;
 
-    private Long goods_id;
+    @OneToMany(mappedBy = "cart")
+    private List<Goods> goods;
 
+    @Column
     private int count;
 
 }

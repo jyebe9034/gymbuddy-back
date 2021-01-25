@@ -11,23 +11,25 @@ public class News extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "news_id")
     private Long id;
 
-    @Column
+    @Column(length = 100)
     private String title;
 
     @Column
     private String contents;
 
-    @Column
+    @Column(length = 20)
     private String categoryId;
 
-    @Column
+    @Column(length = 300)
     private String imgPath;
 
-    @Column
+    @Column(length = 50)
     private String imgName;
 
+    @Column(length = 1)
     private String mainYn;
 
 }
