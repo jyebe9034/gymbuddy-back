@@ -5,14 +5,23 @@ package com.gymbuddy.backgymbuddy.admin.base;
  */
 public final class Constants {
 
+    /** 관리자만 접근 가능한 API 경로 PREFIX */
+    public static final String ADMIN_AUTH = "/api/admin";
+
+    /** 회원만 접근 가능한 API 경로 PREFIX */
+    public static final String USER_AUTH = "/api/user";
+
     /** 메인 배너 API 경로 PREFIX */
     public static final String BANNER_PREFIX = "/api/banner";
 
     /** BI API 경로 PREFIX */
     public static final String BI_PREFIX = "/api/businessIdentity";
 
-    /** 장바구니 API 경로 PREFIX */
-    public static final String CART_PREFIX = "/api/cart";
+    /** 관리자 장바구니 API 경로 PREFIX */
+    public static final String ADMIN_CART_PREFIX = ADMIN_AUTH + "/cart";
+
+    /** 회원 장바구니 API 경로 PREFIX */
+    public static final String USER_CART_PREFIX = USER_AUTH + "/cart";
 
     /** 컬럼 API 경로 PREFIX */
     public static final String COLUMN_PREFIX = "/api/column";
@@ -50,17 +59,17 @@ public final class Constants {
     /** 프로그램 API 경로 PREFIX */
     public static final String PROGRAM_PREFIX = "/api/program";
 
-    /** 1:1 문의 API 경로 PREFIX */
-    public static final String QUESTION_PREFIX = "/api/question";
+    /** 관리자 1:1 문의 API 경로 PREFIX */
+    public static final String ADMIN_QUESTION_PREFIX = ADMIN_AUTH + "/question";
+
+    /** 회원 1:1 문의 API 경로 PREFIX */
+    public static final String USER_QUESTION_PREFIX = USER_AUTH + "/question";
 
     /** 후기 API 경로 PREFIX */
     public static final String REVIEW_PREFIX = "/api/review";
 
     /** 약관 API 경로 PREFIX */
     public static final String TERM_PREFIX = "/api/term";
-
-    /** 회원 API 경로 PREFIX */
-    public static final String USER_PREFIX = "/api/user";
 
     /** 유튜브 API 경로 PREFIX */
     public static final String YOUTUBE_PREFIX = "/api/youtube";

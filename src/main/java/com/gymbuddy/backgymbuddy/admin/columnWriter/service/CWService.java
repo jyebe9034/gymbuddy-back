@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -17,11 +18,33 @@ public class CWService {
 
     private final CWRepository CWRepository;
 
-    public List<ColumnWriter> selectColumnWriterList() {
+    public List<ColumnWriter> findAll() {
         return CWRepository.findAll();
     }
 
-    public ColumnWriter selectColumnWriterDetail(Long columnWriterId) {
-        return CWRepository.findById(columnWriterId).get();
+    public ColumnWriter findOne(Long id) {
+        return CWRepository.findById(id).get();
+    }
+
+    @Transactional
+    public Long save(ColumnWriter columnWriter) {
+        CWRepository.save(columnWriter);
+        return columnWriter.getId();
+    }
+
+    @Transactional
+    public void update(Long id, String contents) {
+        ColumnWriter columnWriter = CWRepository.findById(id).get();
+        columnWriter.setContents(contents);
+    }
+
+    @Transactional
+    public int delete(List<Long> ids) {
+        Long deletedCount = CWRepository.deleteByIdIn(ids); // 삭제된 row 수
+        if (ids.size() == deletedCount.intValue()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }
