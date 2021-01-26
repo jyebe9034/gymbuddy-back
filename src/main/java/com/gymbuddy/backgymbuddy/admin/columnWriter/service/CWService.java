@@ -16,32 +16,33 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CWService {
 
-    private final CWRepository CWRepository;
+    private final CWRepository cwRepository;
 
     public List<ColumnWriter> findAll() {
-        return CWRepository.findAll();
+        return cwRepository.findAll();
     }
 
     public ColumnWriter findOne(Long id) {
-        return CWRepository.findById(id).get();
+        // TODO Optional일 경우 null이면 customException을 날리도록 해야함..나중에 할 것.
+        return cwRepository.findById(id).get();
     }
 
     @Transactional
     public Long save(ColumnWriter columnWriter) {
-        CWRepository.save(columnWriter);
+        cwRepository.save(columnWriter);
         return columnWriter.getId();
     }
 
     @Transactional
     public void update(Long id, String contents) {
-        ColumnWriter columnWriter = CWRepository.findById(id).get();
+        ColumnWriter columnWriter = cwRepository.findById(id).get();
         columnWriter.setContents(contents);
     }
 
     @Transactional
     public int delete(List<Long> ids) {
-        Long deletedCount = CWRepository.deleteByIdIn(ids); // 삭제된 row 수
-        if (ids.size() == deletedCount.intValue()) {
+        Long deletedRows = cwRepository.deleteByIdIn(ids); // 삭제된 row 수
+        if (ids.size() == deletedRows.intValue()) {
             return 1;
         } else {
             return 0;
