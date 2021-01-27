@@ -5,63 +5,93 @@ import com.gymbuddy.backgymbuddy.admin.news.domain.News;
 import com.gymbuddy.backgymbuddy.admin.news.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.NEWS_PREFIX;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class NewsController extends BaseController {
 
+    private final String URI_PREFIX = NEWS_PREFIX;
+
     private final NewsService newsService;
 
     /**
      * 전체 대외뉴스 조회(관리자)
      */
-    @GetMapping("/allNews")
-    public List<News> selectNewsList() {
-        return null;
+    @GetMapping(URI_PREFIX + "/all")
+    public ResponseEntity<List<News>> selectNewsList() {
+        return createResponseEntity(true, newsService.findAll());
     }
 
     /**
-     * 메인 노출 대외뉴스 조회
+     * 메인 노출 대외뉴스 조회(최근 5개만)
      */
-    @GetMapping("/mainNews")
-    public List<News> selectMainNewsList() {
-        return null;
+    @GetMapping(URI_PREFIX + "/mainAll")
+    public ResponseEntity<List<News>> selectMainNewsList() {
+        return createResponseEntity(true, newsService.findAllForMain());
     }
 
     /**
      * 대외뉴스 상세
      */
-    @GetMapping("/newsDetail/{no}")
-    public Map<String, Object> selectNewsDetail(@PathVariable("no") int no) {
-        return null;
+    @GetMapping(URI_PREFIX + "/detail/{id}")
+    public ResponseEntity<News> selectNewsDetail(@PathVariable("id") Long id) {
+        log.info("대외뉴스 아이디로 조회: {}", id);
+        return createResponseEntity(true, newsService.findOne(id));
     }
 
     /**
      * 대외뉴스 등록
      */
-    @PostMapping("/newNews")
-    public Map<String, Object> insertNews(@RequestBody Map<String, Object> param) {
-        return null;
+    @PostMapping(URI_PREFIX + "/new")
+    public ResponseEntity<Map<String, Object>> insertNews(@RequestBody News news) {
+        log.info("대외뉴스 등록: {}", news);
+        Long id = newsService.save(news);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", id);
+        return createResponseEntity(true, result);
     }
 
     /**
      * 대외뉴스 수정
      */
-    @PostMapping("/updateNews")
-    public Map<String, Object> updateNews(@RequestBody Map<String, Object> param) {
-        return null;
+    @PutMapping(URI_PREFIX + "/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateNews(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
+        log.info("대외뉴스 수정 - id: {}, param: {}", id, param);
+        String title = Objects.toString(param.get("title"));
+        String contents = Objects.toString(param.get("contents"));
+        newsService.update(id, title, contents);
+        News findNews = newsService.findOne(id);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", findNews.getId());
+        result.put("title", findNews.getTitle());
+        result.put("contents", findNews.getContents());
+        return createResponseEntity(true, result);
     }
+
+    // TODO 이미지 추가 및 삭제 로직 필요
 
     /**
      * 대외뉴스 삭제
      */
-    @GetMapping("/deleteNews")
-    public Map<String, Object> deleteNews(@RequestParam Map<String, Object> param) {
-        return null;
+    @DeleteMapping(URI_PREFIX + "/delete")
+    public ResponseEntity<Map<String, Object>> deleteNews(@RequestParam List<Long> ids) {
+        log.info("대외뉴스 삭제: {}", ids.toString());
+        int deleteResult = newsService.delete(ids);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", deleteResult);
+        return createResponseEntity(true, result);
     }
 }

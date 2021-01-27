@@ -30,8 +30,7 @@ public class CWController extends BaseController {
      */
     @GetMapping(URI_PREFIX + "/all")
     public ResponseEntity<List<ColumnWriter>> selectColumnWriterList() {
-        List<ColumnWriter> list = cwService.findAll();
-        return createResponseEntity(true, list);
+        return createResponseEntity(true, cwService.findAll());
     }
 
     /**
@@ -39,9 +38,8 @@ public class CWController extends BaseController {
      */
     @GetMapping(URI_PREFIX + "/detail/{id}")
     public ResponseEntity<ColumnWriter> selectColumnWriterDetail(@PathVariable("id") Long id) {
-        log.info("칼럼 작성자 아이디로 조회 : {}", id);
-        ColumnWriter result = cwService.findOne(id);
-        return createResponseEntity(true, result);
+        log.info("칼럼 작성자 아이디로 조회: {}", id);
+        return createResponseEntity(true, cwService.findOne(id));
     }
 
     /**
@@ -49,7 +47,7 @@ public class CWController extends BaseController {
      */
     @PostMapping(URI_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertColumnWriter(@RequestBody ColumnWriter columnWriter) {
-        log.info("컬럼 작성자 등록 : {}", columnWriter);
+        log.info("컬럼 작성자 등록: {}", columnWriter);
         Long id = cwService.save(columnWriter);
 
         Map<String, Object> result = new HashMap<>();

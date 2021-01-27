@@ -29,8 +29,7 @@ public class BannerController extends BaseController {
      */
     @GetMapping(URI_PREFIX + "/all")
     public ResponseEntity<List<Banner>> selectMainBannerList() {
-        List<Banner> list = bannerService.findAll();
-        return createResponseEntity(true, list);
+        return createResponseEntity(true, bannerService.findAll());
     }
 
     /**
@@ -38,9 +37,8 @@ public class BannerController extends BaseController {
      */
     @GetMapping(URI_PREFIX + "/detail/{id}")
     public ResponseEntity<Banner> selectMainBannerDetail(@PathVariable("id") Long id) {
-        log.info("메인 배너 아이디로 조회 : {}", id);
-        Banner result = bannerService.findOne(id);
-        return createResponseEntity(true, result);
+        log.info("메인 배너 아이디로 조회: {}", id);
+        return createResponseEntity(true, bannerService.findOne(id));
     }
 
     /**
@@ -48,7 +46,7 @@ public class BannerController extends BaseController {
      */
     @PostMapping(URI_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertMainBanner(@RequestBody Banner banner) {
-        log.info("메인 배너 등록 : {}", banner);
+        log.info("메인 배너 등록: {}", banner);
         Long id = bannerService.save(banner);
 
         Map<String, Object> result = new HashMap<>();

@@ -43,8 +43,7 @@ public class BannerService {
         Long deletedRows = bannerRepository.deleteByIdIn(ids);
         if (ids.size() == deletedRows.intValue()) {
             return 1;
-        } else {
-            return 0;
         }
+        return 0;
     }
 }

@@ -44,8 +44,7 @@ public class CWService {
         Long deletedRows = cwRepository.deleteByIdIn(ids); // 삭제된 row 수
         if (ids.size() == deletedRows.intValue()) {
             return 1;
-        } else {
-            return 0;
         }
+        return 0;
     }
 }
