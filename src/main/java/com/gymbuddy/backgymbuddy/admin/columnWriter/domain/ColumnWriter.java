@@ -1,9 +1,12 @@
 package com.gymbuddy.backgymbuddy.admin.columnWriter.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,7 +26,7 @@ public class ColumnWriter {
     @Column
     private String contents;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "column_id")
-    private Columns columns;
+    @JsonIgnore
+    @OneToMany(mappedBy = "columnWriter", cascade = CascadeType.ALL)
+    private List<Columns> columns = new ArrayList<>();
 }

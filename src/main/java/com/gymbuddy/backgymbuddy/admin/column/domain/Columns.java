@@ -1,11 +1,14 @@
 package com.gymbuddy.backgymbuddy.admin.column.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Data
@@ -25,8 +28,10 @@ public class Columns {
     @Column
     private String contents;
 
-    @OneToMany(mappedBy = "columns")
-    private List<ColumnWriter> columnWriters = new ArrayList<>();
+    @JsonIgnore
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "column_writer_id")
+    private ColumnWriter columnWriter;
 
     @Column(length = 20)
     private String categoryId;

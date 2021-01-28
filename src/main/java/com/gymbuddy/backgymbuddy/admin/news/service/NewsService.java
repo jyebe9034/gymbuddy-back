@@ -49,8 +49,8 @@ public class NewsService {
 
     @Transactional
     public int delete(List<Long> ids) {
-        Long deletedRow = newsRepository.deleteByIdIn(ids);
-        if (ids.size() == deletedRow.intValue()) {
+        Long deletedRows = newsRepository.deleteByIdIn(ids);
+        if (ids.size() == deletedRows.intValue()) {
             return 1;
         }
         return 0;

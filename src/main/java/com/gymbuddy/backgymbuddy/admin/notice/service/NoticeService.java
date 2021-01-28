@@ -48,8 +48,8 @@ public class NoticeService {
 
     @Transactional
     public int delete(List<Long> ids) {
-        Long deletedRow = noticeRepository.deleteByIdIn(ids);
-        if (ids.size() == deletedRow.intValue()) {
+        Long deletedRows = noticeRepository.deleteByIdIn(ids);
+        if (ids.size() == deletedRows.intValue()) {
             return 1;
         }
         return 0;
