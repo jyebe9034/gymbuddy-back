@@ -27,9 +27,9 @@ public class NewsController extends BaseController {
     /**
      * 전체 대외뉴스 조회(관리자)
      */
-    @GetMapping(URI_PREFIX + "/all")
-    public ResponseEntity<List<News>> selectNewsList() {
-        return createResponseEntity(true, newsService.findAll());
+    @GetMapping(URI_PREFIX + "/all/{page}")
+    public ResponseEntity<List<News>> selectNewsList(@PathVariable("page") int page) {
+        return createResponseEntity(true, newsService.findAll(page));
     }
 
     /**

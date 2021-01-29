@@ -28,9 +28,9 @@ public class ColumnController extends BaseController {
     /**
      * 전체 칼럼 조회
      */
-    @GetMapping(URI_PREFIX + "/all")
-    public ResponseEntity<List<Columns>> selectColumnList() {
-        return createResponseEntity(true, columnService.findAll());
+    @GetMapping(URI_PREFIX + "/all/{page}")
+    public ResponseEntity<List<Columns>> selectColumnList(@PathVariable("page") int page) {
+        return createResponseEntity(true, columnService.findAll(page));
     }
 
     /**

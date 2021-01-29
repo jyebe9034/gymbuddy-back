@@ -27,9 +27,9 @@ public class NoticeController extends BaseController {
     /**
      * 전체 공지사항 조회(관리자)
      */
-    @GetMapping(URI_PREFIX + "/all")
-    public ResponseEntity<List<Notice>> selectNoticeList() {
-        return createResponseEntity(true, noticeService.findAll());
+    @GetMapping(URI_PREFIX + "/all/{page}")
+    public ResponseEntity<List<Notice>> selectNoticeList(@PathVariable("page") int page) {
+        return createResponseEntity(true, noticeService.findAll(page));
     }
 
     /**

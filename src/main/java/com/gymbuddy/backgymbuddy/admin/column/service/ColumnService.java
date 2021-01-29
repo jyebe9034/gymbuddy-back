@@ -5,6 +5,7 @@ import com.gymbuddy.backgymbuddy.admin.column.repository.ColumnRepository;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,8 @@ public class ColumnService {
 
     private final ColumnRepository columnRepository;
 
-    public List<Columns> findAll() {
-        return columnRepository.findAll();
+    public List<Columns> findAll(int page) {
+        return columnRepository.findAll(PageRequest.of(page, 10)).getContent();
     }
 
     public Columns findOne(Long id) {

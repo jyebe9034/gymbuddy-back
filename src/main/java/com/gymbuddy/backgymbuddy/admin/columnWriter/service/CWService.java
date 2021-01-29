@@ -4,6 +4,7 @@ import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.repository.CWRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,8 @@ public class CWService {
 
     private final CWRepository cwRepository;
 
-    public List<ColumnWriter> findAll() {
-        return cwRepository.findAll();
+    public List<ColumnWriter> findAll(int page) {
+        return cwRepository.findAll(PageRequest.of(page, 10)).getContent();
     }
 
     public ColumnWriter findOne(Long id) {

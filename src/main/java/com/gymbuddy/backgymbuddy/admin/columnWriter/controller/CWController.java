@@ -28,9 +28,9 @@ public class CWController extends BaseController {
     /**
      * 전체 칼럼 작성자 조회
      */
-    @GetMapping(URI_PREFIX + "/all")
-    public ResponseEntity<List<ColumnWriter>> selectColumnWriterList() {
-        return createResponseEntity(true, cwService.findAll());
+    @GetMapping(URI_PREFIX + "/all/{page}")
+    public ResponseEntity<List<ColumnWriter>> selectColumnWriterList(@PathVariable("page") int page) {
+        return createResponseEntity(true, cwService.findAll(page));
     }
 
     /**

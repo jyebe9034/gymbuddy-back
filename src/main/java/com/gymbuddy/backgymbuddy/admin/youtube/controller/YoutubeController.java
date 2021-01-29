@@ -5,6 +5,8 @@ import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
 import com.gymbuddy.backgymbuddy.admin.youtube.service.YoutubeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +29,12 @@ public class YoutubeController extends BaseController {
     /**
      * 전체 유튜브 조회
      */
-    @GetMapping(URI_PREFIX + "/all")
-    public ResponseEntity<List<Youtube>> selectYoutubeList() {
-        return createResponseEntity(true, youtubeService.findAll());
+    @GetMapping(URI_PREFIX + "/all/{page}")
+    public ResponseEntity<List<Youtube>> selectYoutubeList(@PathVariable("page") int page) {
+        return createResponseEntity(true, youtubeService.findAll(page));
     }
+
+    // TODO 홈화면 쪽에서 어떻게 보여주는지? 최신 9개만 보여주면 되는지 아니면 3개씩 나눠서 콜할건지?
 
     /**
      * 유튜브 상세조회

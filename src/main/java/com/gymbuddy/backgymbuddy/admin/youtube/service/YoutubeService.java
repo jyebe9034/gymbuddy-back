@@ -4,6 +4,8 @@ import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
 import com.gymbuddy.backgymbuddy.admin.youtube.repository.YoutubeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +19,8 @@ public class YoutubeService {
 
     private final YoutubeRepository youtubeRepository;
 
-    public List<Youtube> findAll() {
-        return youtubeRepository.findAll();
+    public List<Youtube> findAll(int page) {
+        return youtubeRepository.findAll(PageRequest.of(page, 10)).getContent();
     }
 
     public Youtube findOne(Long id) {

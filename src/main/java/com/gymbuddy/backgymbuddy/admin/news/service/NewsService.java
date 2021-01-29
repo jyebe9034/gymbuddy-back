@@ -4,6 +4,7 @@ import com.gymbuddy.backgymbuddy.admin.news.domain.News;
 import com.gymbuddy.backgymbuddy.admin.news.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +21,8 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
 
-    public List<News> findAll() {
-        return newsRepository.findAll();
+    public List<News> findAll(int page) {
+        return newsRepository.findAll(PageRequest.of(page, 10)).getContent();
     }
 
     public List<News> findAllForMain() {

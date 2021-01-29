@@ -4,6 +4,7 @@ import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import com.gymbuddy.backgymbuddy.admin.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +20,8 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
 
-    public List<Notice> findAll() {
-        return noticeRepository.findAll();
+    public List<Notice> findAll(int page) {
+        return noticeRepository.findAll(PageRequest.of(page, 10)).getContent();
     }
 
     public List<Notice> findAllForMain() {
