@@ -5,14 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Data
 public abstract class BaseDomain {
-
-    @Id
-    @GeneratedValue
-    private Long id;
 
     private LocalDateTime createDate;
 

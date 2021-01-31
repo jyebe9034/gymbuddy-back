@@ -6,20 +6,21 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "review_comment")
 @Data
-public class ReviewComments extends BaseDomain {
+public class ReviewComment extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_comments_id")
+    @Column(name = "review_comment_id")
     private Long id;
 
-    @OneToOne(mappedBy = "reviewComments", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "reviewComment", fetch = FetchType.LAZY)
     private Review review;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String contents;
 }

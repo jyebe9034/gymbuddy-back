@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "member")
 @Data
 public class Member extends BaseDomain {
 
@@ -15,10 +16,10 @@ public class Member extends BaseDomain {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(length = 300)
+    @Column(length = 300, nullable = false)
     private String imgPath;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String imgName;
 
     @Enumerated(EnumType.STRING)

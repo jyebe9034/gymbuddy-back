@@ -11,6 +11,7 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
+@Table(name = "columns")
 @Data
 public class Columns {
 
@@ -22,10 +23,10 @@ public class Columns {
     @Column
     private int counts;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String contents;
 
     @JsonIgnore
@@ -33,15 +34,15 @@ public class Columns {
     @JoinColumn(name = "column_writer_id")
     private ColumnWriter columnWriter;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private String categoryId;
 
-    @Column(length = 300)
+    @Column(length = 300, nullable = false)
     private String imgPath;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String imgName;
 
-    @Column(length = 1)
+    @Column(length = 1, nullable = false)
     private String mainYn;
 }

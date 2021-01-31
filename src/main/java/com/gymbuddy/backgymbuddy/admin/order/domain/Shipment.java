@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "shipment")
 @Data
 public class Shipment {
 
@@ -14,10 +15,10 @@ public class Shipment {
     @Column(name = "shipment_id")
     private Long id;
 
-    @Column(length = 30)
+    @Column(length = 30, nullable = false)
     private String name;
 
-    @Column(length = 15)
+    @Column(length = 15, nullable = false)
     private String phone;
 
     @Embedded

@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "news")
 @Data
 public class News extends BaseDomain {
 
@@ -14,13 +15,13 @@ public class News extends BaseDomain {
     @Column(name = "news_id")
     private Long id;
 
-    @Column(length = 100)
+    @Column(length = 100,nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String contents;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private String categoryId;
 
     @Column(length = 300)
@@ -29,7 +30,7 @@ public class News extends BaseDomain {
     @Column(length = 50)
     private String imgName;
 
-    @Column(length = 1)
+    @Column(length = 1, nullable = false)
     private String mainYn;
 
 }

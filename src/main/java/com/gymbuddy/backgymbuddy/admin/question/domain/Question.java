@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "question")
 @Data
 public class Question {
 
@@ -13,10 +14,10 @@ public class Question {
     @Column(name = "question_id")
     private Long id;
 
-    @Column(length = 300)
+    @Column(length = 100, nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String contents;
 
     @Column(length = 300)
@@ -38,6 +39,6 @@ public class Question {
     private String imgName3;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "question_comments_id")
-    private QuestionComments questionComments;
+    @JoinColumn(name = "question_comment_id")
+    private QuestionComment questionComment;
 }

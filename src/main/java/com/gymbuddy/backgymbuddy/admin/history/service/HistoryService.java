@@ -1,6 +1,5 @@
 package com.gymbuddy.backgymbuddy.admin.history.service;
 
-import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BusinessIdentity;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
 import com.gymbuddy.backgymbuddy.admin.history.repository.HistoryRepository;
 import lombok.RequiredArgsConstructor;
