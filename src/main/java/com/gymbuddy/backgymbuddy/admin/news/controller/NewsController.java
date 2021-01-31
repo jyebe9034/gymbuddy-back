@@ -68,8 +68,8 @@ public class NewsController extends BaseController {
     @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateNews(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
         log.info("대외뉴스 수정 - id: {}, param: {}", id, param);
-        String title = Objects.toString(param.get("title"));
-        String contents = Objects.toString(param.get("contents"));
+        String title = Objects.toString(param.get("title") == null ? "" : param.get("title"));
+        String contents = Objects.toString(param.get("contents") == null ? "" : param.get("contents"));
         newsService.update(id, title, contents);
         News findNews = newsService.findOne(id);
 
@@ -86,12 +86,12 @@ public class NewsController extends BaseController {
      * 대외뉴스 삭제
      */
     @DeleteMapping(URI_PREFIX + "/delete")
-    public ResponseEntity<Map<String, Object>> deleteNews(@RequestParam List<Long> ids) {
-        log.info("대외뉴스 삭제: {}", ids.toString());
-        int deleteResult = newsService.delete(ids);
+    public ResponseEntity<Map<String, Object>> deleteNews(@RequestParam List<Integer> ids) {
+        log.info("대외뉴스 삭제: {}", ids);
+        newsService.delete(ids);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result", deleteResult);
+        result.put("result", 0);
         return createResponseEntity(true, result);
     }
 }

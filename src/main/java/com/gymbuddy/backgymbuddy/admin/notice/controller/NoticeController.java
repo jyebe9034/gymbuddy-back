@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.NOTICE_PREFIX;
 
@@ -68,8 +65,8 @@ public class NoticeController extends BaseController {
     @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateNotice(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
         log.info("공지사항 수정 - id: {}, param: {}", id, param);
-        String title = Objects.toString(param.get("title"));
-        String contents = Objects.toString(param.get("contents"));
+        String title = Objects.toString(param.get("title") == null ? "" : param.get("title"));
+        String contents = Objects.toString(param.get("contents") == null ? "" : param.get("contents"));
         noticeService.update(id, title, contents);
         Notice findNotice = noticeService.findOne(id);
 
@@ -86,13 +83,12 @@ public class NoticeController extends BaseController {
      * 공지사항 삭제
      */
     @DeleteMapping(URI_PREFIX + "/delete")
-    public ResponseEntity<Map<String, Object>> deleteNotice(@RequestParam List<Long> ids) {
-        log.info("공지사항 삭제: {}", ids.toString());
-        int deleteResult = noticeService.delete(ids);
+    public ResponseEntity<Map<String, Object>> deleteNotice(@RequestBody List<Integer> ids) {
+        log.info("공지사항 삭제: {}", ids);
+        noticeService.delete(ids);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result", deleteResult);
+        result.put("result", 0);
         return createResponseEntity(true, result);
     }
-
 }

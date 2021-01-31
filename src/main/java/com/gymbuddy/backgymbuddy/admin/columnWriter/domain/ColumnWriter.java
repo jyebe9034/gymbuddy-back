@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "column_writer")
 @Data
 public class ColumnWriter {
 
@@ -17,13 +18,13 @@ public class ColumnWriter {
     @Column(name = "column_writer_id")
     private Long id;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String name;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String job;
 
-    @Column
+    @Column(nullable = false)
     private String contents;
 
     @JsonIgnore

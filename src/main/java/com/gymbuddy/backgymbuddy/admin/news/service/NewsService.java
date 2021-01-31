@@ -44,16 +44,19 @@ public class NewsService {
     @Transactional
     public void update(Long id, String title, String contents) {
         News news = newsRepository.findById(id).get();
-        news.setTitle(title);
-        news.setContents(contents);
+        if (!"".equals(title)) {
+            news.setTitle(title);
+        }
+        if (!"".equals(contents)) {
+            news.setContents(contents);
+        }
     }
 
     @Transactional
-    public int delete(List<Long> ids) {
-        Long deletedRows = newsRepository.deleteByIdIn(ids);
-        if (ids.size() == deletedRows.intValue()) {
-            return 1;
+    public void delete(List<Integer> ids) {
+        for (int id : ids) {
+            long idL = new Long(id);
+            newsRepository.deleteById(idL);
         }
-        return 0;
     }
 }

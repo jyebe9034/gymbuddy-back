@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "banner")
 @Data
 public class Banner extends BaseDomain {
 
@@ -13,10 +14,10 @@ public class Banner extends BaseDomain {
     @Column(name = "banner_id")
     private Long id;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false, unique = true)
     private String title;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private String categoryId;
 
     @Column(length = 500)
@@ -25,10 +26,10 @@ public class Banner extends BaseDomain {
     @Column(length = 20)
     private String btnTitle;
 
-    @Column(length = 300)
+    @Column(length = 300, nullable = false)
     private String imgPath;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String imgName;
 
 }

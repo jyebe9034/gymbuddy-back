@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
+@Table(name = "user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,26 +29,58 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private Long id;
 
-//    private String identity;
+    /**
+     * 아이디
+     */
+    @Column(length = 20, nullable = false, unique = true)
+    private String identity;
 
+    /**
+     * 이메일
+     */
     @Column(length = 100, nullable = false, unique = true)
     private String email;
 
-    @Column(length = 300, nullable = false)
+    /**
+     * 비밀번호
+     */
+    @Column(length = 200, nullable = false)
     private String password;
 
-//    private String name;
-//
-//    private String phone;
-//
-//    private Grade grade;
+    /**
+     * 이름
+     */
+    @Column(length = 30, nullable = false)
+    private String name;
 
-//    @Embedded
-//    private Address address;
+    /**
+     * 전화번호
+     */
+    @Column(length = 15, nullable = false)
+    private String phone;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Cart> cartList = new ArrayList<>();
+    /**
+     * 회원등급
+     */
+    @Column(length = 10, nullable = false)
+    private Grade grade;
 
+    /**
+     * 주소
+     */
+    @Embedded
+    private Address address;
+
+    /**
+     * 장바구니
+     */
+    @OneToMany(mappedBy = "user")
+    private List<Cart> cartList = new ArrayList<>();
+
+    /**
+    * 광고 및 뉴스레터 수신동의
+     */
+    @Column(length = 1, nullable = false)
     private String agreeYn;
 
     @ElementCollection(fetch = FetchType.EAGER)

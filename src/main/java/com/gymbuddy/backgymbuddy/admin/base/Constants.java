@@ -53,6 +53,9 @@ public final class Constants {
     /** 공지사항 API 경로 PREFIX */
     public static final String NOTICE_PREFIX = "/api/notice";
 
+    /** 공지사항 API 경로 PREFIX */
+    public static final String ADMIN_NOTICE_PREFIX = ADMIN_AUTH + "/notice";
+
     /** 주문 API 경로 PREFIX */
     public static final String ORDER_PREFIX = "/api/order";
 

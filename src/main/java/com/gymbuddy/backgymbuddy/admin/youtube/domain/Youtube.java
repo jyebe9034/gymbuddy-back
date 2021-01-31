@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "youtube")
 @Data
 public class Youtube {
 
@@ -18,25 +19,25 @@ public class Youtube {
     @Column
     private String uploadDate;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String contents;
 
-    @Column(length = 500)
+    @Column(length = 500, nullable = false)
     private String link;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private String categoryId;
 
-    @Column(length = 300)
+    @Column(length = 300, nullable = false)
     private String imgPath;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String imgName;
 
-    @Column(length = 1)
+    @Column(length = 1, nullable = false)
     private String mainYn;
 
 }

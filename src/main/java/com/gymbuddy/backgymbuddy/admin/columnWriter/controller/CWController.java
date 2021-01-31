@@ -3,7 +3,6 @@ package com.gymbuddy.backgymbuddy.admin.columnWriter.controller;
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.service.CWService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
