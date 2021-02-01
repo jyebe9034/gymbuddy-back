@@ -65,9 +65,7 @@ public class NoticeController extends BaseController {
     @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateNotice(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
         log.info("공지사항 수정 - id: {}, param: {}", id, param);
-        String title = Objects.toString(param.get("title") == null ? "" : param.get("title"));
-        String contents = Objects.toString(param.get("contents") == null ? "" : param.get("contents"));
-        noticeService.update(id, title, contents);
+        noticeService.update(id, param);
         Notice findNotice = noticeService.findOne(id);
 
         Map<String, Object> result = new HashMap<>();

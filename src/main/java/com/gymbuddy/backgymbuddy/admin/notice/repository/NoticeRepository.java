@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
 
-    Long deleteByIdIn(List<Long> ids);
 }

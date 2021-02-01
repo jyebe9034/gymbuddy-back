@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -32,18 +34,24 @@ public class ColumnService {
         return columns.getId();
     }
 
-    public void update(Long id, String title, String contents, ColumnWriter columnWriter) {
+    public void update(Long id, Map<String, Object> param) {
         Columns columns = columnRepository.findById(id).get();
-        columns.setTitle(title);
-        columns.setContents(contents);
-        columns.setColumnWriter(columnWriter);
+        if (param.get("title") != null) {
+            columns.setTitle(Objects.toString(param.get("title")));
+        }
+        if (param.get("contents") != null) {
+            columns.setTitle(Objects.toString(param.get("contents")));
+        }
+        // 컬럼 작성자의 정보를 꼭 다 넘겨야 하는지..
+        if (param.get("columnWriter") != null) {
+            columns.setColumnWriter((ColumnWriter) param.get("columnWriter"));
+        }
     }
 
-    public int delete(List<Long> ids) {
-        Long deletedRows = columnRepository.deleteByIdIn(ids);
-        if (ids.size() == deletedRows.intValue()) {
-            return 1;
+    public void delete(List<Integer> ids) {
+        for (int id : ids) {
+            long idL = new Long(id);
+            columnRepository.deleteById(idL);
         }
-        return 0;
     }
 }

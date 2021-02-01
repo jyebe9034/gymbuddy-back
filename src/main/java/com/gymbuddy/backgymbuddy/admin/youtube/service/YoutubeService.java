@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -34,20 +36,27 @@ public class YoutubeService {
     }
 
     @Transactional
-    public void update(Long id, String uploadDate, String title, String contents, String link) {
+    public void update(Long id, Map<String, Object> param) {
         Youtube youtube = youtubeRepository.findById(id).get();
-        youtube.setUploadDate(uploadDate);
-        youtube.setTitle(title);
-        youtube.setContents(contents);
-        youtube.setLink(link);
+        if (param.get("uploadDate") != null) {
+            youtube.setUploadDate(Objects.toString(param.get("uploadDate")));
+        }
+        if (param.get("title") != null) {
+            youtube.setTitle(Objects.toString(param.get("title")));
+        }
+        if (param.get("contents") != null) {
+            youtube.setContents(Objects.toString(param.get("contents")));
+        }
+        if (param.get("link") != null) {
+            youtube.setLink(Objects.toString(param.get("link")));
+        }
     }
 
     @Transactional
-    public int delete(List<Long> ids) {
-        Long deletedRows = youtubeRepository.deleteByIdIn(ids);
-        if (ids.size() == deletedRows.intValue()) {
-            return 1;
+    public void delete(List<Integer> ids) {
+        for (int id : ids) {
+            long idL = new Long(id);
+            youtubeRepository.deleteById(idL);
         }
-        return 0;
     }
 }

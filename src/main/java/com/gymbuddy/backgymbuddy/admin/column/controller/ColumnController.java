@@ -61,10 +61,7 @@ public class ColumnController extends BaseController {
     @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateColumn(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
         log.info("컬럼 수정 - id: {}, param: {}", id, param);
-        String title = Objects.toString(param.get("title"));
-        String contents = Objects.toString(param.get("contents"));
-        ColumnWriter columnWriter = (ColumnWriter) param.get("columnWriter");
-        columnService.update(id, title, contents, columnWriter);
+        columnService.update(id, param);
         Columns findColumn = columnService.findOne(id);
 
         Map<String, Object> result = new HashMap<>();
@@ -78,12 +75,12 @@ public class ColumnController extends BaseController {
      * 칼럼 삭제
      */
     @DeleteMapping(URI_PREFIX + "/delete")
-    public ResponseEntity<Map<String, Object>> deleteColumn(@RequestParam List<Long> ids) {
+    public ResponseEntity<Map<String, Object>> deleteColumn(@RequestBody List<Integer> ids) {
         log.info("컬럼 삭제: {}", ids);
-        int deleteResult = columnService.delete(ids);
+        columnService.delete(ids);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result", deleteResult);
+        result.put("result", 0);
         return createResponseEntity(true, result);
     }
 }

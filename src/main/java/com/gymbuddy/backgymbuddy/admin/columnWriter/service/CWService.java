@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -34,17 +36,18 @@ public class CWService {
     }
 
     @Transactional
-    public void update(Long id, String contents) {
+    public void update(Long id, Map<String, Object> param) {
         ColumnWriter columnWriter = cwRepository.findById(id).get();
-        columnWriter.setContents(contents);
+        if (param.get("contents") != null) {
+            columnWriter.setContents(Objects.toString(param.get("contents")));
+        }
     }
 
     @Transactional
-    public int delete(List<Long> ids) {
-        Long deletedRows = cwRepository.deleteByIdIn(ids); // 삭제된 row 수
-        if (ids.size() == deletedRows.intValue()) {
-            return 1;
+    public void delete(List<Integer> ids) {
+        for (int id : ids) {
+            long idL = new Long(id);
+            cwRepository.deleteById(idL);
         }
-        return 0;
     }
 }

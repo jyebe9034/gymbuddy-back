@@ -60,9 +60,7 @@ public class BannerController extends BaseController {
     @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateMainBanner(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
         log.info("메인 배너 수정 - id: {}, param: {}", id, param);
-        String title = Objects.toString(param.get("title"));
-        String link = Objects.toString(param.get("link"));
-        bannerService.update(id, title, link);
+        bannerService.update(id, param);
         Banner findBanner = bannerService.findOne(id);
 
         Map<String, Object> result = new HashMap<>();
@@ -76,12 +74,12 @@ public class BannerController extends BaseController {
      * 메인 베너 삭제
      */
     @DeleteMapping(URI_PREFIX + "/delete")
-    public ResponseEntity<Map<String, Object>> deleteMainBanner(@RequestParam List<Long> ids) {
+    public ResponseEntity<Map<String, Object>> deleteMainBanner(@RequestBody List<Integer> ids) {
         log.info("메인 베너 삭제: {}", ids.toString());
-        int deleteResult = bannerService.delete(ids);
+        bannerService.delete(ids);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result", deleteResult);
+        result.put("result", 0);
         return createResponseEntity(true, result);
     }
 }

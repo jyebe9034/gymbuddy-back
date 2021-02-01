@@ -37,7 +37,7 @@ public class YoutubeController extends BaseController {
     // TODO 홈화면 쪽에서 어떻게 보여주는지? 최신 9개만 보여주면 되는지 아니면 3개씩 나눠서 콜할건지?
 
     /**
-     * 유튜브 상세조회
+     * 유튜브 상세
      */
     @GetMapping(URI_PREFIX + "detail/{id}")
     public ResponseEntity<Youtube> selectYoutubeDetail(@PathVariable("id") Long id) {
@@ -59,16 +59,12 @@ public class YoutubeController extends BaseController {
     }
 
     /**
-     * 유튜브 수정
+     * 업로드 날짜, 제목, 내용, 링크 수정
      */
     @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateYoutube(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
         log.info("유튜브 수정 - id: {}, param: {}", id, param);
-        String uploadDate = Objects.toString(param.get("uploadDate"));
-        String title = Objects.toString(param.get("title"));
-        String contents = Objects.toString(param.get("contents"));
-        String link = Objects.toString(param.get("link"));
-        youtubeService.update(id, uploadDate, title, contents, link);
+        youtubeService.update(id, param);
         Youtube findYoutube = youtubeService.findOne(id);
 
         Map<String, Object> result = new HashMap<>();
@@ -83,12 +79,12 @@ public class YoutubeController extends BaseController {
      * 유튜브 삭제
      */
     @DeleteMapping(URI_PREFIX + "/delete")
-    public ResponseEntity<Map<String, Object>> deleteYoutube(@RequestParam List<Long> ids) {
+    public ResponseEntity<Map<String, Object>> deleteYoutube(@RequestBody List<Integer> ids) {
         log.info("유튜브 삭제: {}", ids.toString());
-        int deleteResult = youtubeService.delete(ids);
+        youtubeService.delete(ids);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result", deleteResult);
+        result.put("result", 0);
         return createResponseEntity(true, result);
     }
 }

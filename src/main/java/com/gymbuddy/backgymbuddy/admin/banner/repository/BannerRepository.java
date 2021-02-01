@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface BannerRepository extends JpaRepository<Banner, Long> {
 
-    Long deleteByIdIn(List<Long> ids);
 }

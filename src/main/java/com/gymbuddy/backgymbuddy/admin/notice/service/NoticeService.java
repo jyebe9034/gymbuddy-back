@@ -11,6 +11,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,13 +44,13 @@ public class NoticeService {
     }
 
     @Transactional
-    public void update(Long id, String title, String contents) {
+    public void update(Long id, Map<String, Object> param) {
         Notice notice = noticeRepository.findById(id).get();
-        if (!"".equals(title)) {
-            notice.setTitle(title);
+        if (param.get("title") != null) {
+            notice.setTitle(Objects.toString(param.get("title")));
         }
-        if (!"".equals(contents)) {
-            notice.setContents(contents);
+        if (param.get("contents") != null) {
+            notice.setContents(Objects.toString(param.get("contents")));
         }
     }
 

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,13 +44,13 @@ public class NewsService {
     }
 
     @Transactional
-    public void update(Long id, String title, String contents) {
+    public void update(Long id, Map<String, Object> param) {
         News news = newsRepository.findById(id).get();
-        if (!"".equals(title)) {
-            news.setTitle(title);
+        if (param.get("title") != null) {
+            news.setTitle(Objects.toString(param.get("title")));
         }
-        if (!"".equals(contents)) {
-            news.setContents(contents);
+        if (param.get("contents") != null) {
+            news.setContents(Objects.toString(param.get("contents")));
         }
     }
 

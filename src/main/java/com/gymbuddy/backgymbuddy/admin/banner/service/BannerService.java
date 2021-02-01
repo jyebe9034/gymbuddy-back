@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -32,18 +34,21 @@ public class BannerService {
     }
 
     @Transactional
-    public void update(Long id, String title, String link) {
+    public void update(Long id, Map<String, Object> param) {
         Banner banner = bannerRepository.findById(id).get();
-        banner.setTitle(title);
-        banner.setLink(link);
+        if (param.get("title") != null) {
+            banner.setTitle(Objects.toString(param.get("title")));
+        }
+        if (param.get("link") != null) {
+            banner.setLink(Objects.toString(param.get("link")));
+        }
     }
 
     @Transactional
-    public int delete(List<Long> ids) {
-        Long deletedRows = bannerRepository.deleteByIdIn(ids);
-        if (ids.size() == deletedRows.intValue()) {
-            return 1;
+    public void delete(List<Integer> ids) {
+        for (int id : ids) {
+            long idL = new Long(id);
+            bannerRepository.deleteById(idL);
         }
-        return 0;
     }
 }
