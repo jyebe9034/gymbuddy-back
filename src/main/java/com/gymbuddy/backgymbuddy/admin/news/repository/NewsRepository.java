@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface NewsRepository extends JpaRepository<News, Long> {
 
-    Long deleteByIdIn(List<Long> ids);
 }

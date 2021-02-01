@@ -60,8 +60,7 @@ public class CWController extends BaseController {
     @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateColumnWriter(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
         log.info("컬럼 작성자 수정 - id: {}, param: {}", id, param);
-        String contents = Objects.toString(param.get("contents"));
-        cwService.update(id, contents);
+        cwService.update(id, param);
         ColumnWriter findColumnWriter = cwService.findOne(id);
 
         Map<String, Object> result = new HashMap<>();
@@ -74,13 +73,12 @@ public class CWController extends BaseController {
      * 칼럼 작성자 삭제
      */
     @DeleteMapping(URI_PREFIX + "/delete")
-    public ResponseEntity<Map<String, Object>> deleteColumnWriter(@RequestParam List<Long> ids) {
-        // TODO 로그가 어떻게 남는지 확인 필요
-        log.info("컬럼 작성자 삭제 : {}", ids.toString());
-        int deleteResult = cwService.delete(ids);
+    public ResponseEntity<Map<String, Object>> deleteColumnWriter(@RequestBody List<Integer> ids) {
+        log.info("컬럼 작성자 삭제 : {}", ids);
+        cwService.delete(ids);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result", deleteResult);
+        result.put("result", 0);
         return createResponseEntity(true, result);
     }
 
