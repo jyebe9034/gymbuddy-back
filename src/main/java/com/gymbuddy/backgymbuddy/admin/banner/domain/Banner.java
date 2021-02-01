@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.banner.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
+import com.gymbuddy.backgymbuddy.admin.enums.category.BannerEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,8 +18,8 @@ public class Banner extends BaseDomain {
     @Column(length = 100, nullable = false, unique = true)
     private String title;
 
-    @Column(length = 20, nullable = false)
-    private String categoryId;
+    @Enumerated(EnumType.STRING)
+    private BannerEnum categoryId;
 
     @Column(length = 500)
     private String link;

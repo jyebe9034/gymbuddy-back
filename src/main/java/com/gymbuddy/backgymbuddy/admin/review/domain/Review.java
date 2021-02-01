@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.review.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
+import com.gymbuddy.backgymbuddy.admin.enums.category.ReviewEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,8 +19,8 @@ public class Review extends BaseDomain {
     /**
      * 카테고리
      */
-    @Column(length = 20, nullable = false)
-    private String categoryId;
+    @Enumerated(EnumType.STRING)
+    private ReviewEnum categoryId;
 
     /**
      * 제목
