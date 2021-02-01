@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
+import com.gymbuddy.backgymbuddy.admin.enums.category.FaqEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,8 +16,8 @@ public class FrequencyQuestion extends BaseDomain {
     @Column(name = "frequency_question_id")
     private Long id;
 
-    @Column(length = 20, nullable = false)
-    private String categoryId;
+    @Enumerated(EnumType.STRING)
+    private FaqEnum categoryId;
 
     @Column(length = 300, nullable = false)
     private String title;

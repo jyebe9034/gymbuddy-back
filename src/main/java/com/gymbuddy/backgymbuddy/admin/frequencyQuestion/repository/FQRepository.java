@@ -4,4 +4,5 @@ import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain.FrequencyQuestio
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FQRepository extends JpaRepository<FrequencyQuestion, Long> {
+
 }

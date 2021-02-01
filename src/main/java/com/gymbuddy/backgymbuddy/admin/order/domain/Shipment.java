@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.order.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.Address;
+import com.gymbuddy.backgymbuddy.admin.enums.status.ShipmentStatus;
 import lombok.Data;
 
 import javax.persistence.*;

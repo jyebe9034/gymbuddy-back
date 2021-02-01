@@ -7,7 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -21,6 +24,10 @@ public class HistoryService {
         return historyRepository.findAll();
     }
 
+    public List<History> findAllByDate() {
+        return historyRepository.findAllByDate();
+    }
+
     public History findOne(Long id) {
         return historyRepository.findById(id).get();
     }
@@ -32,8 +39,14 @@ public class HistoryService {
     }
 
     @Transactional
-    public void update(Long id) {
+    public void update(Long id, Map<String, Object> param) {
         History history = historyRepository.findById(id).get();
+        if (param.get("historyDate") != null) {
+            history.setHistoryDate(LocalDateTime.parse(Objects.toString(param.get("historyDate"))));
+        }
+        if (param.get("title") != null) {
+            history.setTitle(Objects.toString(param.get("title")));
+        }
     }
 
     @Transactional

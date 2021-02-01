@@ -28,7 +28,7 @@ public class NewsletterController extends BaseController {
     /**
      * 뉴스레터 구독 이메일 전체 조회
      */
-    @GetMapping(URI_PREFIX + "/newsltterList")
+    @GetMapping(URI_PREFIX + "/newsletterList")
     public ResponseEntity<List<Newsletter>> selectNewsletterList() {
         return createResponseEntity(true, newsletterService.findAll());
     }
@@ -38,12 +38,11 @@ public class NewsletterController extends BaseController {
      */
     @PostMapping(URI_PREFIX + "/newSubscribe")
     public ResponseEntity<Map<String, Object>> insertNewSubscribe(@RequestBody Newsletter newsletter) {
-        log.info("뉴스레터 등록: {}", newsletter);
+        log.info("뉴스레터 구독 이메일 등록: {}", newsletter);
         Long id = newsletterService.save(newsletter);
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", id);
-        result.put("email", newsletter.getEmail());
         return createResponseEntity(true, result);
     }
 
@@ -52,7 +51,7 @@ public class NewsletterController extends BaseController {
      */
     @DeleteMapping(URI_PREFIX + "/deleteSubscribe")
     public ResponseEntity<Newsletter> deleteNewsletter(@PathVariable("id") Long id) {
-        log.info("웹 BI 삭제: {}", id);
+        log.info("뉴스레터 구독 이메일 삭제: {}", id);
         return createResponseEntity(true, newsletterService.delete(id));
     }
 }

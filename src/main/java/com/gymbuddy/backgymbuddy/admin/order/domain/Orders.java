@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.order.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.Address;
+import com.gymbuddy.backgymbuddy.admin.enums.status.OrderStatus;
 import com.gymbuddy.backgymbuddy.admin.user.domain.User;
 import lombok.Data;
 
