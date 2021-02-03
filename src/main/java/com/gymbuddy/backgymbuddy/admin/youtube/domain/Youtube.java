@@ -28,9 +28,6 @@ public class Youtube {
     @Column(length = 500, nullable = false)
     private String link;
 
-    @Column(length = 20, nullable = false)
-    private String categoryId;
-
     @Column(length = 300, nullable = false)
     private String imgPath;
 

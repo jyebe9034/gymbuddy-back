@@ -2,6 +2,7 @@ package com.gymbuddy.backgymbuddy.admin.youtube.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
+import com.gymbuddy.backgymbuddy.admin.youtube.domain.YoutubeDto;
 import com.gymbuddy.backgymbuddy.admin.youtube.service.YoutubeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +53,25 @@ public class YoutubeController extends BaseController {
      * 유튜브 등록
      */
     @PostMapping(URI_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertYoutube(@RequestBody Youtube youtube) {
+    public ResponseEntity<Map<String, Object>> insertYoutube(@ModelAttribute YoutubeDto youtube) {
         log.info("유튜브 등록: {}", youtube);
+        // 이미지 업로드
+        String rootPath = System.getProperty("user.dir") + "/src/main/resources/static/img/youtube";
+        String filename = youtube.getFile().getOriginalFilename();
+        try {
+            File newFile = new File(rootPath);
+            if (!newFile.exists()) {
+                newFile.mkdir();
+            }
+            File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
+            youtube.getFile().transferTo(realFile);
+            youtube.setImgName(filename);
+            youtube.setImgPath("/resources/static/img/youtube/" + realFile.getName());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        // 저장
         Long id = youtubeService.save(youtube);
 
         Map<String, Object> result = new HashMap<>();

@@ -21,9 +21,6 @@ public class Notice extends BaseDomain {
     @Column(nullable = false)
     private String contents;
 
-    @Column(length = 20, nullable = false)
-    private String categoryId;
-
     @Column(length = 300)
     private String imgPath;
 

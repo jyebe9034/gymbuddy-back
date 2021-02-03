@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.banner.service;
 
 import com.gymbuddy.backgymbuddy.admin.banner.domain.Banner;
+import com.gymbuddy.backgymbuddy.admin.banner.domain.BannerDto;
 import com.gymbuddy.backgymbuddy.admin.banner.repository.BannerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +29,17 @@ public class BannerService {
     }
 
     @Transactional
-    public Long save(Banner banner) {
-        bannerRepository.save(banner);
-        return banner.getId();
+    public Long save(BannerDto banner) {
+        Banner entity = new Banner();
+        entity.setTitle(banner.getTitle());
+        entity.setCategoryId(banner.getCategoryId());
+        entity.setLink(banner.getLink());
+        entity.setBtnTitle(banner.getBtnTitle());
+        entity.setImgPath(banner.getImgPath());
+        entity.setImgName(banner.getImgName());
+
+        bannerRepository.save(entity);
+        return entity.getId();
     }
 
     @Transactional

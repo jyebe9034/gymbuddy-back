@@ -34,9 +34,6 @@ public class Columns {
     @JoinColumn(name = "column_writer_id")
     private ColumnWriter columnWriter;
 
-    @Column(length = 20, nullable = false)
-    private String categoryId;
-
     @Column(length = 300, nullable = false)
     private String imgPath;
 
