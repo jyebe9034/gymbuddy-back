@@ -18,8 +18,8 @@ public class Banner extends BaseDomain {
     @Column(length = 100, nullable = false, unique = true)
     private String title;
 
-    @Enumerated(EnumType.STRING)
-    private BannerEnum categoryId;
+    @Column(length = 10, nullable = false)
+    private String categoryId;
 
     @Column(length = 500)
     private String link;

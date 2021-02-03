@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.youtube.service;
 
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
+import com.gymbuddy.backgymbuddy.admin.youtube.domain.YoutubeDto;
 import com.gymbuddy.backgymbuddy.admin.youtube.repository.YoutubeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +31,18 @@ public class YoutubeService {
     }
 
     @Transactional
-    public Long save(Youtube youtube) {
-        youtubeRepository.save(youtube);
-        return youtube.getId();
+    public Long save(YoutubeDto youtube) {
+        Youtube entity = new Youtube();
+        entity.setUploadDate(youtube.getUploadDate());
+        entity.setTitle(youtube.getTitle());
+        entity.setContents(youtube.getContents());
+        entity.setLink(youtube.getLink());
+        entity.setImgPath(youtube.getImgPath());
+        entity.setImgName(youtube.getImgName());
+        entity.setMainYn(youtube.getMainYn());
+
+        youtubeRepository.save(entity);
+        return entity.getId();
     }
 
     @Transactional
