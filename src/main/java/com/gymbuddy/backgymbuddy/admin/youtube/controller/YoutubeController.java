@@ -6,18 +6,13 @@ import com.gymbuddy.backgymbuddy.admin.youtube.domain.YoutubeDto;
 import com.gymbuddy.backgymbuddy.admin.youtube.service.YoutubeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.YOUTUBE_PREFIX;
 
@@ -27,6 +22,9 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.YOUTUBE_PREFIX;
 public class YoutubeController extends BaseController {
 
     private final String URI_PREFIX = YOUTUBE_PREFIX;
+    private String youtubePath = "/resources/static/img/youtube";
+    private String rootpath = System.getProperty("user.dir") + "/src/main" + youtubePath;
+    private File newFile = new File(rootpath);
 
     private final YoutubeService youtubeService;
 
@@ -43,7 +41,7 @@ public class YoutubeController extends BaseController {
     /**
      * 유튜브 상세
      */
-    @GetMapping(URI_PREFIX + "detail/{id}")
+    @GetMapping(URI_PREFIX + "/detail/{id}")
     public ResponseEntity<Youtube> selectYoutubeDetail(@PathVariable("id") Long id) {
         log.info("유튜브 아이디로 조회: {}", id);
         return createResponseEntity(true, youtubeService.findOne(id));
@@ -55,44 +53,79 @@ public class YoutubeController extends BaseController {
     @PostMapping(URI_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertYoutube(@ModelAttribute YoutubeDto youtube) {
         log.info("유튜브 등록: {}", youtube);
+
         // 이미지 업로드
-        String rootPath = System.getProperty("user.dir") + "/src/main/resources/static/img/youtube";
         String filename = youtube.getFile().getOriginalFilename();
         try {
-            File newFile = new File(rootPath);
             if (!newFile.exists()) {
                 newFile.mkdir();
             }
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             youtube.getFile().transferTo(realFile);
             youtube.setImgName(filename);
-            youtube.setImgPath("/resources/static/img/youtube/" + realFile.getName());
+            youtube.setImgPath(youtubePath + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
-        // 저장
-        Long id = youtubeService.save(youtube);
-
         Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
+        result.put("id", youtubeService.save(youtube));
         return createResponseEntity(true, result);
     }
 
     /**
-     * 업로드 날짜, 제목, 내용, 링크 수정
+     * 업로드 날짜, 제목, 내용, 링크, 이미지 수정
      */
     @PutMapping(URI_PREFIX + "/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateYoutube(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
-        log.info("유튜브 수정 - id: {}, param: {}", id, param);
-        youtubeService.update(id, param);
+    public ResponseEntity<Map<String, Object>> updateYoutube(@PathVariable("id") Long id, @RequestBody YoutubeDto youtube) {
+        log.info("유튜브 수정 - id: {}, youtube: {}", id, youtube);
+
+        Youtube origin = youtubeService.findOne(id);
+        // 기존의 이미지 파일과 다른 파일인 경우에만 새로운 파일을 서버에 올린다.
+        String filename = youtube.getFile().getOriginalFilename();
+        if (!origin.getImgName().equals(filename)) {
+            // 이미지 업로드
+            try {
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
+                youtube.getFile().transferTo(realFile);
+                youtube.setImgName(filename);
+                youtube.setImgPath(youtubePath + realFile.getName());
+
+                // 기존 이미지 파일 서버에서 삭제
+                File originFile = new File(newFile + "/" + origin.getImgPath());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+
+        youtubeService.update(id, youtube);
         Youtube findYoutube = youtubeService.findOne(id);
 
+        boolean flag = true;
+        // 요청대로 잘 수정된건지 확인한다.
+        if (youtube.getUploadDate() != null) {
+            flag = youtube.getUploadDate().equals(findYoutube.getUploadDate()) ? true : false;
+        }
+        if (youtube.getTitle() != null) {
+            flag = youtube.getTitle().equals(findYoutube.getTitle()) ? true : false;
+        }
+        if (youtube.getContents() != null) {
+            flag = youtube.getContents().equals(findYoutube.getContents()) ? true : false;
+        }
+        if (youtube.getLink() != null) {
+            flag = youtube.getLink().equals(findYoutube.getLink()) ? true : false;
+        }
+        if (youtube.getImgPath() != null) {
+            flag = youtube.getImgPath().equals(findYoutube.getImgPath()) ? true : false;
+        }
+        if (youtube.getImgName() != null) {
+            flag = youtube.getImgName().equals(findYoutube.getImgName()) ? true : false;
+        }
         Map<String, Object> result = new HashMap<>();
-        result.put("uploadDate", findYoutube.getUploadDate());
-        result.put("title", findYoutube.getTitle());
-        result.put("contents", findYoutube.getContents());
-        result.put("link", findYoutube.getLink());
+        result.put("result", flag);
         return createResponseEntity(true, result);
     }
 
@@ -101,11 +134,21 @@ public class YoutubeController extends BaseController {
      */
     @DeleteMapping(URI_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteYoutube(@RequestBody List<Integer> ids) {
-        log.info("유튜브 삭제: {}", ids.toString());
-        youtubeService.delete(ids);
+        log.info("유튜브 삭제: {}", ids);
+
+        for (int id : ids) {
+            long idL = new Long(id);
+            Youtube origin = youtubeService.findOne(idL);
+            // 이미지 삭제
+            File originFile = new File(newFile + "/" + origin.getImgPath());
+            if (originFile.exists()) {
+                originFile.delete();
+            }
+            youtubeService.delete(idL);
+        }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result", 0);
+        result.put("result", "success");
         return createResponseEntity(true, result);
     }
 }

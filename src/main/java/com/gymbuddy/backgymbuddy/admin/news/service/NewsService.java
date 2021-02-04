@@ -1,7 +1,9 @@
 package com.gymbuddy.backgymbuddy.admin.news.service;
 
 import com.gymbuddy.backgymbuddy.admin.news.domain.News;
+import com.gymbuddy.backgymbuddy.admin.news.domain.NewsDto;
 import com.gymbuddy.backgymbuddy.admin.news.repository.NewsRepository;
+import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -38,27 +40,40 @@ public class NewsService {
     }
 
     @Transactional
-    public Long save(News news) {
-        newsRepository.save(news);
-        return news.getId();
+    public Long save(NewsDto news) {
+        News entity = new News();
+        entity.setTitle(news.getTitle());
+        entity.setContents(news.getContents());
+        entity.setImgPath(news.getImgPath());
+        entity.setImgName(news.getImgName());
+        entity.setMainYn(news.getMainYn());
+
+        newsRepository.save(entity);
+        return entity.getId();
     }
 
     @Transactional
-    public void update(Long id, Map<String, Object> param) {
-        News news = newsRepository.findById(id).get();
-        if (param.get("title") != null) {
-            news.setTitle(Objects.toString(param.get("title")));
+    public void update(Long id, NewsDto news) {
+        News origin = findOne(id);
+        if (news.getTitle() != null) {
+            origin.setTitle(news.getTitle());
         }
-        if (param.get("contents") != null) {
-            news.setContents(Objects.toString(param.get("contents")));
+        if (news.getContents() != null) {
+            origin.setContents(news.getContents());
+        }
+        if (news.getImgPath() != null) {
+            origin.setImgPath(news.getImgPath());
+        }
+        if (news.getImgName() != null) {
+            origin.setImgName(news.getImgName());
+        }
+        if (news.getMainYn() != null) {
+            origin.setMainYn(news.getMainYn());
         }
     }
 
     @Transactional
-    public void delete(List<Integer> ids) {
-        for (int id : ids) {
-            long idL = new Long(id);
-            newsRepository.deleteById(idL);
-        }
+    public void delete(Long id) {
+        newsRepository.deleteById(id);
     }
 }

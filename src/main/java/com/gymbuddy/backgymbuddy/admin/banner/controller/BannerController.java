@@ -8,17 +8,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.BANNER_PREFIX;
 
@@ -28,10 +22,11 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.BANNER_PREFIX;
 public class BannerController extends BaseController {
 
     private final String URI_PREFIX = BANNER_PREFIX;
+    private String bannerPath = "/resources/static/img/banner";
+    private String rootPath = System.getProperty("user.dir") + "/src/main" + bannerPath;
+    private File newFile = new File(rootPath);
 
     private final BannerService bannerService;
-
-    private final HttpSession session;
 
     /**
      * 메인 배너 조회
@@ -58,17 +53,15 @@ public class BannerController extends BaseController {
         log.info("메인 배너 등록: {}", banner);
 
         // 이미지 업로드
-        String rootPath = System.getProperty("user.dir") + "/src/main/resources/static/img/banner";
         String filename = banner.getFile().getOriginalFilename();
         try {
-            File newFile = new File(rootPath);
             if (!newFile.exists()) {
                 newFile.mkdir();
             }
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             banner.getFile().transferTo(realFile);
             banner.setImgName(filename);
-            banner.setImgPath("/resources/static/img/banner/" + realFile.getName());
+            banner.setImgPath(bannerPath + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -85,15 +78,52 @@ public class BannerController extends BaseController {
      * 메인 베너의 제목과 링크 수정
      */
     @PutMapping(URI_PREFIX + "/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateMainBanner(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
-        log.info("메인 배너 수정 - id: {}, param: {}", id, param);
-        bannerService.update(id, param);
+    public ResponseEntity<Map<String, Object>> updateMainBanner(@PathVariable("id") Long id, @RequestBody BannerDto banner) {
+        log.info("메인 배너 수정 - id: {}, banner: {}", id, banner);
+
+        Banner origin = bannerService.findOne(id);
+        String filename = banner.getFile().getOriginalFilename();
+        if (!origin.getImgName().equals(filename)) {
+            try {
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
+                banner.getFile().transferTo(realFile);
+                banner.setImgName(filename);
+                banner.setImgPath(bannerPath + realFile.getName());
+
+                File originFile = new File(newFile + "/" + origin.getImgPath());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+
+        bannerService.update(id, banner);
         Banner findBanner = bannerService.findOne(id);
 
+        boolean flag = true;
+        if (banner.getTitle() != null) {
+            flag = banner.getTitle().equals(findBanner.getTitle()) ? true : false;
+        }
+        if (banner.getCategoryId() != null) {
+            flag = banner.getCategoryId().equals(findBanner.getCategoryId()) ? true : false;
+        }
+        if (banner.getLink() != null) {
+            flag = banner.getLink().equals(findBanner.getLink()) ? true : false;
+        }
+        if (banner.getBtnTitle() != null) {
+            flag = banner.getBtnTitle().equals(findBanner.getBtnTitle()) ? true : false;
+        }
+        if (banner.getImgPath() != null) {
+            flag = banner.getImgPath().equals(findBanner.getImgPath()) ? true : false;
+        }
+        if (banner.getImgName() != null) {
+            flag = banner.getImgName().equals(findBanner.getImgName()) ? true : false;
+        }
+
         Map<String, Object> result = new HashMap<>();
-        result.put("id", findBanner.getId());
-        result.put("title", findBanner.getTitle());
-        result.put("link", findBanner.getLink());
+        result.put("result", flag);
         return createResponseEntity(true, result);
     }
 
@@ -103,10 +133,20 @@ public class BannerController extends BaseController {
     @DeleteMapping(URI_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteMainBanner(@RequestBody List<Integer> ids) {
         log.info("메인 베너 삭제: {}", ids.toString());
-        bannerService.delete(ids);
+
+        for (int id : ids) {
+            long idL = new Long(id);
+            Banner origin = bannerService.findOne(idL);
+            // 이미지 삭제
+            File originFile = new File(newFile + "/" + origin.getImgPath());
+            if (originFile.exists()) {
+                originFile.delete();
+            }
+            bannerService.delete(idL);
+        }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result", 0);
+        result.put("result", "success");
         return createResponseEntity(true, result);
     }
 }

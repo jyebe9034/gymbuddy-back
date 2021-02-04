@@ -43,21 +43,30 @@ public class BannerService {
     }
 
     @Transactional
-    public void update(Long id, Map<String, Object> param) {
-        Banner banner = bannerRepository.findById(id).get();
-        if (param.get("title") != null) {
-            banner.setTitle(Objects.toString(param.get("title")));
+    public void update(Long id, BannerDto banner) {
+        Banner origin = findOne(id);
+        if (banner.getTitle() != null) {
+            origin.setTitle(banner.getTitle());
         }
-        if (param.get("link") != null) {
-            banner.setLink(Objects.toString(param.get("link")));
+        if (banner.getCategoryId() != null) {
+            origin.setCategoryId(banner.getCategoryId());
+        }
+        if (banner.getLink() != null) {
+            origin.setLink(banner.getLink());
+        }
+        if (banner.getBtnTitle() != null) {
+            origin.setBtnTitle(banner.getBtnTitle());
+        }
+        if (banner.getImgPath() != null) {
+            origin.setImgPath(banner.getImgPath());
+        }
+        if (banner.getImgName() != null) {
+            origin.setImgName(banner.getImgName());
         }
     }
 
     @Transactional
-    public void delete(List<Integer> ids) {
-        for (int id : ids) {
-            long idL = new Long(id);
-            bannerRepository.deleteById(idL);
-        }
+    public void delete(Long id) {
+        bannerRepository.deleteById(id);
     }
 }
