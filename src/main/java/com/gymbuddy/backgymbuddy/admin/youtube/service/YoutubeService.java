@@ -46,27 +46,30 @@ public class YoutubeService {
     }
 
     @Transactional
-    public void update(Long id, Map<String, Object> param) {
-        Youtube youtube = youtubeRepository.findById(id).get();
-        if (param.get("uploadDate") != null) {
-            youtube.setUploadDate(Objects.toString(param.get("uploadDate")));
+    public void update(Long id, YoutubeDto youtube) {
+        Youtube origin = findOne(id);
+        if (youtube.getUploadDate() != null) {
+            origin.setUploadDate(youtube.getUploadDate());
         }
-        if (param.get("title") != null) {
-            youtube.setTitle(Objects.toString(param.get("title")));
+        if (youtube.getTitle() != null) {
+            origin.setTitle(youtube.getTitle());
         }
-        if (param.get("contents") != null) {
-            youtube.setContents(Objects.toString(param.get("contents")));
+        if (youtube.getContents() != null) {
+            origin.setContents(youtube.getContents());
         }
-        if (param.get("link") != null) {
-            youtube.setLink(Objects.toString(param.get("link")));
+        if (youtube.getLink() != null) {
+            origin.setLink(youtube.getLink());
+        }
+        if (youtube.getImgPath() != null) {
+            origin.setImgPath(youtube.getImgPath());
+        }
+        if (youtube.getImgName() != null) {
+            origin.setImgName(youtube.getImgName());
         }
     }
 
     @Transactional
-    public void delete(List<Integer> ids) {
-        for (int id : ids) {
-            long idL = new Long(id);
-            youtubeRepository.deleteById(idL);
-        }
+    public void delete(Long id) {
+        youtubeRepository.deleteById(id);
     }
 }
