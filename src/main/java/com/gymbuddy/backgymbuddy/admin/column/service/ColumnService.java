@@ -1,8 +1,10 @@
 package com.gymbuddy.backgymbuddy.admin.column.service;
 
 import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
+import com.gymbuddy.backgymbuddy.admin.column.domain.ColumnsDto;
 import com.gymbuddy.backgymbuddy.admin.column.repository.ColumnRepository;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
+import com.gymbuddy.backgymbuddy.admin.columnWriter.repository.CWRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ import java.util.Objects;
 public class ColumnService {
 
     private final ColumnRepository columnRepository;
+    private final CWRepository cwRepository;
 
     public List<Columns> findAll(int page) {
         return columnRepository.findAll(PageRequest.of(page, 10)).getContent();
@@ -29,29 +32,46 @@ public class ColumnService {
         return columnRepository.findById(id).get();
     }
 
-    public Long save(Columns columns) {
-        columnRepository.save(columns);
-        return columns.getId();
+    public Long save(ColumnsDto columns) {
+        // 컬럼 작성자 조회
+        ColumnWriter columnWriter = cwRepository.findById(columns.getColumnWriterId()).get();
+
+        Columns entity = new Columns();
+        entity.setTitle(columns.getTitle());
+        entity.setContents(columns.getContents());
+        entity.setColumnWriter(columnWriter);
+        entity.setImgPath(columns.getImgPath());
+        entity.setImgName(columns.getImgName());
+        entity.setMainYn(columns.getMainYn());
+
+        columnRepository.save(entity);
+        return entity.getId();
     }
 
-    public void update(Long id, Map<String, Object> param) {
-        Columns columns = columnRepository.findById(id).get();
-        if (param.get("title") != null) {
-            columns.setTitle(Objects.toString(param.get("title")));
+    public void update(Long id, ColumnsDto column) {
+        Columns origin = findOne(id);
+        if (column.getTitle() != null) {
+            origin.setTitle(column.getTitle());
         }
-        if (param.get("contents") != null) {
-            columns.setTitle(Objects.toString(param.get("contents")));
+        if (column.getContents() != null) {
+            origin.setTitle(column.getContents());
         }
-        // 컬럼 작성자의 정보를 꼭 다 넘겨야 하는지..
-        if (param.get("columnWriter") != null) {
-            columns.setColumnWriter((ColumnWriter) param.get("columnWriter"));
+        if (column.getColumnWriterId() != null) {
+            ColumnWriter columnWriter = cwRepository.findById(column.getColumnWriterId()).get();
+            origin.setColumnWriter(columnWriter);
+        }
+        if (column.getImgPath() != null) {
+            origin.setImgPath(column.getImgPath());
+        }
+        if (column.getImgName() != null) {
+            origin.setImgName(column.getImgName());
+        }
+        if (column.getMainYn() != null) {
+            origin.setMainYn(column.getMainYn());
         }
     }
 
-    public void delete(List<Integer> ids) {
-        for (int id : ids) {
-            long idL = new Long(id);
-            columnRepository.deleteById(idL);
-        }
+    public void delete(Long id) {
+        columnRepository.deleteById(id);
     }
 }
