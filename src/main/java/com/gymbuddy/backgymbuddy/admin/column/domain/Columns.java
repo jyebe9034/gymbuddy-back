@@ -20,9 +20,6 @@ public class Columns {
     @Column(name = "column_id")
     private Long id;
 
-    @Column
-    private int counts;
-
     @Column(length = 100, nullable = false)
     private String title;
 

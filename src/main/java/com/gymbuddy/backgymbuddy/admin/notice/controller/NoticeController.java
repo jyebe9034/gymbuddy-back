@@ -82,7 +82,7 @@ public class NoticeController extends BaseController {
      */
     @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateNotice(@PathVariable("id") Long id, @RequestBody NoticeDto notice) {
-        log.info("공지사항 수정 - id: {}, param: {}", id, notice);
+        log.info("공지사항 수정 - id: {}, notice: {}", id, notice);
 
         Notice origin = noticeService.findOne(id);
         String filename = notice.getFile().getOriginalFilename();
@@ -115,17 +115,17 @@ public class NoticeController extends BaseController {
             flag = notice.getContents().equals(findNotice.getContents()) ? true : false;
         }
         if (notice.getImgPath() != null) {
-            flag = notice.getImgPath().equals(findNotice.getImgPath());
+            flag = notice.getImgPath().equals(findNotice.getImgPath()) ? true : false;
         }
         if (notice.getImgName() != null) {
-            flag = notice.getImgName().equals(findNotice.getImgName());
+            flag = notice.getImgName().equals(findNotice.getImgName()) ? true : false;
         }
         if (notice.getMainYn() != null) {
-            flag = notice.getMainYn().equals(findNotice.getMainYn());
+            flag = notice.getMainYn().equals(findNotice.getMainYn()) ? true : false;
         }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("id", flag);
+        result.put("result", flag);
         return createResponseEntity(true, result);
     }
 
