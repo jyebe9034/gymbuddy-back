@@ -8,6 +8,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import static javax.persistence.FetchType.LAZY;
@@ -36,7 +37,7 @@ public class OrderProduct {
     private Orders orders;
 
     @Column
-    private BigInteger orderPrice; // 주문 가격
+    private BigDecimal orderPrice; // 주문 가격
 
     @Column
     private int count; // 주문 수량

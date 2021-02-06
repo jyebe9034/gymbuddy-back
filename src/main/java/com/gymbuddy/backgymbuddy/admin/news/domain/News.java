@@ -26,8 +26,4 @@ public class News extends BaseDomain {
 
     @Column(length = 50)
     private String imgName;
-
-    @Column(length = 1, nullable = false)
-    private String mainYn;
-
 }

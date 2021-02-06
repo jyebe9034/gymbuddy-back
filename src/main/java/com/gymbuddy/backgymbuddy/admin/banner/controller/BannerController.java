@@ -61,7 +61,7 @@ public class BannerController extends BaseController {
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             banner.getFile().transferTo(realFile);
             banner.setImgName(filename);
-            banner.setImgPath(bannerPath + realFile.getName());
+            banner.setImgPath(bannerPath + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -78,24 +78,26 @@ public class BannerController extends BaseController {
      * 메인 베너의 제목과 링크 수정
      */
     @PutMapping(URI_PREFIX + "/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateMainBanner(@PathVariable("id") Long id, @RequestBody BannerDto banner) {
+    public ResponseEntity<Map<String, Object>> updateMainBanner(@PathVariable("id") Long id, @ModelAttribute BannerDto banner) {
         log.info("메인 배너 수정 - id: {}, banner: {}", id, banner);
 
-        Banner origin = bannerService.findOne(id);
-        String filename = banner.getFile().getOriginalFilename();
-        if (!origin.getImgName().equals(filename)) {
-            try {
-                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
-                banner.getFile().transferTo(realFile);
-                banner.setImgName(filename);
-                banner.setImgPath(bannerPath + realFile.getName());
+        if (banner.getFile() != null) {
+            Banner origin = bannerService.findOne(id);
+            String filename = banner.getFile().getOriginalFilename();
+            if (!origin.getImgName().equals(filename)) {
+                try {
+                    File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
+                    banner.getFile().transferTo(realFile);
+                    banner.setImgName(filename);
+                    banner.setImgPath(bannerPath + "/" + realFile.getName());
 
-                File originFile = new File(newFile + "/" + origin.getImgPath());
-                if (originFile.exists()) {
-                    originFile.delete();
+                    File originFile = new File(newFile + "/" + origin.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
 

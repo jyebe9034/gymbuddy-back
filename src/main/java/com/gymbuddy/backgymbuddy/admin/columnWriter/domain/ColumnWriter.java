@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.columnWriter.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "column_writer")
 @Data
-public class ColumnWriter {
+public class ColumnWriter extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

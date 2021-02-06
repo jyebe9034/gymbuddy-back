@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.youtube.domain;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "youtube")
 @Data
-public class Youtube {
+public class Youtube extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

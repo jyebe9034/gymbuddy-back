@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.user.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.Address;
+import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import com.gymbuddy.backgymbuddy.admin.cart.domain.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User implements UserDetails {
+public class User extends BaseDomain implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

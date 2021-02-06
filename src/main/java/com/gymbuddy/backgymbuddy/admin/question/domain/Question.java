@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.question.domain;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "question")
 @Data
-public class Question {
+public class Question extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
