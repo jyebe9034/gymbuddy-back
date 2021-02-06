@@ -1,12 +1,16 @@
 package com.gymbuddy.backgymbuddy.admin.term.service;
 
+import com.gymbuddy.backgymbuddy.admin.enums.status.WebMobileStatus;
 import com.gymbuddy.backgymbuddy.admin.term.domain.Term;
+import com.gymbuddy.backgymbuddy.admin.term.domain.TermDto;
 import com.gymbuddy.backgymbuddy.admin.term.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -17,6 +21,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TermService {
 
+    private final EntityManager em;
     private final TermRepository termRepository;
 
     public List<Term> findAll() {
@@ -27,31 +32,51 @@ public class TermService {
         return termRepository.findById(id).get();
     }
 
-    public Term findByTitle(String title) {
+    public List<Term> findByTitle(String title) {
+        /*List<Term> web = termRepository.findByTitleAndStatus(title, WebMobileStatus.WEB);
+        List<Term> mobile = termRepository.findByTitleAndStatus(title, WebMobileStatus.MOBILE);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("web", web);
+        result.put("mobile", mobile);
+        return result;*/
         return termRepository.findByTitle(title);
     }
 
-    public Term findPrivatePolicy(String title) {
-        Term privatePolicy = termRepository.findByTitle(title);
-        return privatePolicy;
+    public List<Term> findPrivatePolicy() {
+        return termRepository.findByTitle("개인정보 처리 방침");
     }
 
-    public Term findTermsOfUse(String title) {
-        Term termsOfUse = termRepository.findByTitle(title);
-        return termsOfUse;
+    public List<Term> findTermsOfUse() {
+        return termRepository.findByTitle("이용약관");
     }
 
     @Transactional
-    public Long save(Term term) {
+    public Long save(TermDto dto) {
+        Term term = new Term();
+        term.setTitle(dto.getTitle());
+        term.setImgName(dto.getImgName());
+        term.setImgPath(dto.getImgPath());
+        term.setWebMobile(dto.getWebMobile());
+
         termRepository.save(term);
         return term.getId();
     }
 
-    public void update(Long id, Map<String, Object> param) {
-        Term term = termRepository.findById(id).get();
-        // TODO 이미지 로직 추가
-        if (param.get("title") != null) {
-            term.setTitle(Objects.toString(param.get("title")));
+    @Transactional
+    public void update(Long id, TermDto dto) {
+        Term term = findOne(id);
+        if (dto.getTitle() != null) {
+            term.setTitle(dto.getTitle());
+        }
+        if (dto.getImgPath() != null) {
+            term.setImgPath(dto.getImgPath());
+        }
+        if (dto.getImgName() != null) {
+            term.setImgName(dto.getImgName());
+        }
+        if (dto.getWebMobile() != null) {
+            term.setWebMobile(dto.getWebMobile());
         }
     }
 }

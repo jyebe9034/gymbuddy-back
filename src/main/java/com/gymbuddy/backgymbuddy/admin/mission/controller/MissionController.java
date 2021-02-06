@@ -3,12 +3,14 @@ package com.gymbuddy.backgymbuddy.admin.mission.controller;
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
 import com.gymbuddy.backgymbuddy.admin.mission.domain.Mission;
+import com.gymbuddy.backgymbuddy.admin.mission.domain.MissionDto;
 import com.gymbuddy.backgymbuddy.admin.mission.service.MissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,22 +22,63 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.MISSION_PREFIX;
 public class MissionController extends BaseController {
 
     private final String URI_PREFIX = MISSION_PREFIX;
+    private String missionPath = "/resources/static/img/mission";
+    private String rootPath = System.getProperty("user.dir") + "/src/main" + missionPath;
+    private File saveFile = new File(rootPath);
+
     private final MissionService missionService;
+
+    /**
+     * 미션과 비전 조회(관리자)
+     */
+    @GetMapping(URI_PREFIX + "/allToAdmin")
+    public ResponseEntity<Map<String, Object>> selectAdminMissions() {
+        return createResponseEntity(true, missionService.findAllToAdmin());
+    }
 
     /**
      * 미션과 비전 조회
      */
-    @GetMapping(URI_PREFIX + "/mission")
-    public ResponseEntity<Map<String, Object>> selectMission(Long id) {
-        return createResponseEntity(true, missionService.find(id));
+    @GetMapping(URI_PREFIX + "/allToUser")
+    public ResponseEntity<Map<String, Object>> selectUserMissions() {
+        return createResponseEntity(true, missionService.findAllToUser());
     }
 
     /**
      * 미션 등록
      */
     @PostMapping(URI_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertMission(@RequestBody Mission mission) {
+    public ResponseEntity<Map<String, Object>> insertMission(@ModelAttribute MissionDto mission) {
         log.info("공지사항 등록: {}", mission);
+
+        String imgName1 = mission.getFile1().getOriginalFilename();
+        String imgName2 = mission.getFile2().getOriginalFilename();
+        String imgName3 = mission.getFile3().getOriginalFilename();
+        try {
+            if (!saveFile.exists()) {
+                saveFile.mkdir();
+            }
+            // 파일1
+            File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
+            mission.getFile1().transferTo(realFile1);
+            mission.setImgName1(imgName1);
+            mission.setImgPath1(missionPath + realFile1.getName());
+
+            // 파일2
+            File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
+            mission.getFile2().transferTo(realFile2);
+            mission.setImgName2(imgName2);
+            mission.setImgPath2(missionPath + realFile2.getName());
+
+            // 파일3
+            File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
+            mission.getFile3().transferTo(realFile3);
+            mission.setImgName3(imgName3);
+            mission.setImgPath3(missionPath + realFile3.getName());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
         Long id = missionService.save(mission);
 
         Map<String, Object> result = new HashMap<>();
@@ -46,17 +89,89 @@ public class MissionController extends BaseController {
     /**
      * 미션 수정
      */
-    @PostMapping(URI_PREFIX + "/update")
+    @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateMission(
-            @PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
-        log.info("미션 수정 id: {}, param: {}", id, param);
-        missionService.update(id, param);
+            @PathVariable("id") Long id, @ModelAttribute MissionDto dto) {
+        log.info("미션 수정 id: {}, dto: {}", id, dto);
 
-        Mission findMission = missionService.find(id);
+        Mission mission = missionService.findOne(id);
+        String imgName1 = dto.getFile1().getOriginalFilename();
+        String imgName2 = dto.getFile2().getOriginalFilename();
+        String imgName3 = dto.getFile3().getOriginalFilename();
+        if (!mission.getImgName1().equals(imgName1)) {
+            try {
+                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
+                dto.getFile1().transferTo(realFile);
+                dto.setImgName1(imgName1);
+                dto.setImgPath1(missionPath + realFile.getName());
+
+                File originFile = new File(saveFile + "/" + dto.getImgPath1());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+        if (!mission.getImgName2().equals(imgName2)) {
+            try {
+                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
+                dto.getFile2().transferTo(realFile);
+                dto.setImgName2(imgName2);
+                dto.setImgPath2(missionPath + realFile.getName());
+
+                File originFile = new File(saveFile + "/" + dto.getImgPath2());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+        if (!mission.getImgName3().equals(imgName3)) {
+            try {
+                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
+                dto.getFile3().transferTo(realFile);
+                dto.setImgName1(imgName3);
+                dto.setImgPath1(missionPath + realFile.getName());
+
+                File originFile = new File(saveFile + "/" + dto.getImgPath3());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+
+        missionService.update(id, dto);
+        Mission findMission = missionService.findOne(id);
+
+        boolean flag = true;
+        if (dto.getContents() != null) {
+            flag = dto.getContents().equals(findMission.getContents()) ? true : false;
+        }
+        if (dto.getImgPath1() != null) {
+            flag = dto.getImgPath1().equals(findMission.getImgPath1());
+        }
+        if (dto.getImgName1() != null) {
+            flag = dto.getImgName1().equals(findMission.getImgName1());
+        }
+        if (dto.getImgPath2() != null) {
+            flag = dto.getImgPath2().equals(findMission.getImgPath2());
+        }
+        if (dto.getImgName2() != null) {
+            flag = dto.getImgName2().equals(findMission.getImgName2());
+        }
+        if (dto.getImgPath3() != null) {
+            flag = dto.getImgPath3().equals(findMission.getImgPath3());
+        }
+        if (dto.getImgName3() != null) {
+            flag = dto.getImgName3().equals(findMission.getImgName3());
+        }
+
         Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
-        result.put("contents", findMission.getContents());
+        result.put("result", flag);
         return createResponseEntity(true, result);
     }
-
 }
