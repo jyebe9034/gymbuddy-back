@@ -52,7 +52,7 @@ public class ColumnController extends BaseController {
      * 칼럼 등록
      */
     @PostMapping(URI_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertNewColumn(@RequestBody ColumnsDto columns) {
+    public ResponseEntity<Map<String, Object>> insertColumn(@ModelAttribute ColumnsDto columns) {
         log.info("컬럼 등록: {}", columns);
 
         // 이미지 업로드
@@ -64,7 +64,7 @@ public class ColumnController extends BaseController {
             File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
             columns.getFile().transferTo(realFile);
             columns.setImgName(filename);
-            columns.setImgPath(columnPath + realFile.getName());
+            columns.setImgPath(columnPath + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -78,29 +78,30 @@ public class ColumnController extends BaseController {
      * 칼럼 수정
      */
     @PutMapping(URI_PREFIX + "/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateColumn(@PathVariable("id") Long id, @RequestBody ColumnsDto columns) {
+    public ResponseEntity<Map<String, Object>> updateColumn(@PathVariable("id") Long id, @ModelAttribute ColumnsDto columns) {
         log.info("컬럼 수정 - id: {}, columns: {}", id, columns);
 
-        Columns origin = columnService.findOne(id);
-        String filename = columns.getFile().getOriginalFilename();
-        if (!origin.getImgName().equals(filename)) {
-            // 이미지 업로드
-            try {
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
-                columns.getFile().transferTo(realFile);
-                columns.setImgName(filename);
-                columns.setImgPath(columnPath + realFile.getName());
+        if (columns.getFile() != null) {
+            Columns origin = columnService.findOne(id);
+            String filename = columns.getFile().getOriginalFilename();
+            if (!origin.getImgName().equals(filename)) {
+                // 이미지 업로드
+                try {
+                    File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                    columns.getFile().transferTo(realFile);
+                    columns.setImgName(filename);
+                    columns.setImgPath(columnPath + "/" + realFile.getName());
 
-                // 기존 이미지 파일 서버에서 삭제
-                File originFile = new File(newfile + "/" + origin.getImgPath());
-                if (originFile.exists()) {
-                    originFile.delete();
+                    // 기존 이미지 파일 서버에서 삭제
+                    File originFile = new File(newfile + "/" + origin.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
-
 
         columnService.update(id, columns);
         Columns findColumn = columnService.findOne(id);

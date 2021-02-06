@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.column.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "columns")
 @Data
-public class Columns {
+public class Columns extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

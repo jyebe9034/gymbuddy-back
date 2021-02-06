@@ -6,10 +6,13 @@ import com.gymbuddy.backgymbuddy.admin.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +32,8 @@ public class NoticeService {
     }
 
     public List<Notice> findAllForMain() {
-        List<Notice> all = noticeRepository.findAll();
-        List<Notice> fiveList = all.stream().sorted(Collections.reverseOrder()).limit(5).collect(Collectors.toList());
-        return fiveList;
+        List<Notice> list = noticeRepository.findTop5ByOrderByIdDesc();
+        return list;
     }
 
     public Notice findOne(Long id) {
@@ -40,12 +42,20 @@ public class NoticeService {
 
     @Transactional
     public Long save(NoticeDto notice) {
+        // 현재 로그인한 아이디 정보 조회
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
+
         Notice entity = new Notice();
         entity.setTitle(notice.getTitle());
         entity.setContents(notice.getContents());
         entity.setImgPath(notice.getImgPath());
         entity.setImgName(notice.getImgName());
-        entity.setMainYn(notice.getMainYn());
+        entity.setCreateDate(LocalDateTime.now());
+//        entity.setCreateId(loginId);
+        entity.setUpdateDate(LocalDateTime.now());
+//        entity.setUpdateId(loginId);
 
         noticeRepository.save(entity);
         return entity.getId();
@@ -53,6 +63,11 @@ public class NoticeService {
 
     @Transactional
     public void update(Long id, NoticeDto notice) {
+        // 현재 로그인한 아이디 정보 조회
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
+
         Notice origin = findOne(id);
         if (notice.getTitle() != null) {
             origin.setTitle(notice.getTitle());
@@ -66,9 +81,8 @@ public class NoticeService {
         if (notice.getImgName() != null) {
             origin.setImgName(notice.getImgName());
         }
-        if (notice.getMainYn() != null) {
-            origin.setMainYn(notice.getMainYn());
-        }
+        origin.setUpdateDate(LocalDateTime.now());
+//        origin.setUpdateId(loginId);
     }
 
     @Transactional

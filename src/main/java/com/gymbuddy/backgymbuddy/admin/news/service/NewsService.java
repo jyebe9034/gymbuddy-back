@@ -7,10 +7,13 @@ import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,9 +33,8 @@ public class NewsService {
     }
 
     public List<News> findAllForMain() {
-        List<News> all = newsRepository.findAll();
-        List<News> fiveList = all.stream().sorted(Collections.reverseOrder()).limit(5).collect(Collectors.toList());
-        return fiveList;
+        List<News> list = newsRepository.findTop5ByOrderByIdDesc();
+        return list;
     }
 
     public News findOne(Long id) {
@@ -41,12 +43,20 @@ public class NewsService {
 
     @Transactional
     public Long save(NewsDto news) {
+        // 현재 로그인한 아이디 정보 조회
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
+
         News entity = new News();
         entity.setTitle(news.getTitle());
         entity.setContents(news.getContents());
         entity.setImgPath(news.getImgPath());
         entity.setImgName(news.getImgName());
-        entity.setMainYn(news.getMainYn());
+        entity.setCreateDate(LocalDateTime.now());
+//        entity.setCreateId(loginId);
+        entity.setUpdateDate(LocalDateTime.now());
+//        entity.setUpdateId(loginId);
 
         newsRepository.save(entity);
         return entity.getId();
@@ -54,6 +64,11 @@ public class NewsService {
 
     @Transactional
     public void update(Long id, NewsDto news) {
+        // 현재 로그인한 아이디 정보 조회
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
+
         News origin = findOne(id);
         if (news.getTitle() != null) {
             origin.setTitle(news.getTitle());
@@ -67,9 +82,8 @@ public class NewsService {
         if (news.getImgName() != null) {
             origin.setImgName(news.getImgName());
         }
-        if (news.getMainYn() != null) {
-            origin.setMainYn(news.getMainYn());
-        }
+        origin.setUpdateDate(LocalDateTime.now());
+//        origin.setUpdateId(loginId);
     }
 
     @Transactional

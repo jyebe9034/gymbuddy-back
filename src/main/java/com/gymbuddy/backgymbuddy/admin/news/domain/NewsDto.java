@@ -18,6 +18,4 @@ public class NewsDto {
     private String imgPath;
 
     private String imgName;
-
-    private String mainYn;
 }

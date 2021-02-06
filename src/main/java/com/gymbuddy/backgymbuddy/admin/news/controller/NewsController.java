@@ -4,7 +4,6 @@ import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.news.domain.News;
 import com.gymbuddy.backgymbuddy.admin.news.domain.NewsDto;
 import com.gymbuddy.backgymbuddy.admin.news.service.NewsService;
-import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.NEWS_PREFIX;
 
@@ -59,7 +57,7 @@ public class NewsController extends BaseController {
      * 대외뉴스 등록
      */
     @PostMapping(URI_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertNews(@RequestBody NewsDto news) {
+    public ResponseEntity<Map<String, Object>> insertNews(@ModelAttribute NewsDto news) {
         log.info("대외뉴스 등록: {}", news);
 
         // 이미지 업로드
@@ -71,7 +69,7 @@ public class NewsController extends BaseController {
             File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
             news.getFile().transferTo(realFile);
             news.setImgName(filename);
-            news.setImgPath(newsPath + realFile.getName());
+            news.setImgPath(newsPath + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -85,7 +83,7 @@ public class NewsController extends BaseController {
      * 대외뉴스 수정
      */
     @PutMapping(URI_PREFIX + "/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateNews(@PathVariable("id") Long id, @RequestBody NewsDto news) {
+    public ResponseEntity<Map<String, Object>> updateNews(@PathVariable("id") Long id, @ModelAttribute NewsDto news) {
         log.info("대외뉴스 수정 - id: {}, param: {}", id, news);
 
         News origin = newsService.findOne(id);
@@ -96,7 +94,7 @@ public class NewsController extends BaseController {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
                 news.getFile().transferTo(realFile);
                 news.setImgName(filename);
-                news.setImgPath(newsPath + realFile.getName());
+                news.setImgPath(newsPath + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
                 File originFile = new File(newfile + "/" + origin.getImgPath());
@@ -111,7 +109,6 @@ public class NewsController extends BaseController {
         newsService.update(id, news);
         News findNews = newsService.findOne(id);
 
-
         boolean flag = true;
         if (news.getTitle() != null) {
             flag = news.getTitle().equals(findNews.getTitle()) ? true : false;
@@ -124,9 +121,6 @@ public class NewsController extends BaseController {
         }
         if (news.getImgName() != null) {
             flag = news.getImgName().equals(findNews.getImgName());
-        }
-        if (news.getMainYn() != null) {
-            flag = news.getMainYn().equals(findNews.getMainYn());
         }
 
         Map<String, Object> result = new HashMap<>();

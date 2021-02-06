@@ -6,6 +6,7 @@ import com.gymbuddy.backgymbuddy.admin.youtube.domain.YoutubeDto;
 import com.gymbuddy.backgymbuddy.admin.youtube.service.YoutubeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,7 +64,7 @@ public class YoutubeController extends BaseController {
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             youtube.getFile().transferTo(realFile);
             youtube.setImgName(filename);
-            youtube.setImgPath(youtubePath + realFile.getName());
+            youtube.setImgPath(youtubePath + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -76,28 +77,31 @@ public class YoutubeController extends BaseController {
     /**
      * 업로드 날짜, 제목, 내용, 링크, 이미지 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateYoutube(@PathVariable("id") Long id, @RequestBody YoutubeDto youtube) {
+    @PutMapping(value = URI_PREFIX + "/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateYoutube(@PathVariable("id") Long id, @ModelAttribute YoutubeDto youtube) {
         log.info("유튜브 수정 - id: {}, youtube: {}", id, youtube);
 
-        Youtube origin = youtubeService.findOne(id);
-        // 기존의 이미지 파일과 다른 파일인 경우에만 새로운 파일을 서버에 올린다.
-        String filename = youtube.getFile().getOriginalFilename();
-        if (!origin.getImgName().equals(filename)) {
-            // 이미지 업로드
-            try {
-                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
-                youtube.getFile().transferTo(realFile);
-                youtube.setImgName(filename);
-                youtube.setImgPath(youtubePath + realFile.getName());
+        // 이미지가 있는 경우에만 실행
+        if (youtube.getFile() != null) {
+            Youtube origin = youtubeService.findOne(id);
+            // 기존의 이미지 파일과 다른 파일인 경우에만 새로운 파일을 서버에 올린다.
+            String filename = youtube.getFile().getOriginalFilename();
+            if (!origin.getImgName().equals(filename)) {
+                // 이미지 업로드
+                try {
+                    File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
+                    youtube.getFile().transferTo(realFile);
+                    youtube.setImgName(filename);
+                    youtube.setImgPath(youtubePath + "/" + realFile.getName());
 
-                // 기존 이미지 파일 서버에서 삭제
-                File originFile = new File(newFile + "/" + origin.getImgPath());
-                if (originFile.exists()) {
-                    originFile.delete();
+                    // 기존 이미지 파일 서버에서 삭제
+                    File originFile = new File(newFile + "/" + origin.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
 

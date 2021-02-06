@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.cart.domain;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.Goods;
 import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
 import com.gymbuddy.backgymbuddy.admin.user.domain.User;
@@ -11,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "cart")
 @Data
-public class Cart {
+public class Cart extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.order.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.Address;
+import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import com.gymbuddy.backgymbuddy.admin.enums.status.OrderStatus;
 import com.gymbuddy.backgymbuddy.admin.user.domain.User;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Data
-public class Orders {
+public class Orders extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

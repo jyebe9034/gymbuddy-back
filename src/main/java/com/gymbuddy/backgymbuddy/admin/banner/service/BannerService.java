@@ -5,12 +5,13 @@ import com.gymbuddy.backgymbuddy.admin.banner.domain.BannerDto;
 import com.gymbuddy.backgymbuddy.admin.banner.repository.BannerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -30,6 +31,11 @@ public class BannerService {
 
     @Transactional
     public Long save(BannerDto banner) {
+        // 현재 로그인한 아이디 정보 조회
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
+
         Banner entity = new Banner();
         entity.setTitle(banner.getTitle());
         entity.setCategoryId(banner.getCategoryId());
@@ -37,6 +43,10 @@ public class BannerService {
         entity.setBtnTitle(banner.getBtnTitle());
         entity.setImgPath(banner.getImgPath());
         entity.setImgName(banner.getImgName());
+        entity.setCreateDate(LocalDateTime.now());
+//        entity.setCreateId(loginId);
+        entity.setUpdateDate(LocalDateTime.now());
+//        entity.setUpdateId(loginId);
 
         bannerRepository.save(entity);
         return entity.getId();
@@ -44,6 +54,11 @@ public class BannerService {
 
     @Transactional
     public void update(Long id, BannerDto banner) {
+        // 현재 로그인한 아이디 정보 조회
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
+
         Banner origin = findOne(id);
         if (banner.getTitle() != null) {
             origin.setTitle(banner.getTitle());
@@ -63,6 +78,8 @@ public class BannerService {
         if (banner.getImgName() != null) {
             origin.setImgName(banner.getImgName());
         }
+        origin.setUpdateDate(LocalDateTime.now());
+//        origin.setUpdateId(loginId);
     }
 
     @Transactional

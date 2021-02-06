@@ -18,6 +18,4 @@ public class NoticeDto {
     private String imgPath;
 
     private String imgName;
-
-    private String mainYn;
 }
