@@ -1,8 +1,10 @@
 package com.gymbuddy.backgymbuddy.admin.member.service;
 
+import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BiDto;
 import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BusinessIdentity;
 import com.gymbuddy.backgymbuddy.admin.enums.status.WebMobileStatus;
 import com.gymbuddy.backgymbuddy.admin.member.domain.Member;
+import com.gymbuddy.backgymbuddy.admin.member.domain.MemberDto;
 import com.gymbuddy.backgymbuddy.admin.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,21 +21,38 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final EntityManager em;
     private final MemberRepository memberRepository;
 
-    public Member findByStatus(WebMobileStatus webMobileStatus) {
-        return em.find(Member.class, webMobileStatus);
+    public List<Member> findAll() {
+        return memberRepository.findAll();
+    }
+
+    public Member findOne(Long id) {
+        return memberRepository.findById(id).get();
     }
 
     @Transactional
-    public Long save(Member member) {
+    public Long save(MemberDto dto) {
+        Member member = new Member();
+        member.setImgName(dto.getImgName());
+        member.setImgPath(dto.getImgPath());
+        member.setWebOrMobile(dto.getWebMobile());
+
         memberRepository.save(member);
         return member.getId();
     }
 
     @Transactional
-    public void delete(Long id) {
-        memberRepository.deleteById(id);
+    public void update(Long id, MemberDto dto) {
+        Member member = findOne(id);
+        if (dto.getImgPath() != null) {
+            member.setImgPath(dto.getImgPath());
+        }
+        if (dto.getImgName() != null) {
+            member.setImgName(dto.getImgName());
+        }
+        if (dto.getWebMobile() != null) {
+            member.setWebOrMobile(dto.getWebMobile());
+        }
     }
 }

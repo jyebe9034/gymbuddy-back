@@ -2,6 +2,7 @@ package com.gymbuddy.backgymbuddy.admin.history.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
+import com.gymbuddy.backgymbuddy.admin.history.domain.HistoryDto;
 import com.gymbuddy.backgymbuddy.admin.history.service.HistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,31 +25,14 @@ public class HistoryController extends BaseController {
     private final HistoryService historyService;
 
     /**
-     * 전체 활동기록 조회 (관리자)
-     */
-    @GetMapping(URI_PREFIX + "/allToAdmin")
-    public ResponseEntity<List<History>> selectHistoryList() {
-        return createResponseEntity(true, historyService.findALl());
-    }
-
-    /**
-     * 전체 활동기록 조회 (사용자) -> 시간별 정렬
-     */
-    @GetMapping(URI_PREFIX + "/allToUser")
-    public ResponseEntity<List<History>> selectHistoryListByDate() {
-        return createResponseEntity(true, historyService.findAllByDate());
-    }
-
-    /**
      * 활동기록 등록
      */
     @PostMapping(URI_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertHistory(@RequestBody History history) {
-        log.info("활동기록 등록: {}", history);
-        Long id = historyService.save(history);
+    public ResponseEntity<Map<String, Object>> insertHistory(@ModelAttribute HistoryDto dto) {
+        log.info("활동기록 등록: {}", dto);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
+        result.put("id", historyService.save(dto));
         return createResponseEntity(true, result);
     }
 
@@ -57,26 +41,36 @@ public class HistoryController extends BaseController {
      */
     @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateHistory(
-            @PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
-        log.info("활동기록 수정 id: {}, param: {}", id, param);
-        historyService.update(id, param);
+            @PathVariable("id") Long id, @ModelAttribute HistoryDto dto) {
+        log.info("활동기록 수정 id: {}, dto: {}", id, dto);
 
+        historyService.update(id, dto);
         History findHistory = historyService.findOne(id);
+
+        boolean flag = true;
+        if (dto.getHistoryDate() != null) {
+            flag = dto.getHistoryDate().equals(findHistory.getHistoryDate());
+        }
+        if (dto.getTitle() != null) {
+            flag = dto.getTitle().equals(findHistory.getTitle()) ? true : false;
+        }
+
         Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
-        result.put("historyDate", findHistory.getHistoryDate());
-        result.put("title", findHistory.getTitle());
+        result.put("result", flag);
         return createResponseEntity(true, result);
     }
 
     /**
      * 활동기록 삭제
-     * @param id 삭제할 글번호
      */
     @DeleteMapping(URI_PREFIX + "/delete/{id}")
     public ResponseEntity<History> deleteHistory(@PathVariable("id") Long id) {
         log.info("활동기록 삭제: {}", id);
-        return createResponseEntity(true, historyService.delete(id));
+        historyService.delete(id);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", "success");
+        return createResponseEntity(true, result);
     }
 
 }

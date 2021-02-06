@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.businessIdentity.service;
 
+import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BiDto;
 import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BusinessIdentity;
 import com.gymbuddy.backgymbuddy.admin.businessIdentity.repository.BiRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,20 +27,27 @@ public class BiService {
     }
 
     @Transactional
-    public Long save(BusinessIdentity businessIdentity) {
-        biRepository.save(businessIdentity);
-        return businessIdentity.getId();
+    public Long save(BiDto dto) {
+        BusinessIdentity bi = new BusinessIdentity();
+        bi.setImgPath(dto.getImgPath());
+        bi.setImgName(dto.getImgName());
+        bi.setWebMobile(dto.getWebMobile());
+
+        biRepository.save(bi);
+        return bi.getId();
     }
 
     @Transactional
-    public void update(Long id) {
-        BusinessIdentity businessIdentity = biRepository.findById(id).get();
-        // TODO 이미지 로직
+    public void update(Long id, BiDto dto) {
+        BusinessIdentity bi = findOne(id);
+        if (dto.getImgPath() != null) {
+            bi.setImgPath(dto.getImgPath());
+        }
+        if (dto.getImgName() != null) {
+            bi.setImgName(dto.getImgName());
+        }
+        if (dto.getWebMobile() != null) {
+            bi.setWebMobile(dto.getWebMobile());
+        }
     }
-
-    @Transactional
-    public void delete(Long id) {
-        biRepository.deleteById(id);
-    }
-
 }

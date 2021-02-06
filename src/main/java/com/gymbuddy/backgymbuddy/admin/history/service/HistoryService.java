@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.history.service;
 
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
+import com.gymbuddy.backgymbuddy.admin.history.domain.HistoryDto;
 import com.gymbuddy.backgymbuddy.admin.history.repository.HistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,25 +34,28 @@ public class HistoryService {
     }
 
     @Transactional
-    public Long save(History history) {
+    public Long save(HistoryDto dto) {
+        History history = new History();
+        history.setHistoryDate(dto.getHistoryDate());
+        history.setTitle(dto.getTitle());
+
         historyRepository.save(history);
         return history.getId();
     }
 
     @Transactional
-    public void update(Long id, Map<String, Object> param) {
-        History history = historyRepository.findById(id).get();
-        if (param.get("historyDate") != null) {
-            history.setHistoryDate(LocalDateTime.parse(Objects.toString(param.get("historyDate"))));
+    public void update(Long id, HistoryDto dto) {
+        History history = findOne(id);
+        if (dto.getHistoryDate() != null) {
+            history.setHistoryDate(dto.getHistoryDate());
         }
-        if (param.get("title") != null) {
-            history.setTitle(Objects.toString(param.get("title")));
+        if (dto.getTitle() != null) {
+            history.setTitle(dto.getTitle());
         }
     }
 
     @Transactional
-    public Long delete(Long id) {
+    public void delete(Long id) {
         historyRepository.deleteById(id);
-        return id;
     }
 }

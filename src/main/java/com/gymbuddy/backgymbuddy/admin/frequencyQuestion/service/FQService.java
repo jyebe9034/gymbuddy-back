@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.frequencyQuestion.service;
 
+import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain.FQDto;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain.FrequencyQuestion;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.repository.FQRepository;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
@@ -31,27 +32,32 @@ public class FQService {
     }
 
     @Transactional
-    public Long save(FrequencyQuestion faq) {
-        fqRepository.save(faq);
-        return faq.getId();
+    public Long save(FQDto dto) {
+        FrequencyQuestion fq = new FrequencyQuestion();
+        fq.setCategoryId(dto.getCategoryId());
+        fq.setTitle(dto.getTitle());
+        fq.setContents(dto.getContents());
+
+        fqRepository.save(fq);
+        return fq.getId();
     }
 
     @Transactional
-    public void update(Long id, Map<String, Object> param) {
-        FrequencyQuestion frequencyQuestion = fqRepository.findById(id).get();
-        if (param.get("title") != null) {
-            frequencyQuestion.setTitle(Objects.toString(param.get("title")));
+    public void update(Long id, FQDto dto) {
+        FrequencyQuestion fq = findOne(id);
+        if (dto.getCategoryId() != null) {
+            fq.setCategoryId(dto.getCategoryId());
         }
-        if (param.get("contents") != null) {
-            frequencyQuestion.setContents(Objects.toString(param.get("contents")));
+        if (dto.getTitle() != null) {
+            fq.setTitle(dto.getTitle());
+        }
+        if (dto.getContents() != null) {
+            fq.setContents(dto.getContents());
         }
     }
 
     @Transactional
-    public void delete(List<Integer> ids) {
-        for (int id : ids) {
-            long idL = new Long(id);
-            fqRepository.deleteById(idL);
-        }
+    public void delete(Long id) {
+        fqRepository.deleteById(id);
     }
 }
