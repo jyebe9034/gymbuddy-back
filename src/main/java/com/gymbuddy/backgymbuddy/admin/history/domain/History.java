@@ -17,7 +17,7 @@ public class History extends BaseDomain {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime historyDate;
+    private String historyDate;
 
     @Column(length = 150, nullable = false)
     private String title;

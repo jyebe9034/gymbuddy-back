@@ -26,4 +26,8 @@ public class GoodsOption extends BaseDomain {
      */
     @Column(nullable = false)
     private int inventory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "goods_id")
+    private Goods goods;
 }

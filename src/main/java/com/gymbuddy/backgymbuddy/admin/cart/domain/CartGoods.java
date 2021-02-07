@@ -1,26 +1,24 @@
-package com.gymbuddy.backgymbuddy.admin.order.domain;
+package com.gymbuddy.backgymbuddy.admin.cart.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gymbuddy.backgymbuddy.admin.base.Product;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.Goods;
+import com.gymbuddy.backgymbuddy.admin.order.domain.Orders;
 import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
 import lombok.Data;
 
 import javax.persistence.*;
-
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name = "order_product")
+@Table(name = "cart_goods")
 @Data
-public class OrderProduct {
+public class CartGoods {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_product_id")
+    @Column(name = "cart_goods_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
@@ -28,16 +26,11 @@ public class OrderProduct {
     private Goods goods;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "program_id")
-    private Program program;
-
-    @JsonIgnore
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "orders_id")
-    private Orders orders;
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     @Column
-    private BigDecimal orderPrice; // 주문 가격
+    private BigDecimal goodsPrice;
 
     @Column
     private int count; // 주문 수량

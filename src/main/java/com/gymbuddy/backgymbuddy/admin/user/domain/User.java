@@ -75,7 +75,7 @@ public class User extends BaseDomain implements UserDetails {
     /**
      * 장바구니
      */
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Cart> cartList = new ArrayList<>();
 
     /**

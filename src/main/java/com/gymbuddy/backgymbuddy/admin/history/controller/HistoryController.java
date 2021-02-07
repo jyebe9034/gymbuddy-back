@@ -28,7 +28,7 @@ public class HistoryController extends BaseController {
      * 활동기록 등록
      */
     @PostMapping(URI_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertHistory(@ModelAttribute HistoryDto dto) {
+    public ResponseEntity<Map<String, Object>> insertHistory(@RequestBody HistoryDto dto) {
         log.info("활동기록 등록: {}", dto);
 
         Map<String, Object> result = new HashMap<>();
@@ -41,7 +41,7 @@ public class HistoryController extends BaseController {
      */
     @PutMapping(URI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateHistory(
-            @PathVariable("id") Long id, @ModelAttribute HistoryDto dto) {
+            @PathVariable("id") Long id, @RequestBody HistoryDto dto) {
         log.info("활동기록 수정 id: {}, dto: {}", id, dto);
 
         historyService.update(id, dto);

@@ -9,11 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -21,7 +19,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TermService {
 
-    private final EntityManager em;
     private final TermRepository termRepository;
 
     public List<Term> findAll() {
@@ -32,15 +29,14 @@ public class TermService {
         return termRepository.findById(id).get();
     }
 
-    public List<Term> findByTitle(String title) {
-        /*List<Term> web = termRepository.findByTitleAndStatus(title, WebMobileStatus.WEB);
-        List<Term> mobile = termRepository.findByTitleAndStatus(title, WebMobileStatus.MOBILE);
+    public Map<String, Object> findByTitle(String title) {
+        Term web = termRepository.findByTitleAndWebMobile(title, WebMobileStatus.WEB);
+        Term mobile = termRepository.findByTitleAndWebMobile(title, WebMobileStatus.MOBILE);
 
         Map<String, Object> result = new HashMap<>();
         result.put("web", web);
         result.put("mobile", mobile);
-        return result;*/
-        return termRepository.findByTitle(title);
+        return result;
     }
 
     public List<Term> findPrivatePolicy() {

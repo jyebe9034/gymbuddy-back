@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 public class HistoryDto {
 
     private Long id;
-    private LocalDateTime historyDate;
+    private String historyDate;
     private String title;
 }

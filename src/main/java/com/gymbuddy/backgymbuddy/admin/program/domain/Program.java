@@ -2,11 +2,11 @@ package com.gymbuddy.backgymbuddy.admin.program.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.Product;
 import com.gymbuddy.backgymbuddy.admin.cart.domain.Cart;
-import com.gymbuddy.backgymbuddy.admin.order.domain.OrderProduct;
+import com.gymbuddy.backgymbuddy.admin.cart.domain.CartProgram;
+import com.gymbuddy.backgymbuddy.admin.order.domain.OrderProgram;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +15,6 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "program")
 @Data
-@DiscriminatorValue("PROGRAM")
 public class Program extends Product {
 
     @Id
@@ -27,13 +26,13 @@ public class Program extends Product {
      * 프로그램 이름
      */
     @Column(length = 100, nullable = false)
-    private String programName;
+    private String title;
 
     /**
      * 강사 이름
      */
     @Column(length = 30, nullable = false)
-    private String coachName;
+    private String coach;
 
     /**
      * 클래스가 열리는 장소
@@ -54,9 +53,11 @@ public class Program extends Product {
     private String classTime;
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
-    private List<OrderProduct> orderProduct = new ArrayList<>();
+    private List<OrderProgram> orderProduct = new ArrayList<>();
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+    private List<CartProgram> cartProgram = new ArrayList<>();
+
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+    private List<ProgramOption> programOptions = new ArrayList<>();
 }

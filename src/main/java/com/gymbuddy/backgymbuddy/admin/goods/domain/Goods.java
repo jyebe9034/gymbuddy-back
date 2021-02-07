@@ -2,7 +2,9 @@ package com.gymbuddy.backgymbuddy.admin.goods.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.Product;
 import com.gymbuddy.backgymbuddy.admin.cart.domain.Cart;
-import com.gymbuddy.backgymbuddy.admin.order.domain.OrderProduct;
+import com.gymbuddy.backgymbuddy.admin.cart.domain.CartGoods;
+import com.gymbuddy.backgymbuddy.admin.order.domain.OrderGoods;
+import com.gymbuddy.backgymbuddy.admin.order.domain.OrderProgram;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +16,6 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "goods")
 @Data
-@DiscriminatorValue("GODDS")
 public class Goods extends Product {
 
     @Id
@@ -26,12 +27,14 @@ public class Goods extends Product {
      * 굿즈 이름
      */
     @Column(length = 200, nullable = false)
-    private String goodsName;
+    private String name;
 
     @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
-    private List<OrderProduct> orderProduct = new ArrayList<>();
+    private List<OrderGoods> orderGoods = new ArrayList<>();
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
+    private List<CartGoods> cartGoods = new ArrayList<>();
+
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
+    private List<GoodsOption> goodsOptions = new ArrayList<>();
 }

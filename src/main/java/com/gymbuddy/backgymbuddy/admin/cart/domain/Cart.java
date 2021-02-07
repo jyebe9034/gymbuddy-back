@@ -7,6 +7,7 @@ import com.gymbuddy.backgymbuddy.admin.user.domain.User;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -23,13 +24,20 @@ public class Cart extends BaseDomain {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "cart")
-    private List<Program> programs;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private List<CartProgram> programs;
 
-    @OneToMany(mappedBy = "cart")
-    private List<Goods> goods;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private List<CartGoods> goods;
 
+    /**
+     * 수량 or 인원수
+     * 프로그램에서는 1로 고정
+     */
     @Column
     private int count;
+
+    @Column
+    private BigDecimal totalPrice;
 
 }

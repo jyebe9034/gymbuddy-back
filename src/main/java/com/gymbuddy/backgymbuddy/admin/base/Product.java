@@ -3,8 +3,10 @@ package com.gymbuddy.backgymbuddy.admin.base;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import java.math.BigInteger;
 
+@MappedSuperclass
 @Data
 public abstract class Product extends BaseDomain {
 
@@ -31,10 +33,4 @@ public abstract class Product extends BaseDomain {
      */
     @Column(length = 50)
     private String detailImgName;
-
-    /**
-     * 가격
-     */
-    @Column
-    private BigInteger price;
 }
