@@ -62,19 +62,19 @@ public class MissionController extends BaseController {
             File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
             mission.getFile1().transferTo(realFile1);
             mission.setImgName1(imgName1);
-            mission.setImgPath1(missionPath + realFile1.getName());
+            mission.setImgPath1(missionPath + "/" + realFile1.getName());
 
             // 파일2
             File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
             mission.getFile2().transferTo(realFile2);
             mission.setImgName2(imgName2);
-            mission.setImgPath2(missionPath + realFile2.getName());
+            mission.setImgPath2(missionPath + "/" + realFile2.getName());
 
             // 파일3
             File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
             mission.getFile3().transferTo(realFile3);
             mission.setImgName3(imgName3);
-            mission.setImgPath3(missionPath + realFile3.getName());
+            mission.setImgPath3(missionPath + "/" + realFile3.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -95,52 +95,58 @@ public class MissionController extends BaseController {
         log.info("미션 수정 id: {}, dto: {}", id, dto);
 
         Mission mission = missionService.findOne(id);
-        String imgName1 = dto.getFile1().getOriginalFilename();
-        String imgName2 = dto.getFile2().getOriginalFilename();
-        String imgName3 = dto.getFile3().getOriginalFilename();
-        if (!mission.getImgName1().equals(imgName1)) {
-            try {
-                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
-                dto.getFile1().transferTo(realFile);
-                dto.setImgName1(imgName1);
-                dto.setImgPath1(missionPath + realFile.getName());
+        if (dto.getFile1() != null) {
+            String imgName1 = dto.getFile1().getOriginalFilename();
+            if (!mission.getImgName1().equals(imgName1)) {
+                try {
+                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
+                    dto.getFile1().transferTo(realFile);
+                    dto.setImgName1(imgName1);
+                    dto.setImgPath1(missionPath + "/" + realFile.getName());
 
-                File originFile = new File(saveFile + "/" + dto.getImgPath1());
-                if (originFile.exists()) {
-                    originFile.delete();
+                    File originFile = new File(saveFile + "/" + dto.getImgPath1());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
-        if (!mission.getImgName2().equals(imgName2)) {
-            try {
-                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
-                dto.getFile2().transferTo(realFile);
-                dto.setImgName2(imgName2);
-                dto.setImgPath2(missionPath + realFile.getName());
+        if (dto.getFile2() != null) {
+            String imgName2 = dto.getFile2().getOriginalFilename();
+            if (!mission.getImgName2().equals(imgName2)) {
+                try {
+                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
+                    dto.getFile2().transferTo(realFile);
+                    dto.setImgName2(imgName2);
+                    dto.setImgPath2(missionPath + "/" + realFile.getName());
 
-                File originFile = new File(saveFile + "/" + dto.getImgPath2());
-                if (originFile.exists()) {
-                    originFile.delete();
+                    File originFile = new File(saveFile + "/" + dto.getImgPath2());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
-        if (!mission.getImgName3().equals(imgName3)) {
-            try {
-                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
-                dto.getFile3().transferTo(realFile);
-                dto.setImgName1(imgName3);
-                dto.setImgPath1(missionPath + realFile.getName());
+        if (dto.getFile3() != null) {
+            String imgName3 = dto.getFile3().getOriginalFilename();
+            if (!mission.getImgName3().equals(imgName3)) {
+                try {
+                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
+                    dto.getFile3().transferTo(realFile);
+                    dto.setImgName3(imgName3);
+                    dto.setImgPath3(missionPath + "/" + realFile.getName());
 
-                File originFile = new File(saveFile + "/" + dto.getImgPath3());
-                if (originFile.exists()) {
-                    originFile.delete();
+                    File originFile = new File(saveFile + "/" + dto.getImgPath3());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
 

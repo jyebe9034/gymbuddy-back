@@ -27,4 +27,8 @@ public class ProgramOption extends BaseDomain {
     @Column(nullable = false)
     private int userCount;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "program_id")
+    private Program program;
+
 }

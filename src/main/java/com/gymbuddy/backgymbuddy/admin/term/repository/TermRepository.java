@@ -9,5 +9,5 @@ public interface TermRepository extends JpaRepository<Term, Long> {
 
     List<Term> findByTitle(String title);
 
-    //List<Term> findByTitleAndStatus(String title, WebMobileStatus webMobile);
+    Term findByTitleAndWebMobile(String title, WebMobileStatus webMobile);
 }
