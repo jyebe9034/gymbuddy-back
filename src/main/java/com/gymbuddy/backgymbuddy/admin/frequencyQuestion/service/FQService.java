@@ -37,6 +37,8 @@ public class FQService {
         fq.setCategoryId(dto.getCategoryId());
         fq.setTitle(dto.getTitle());
         fq.setContents(dto.getContents());
+        fq.setCreateDate(LocalDateTime.now());
+        fq.setUpdateDate(LocalDateTime.now());
 
         fqRepository.save(fq);
         return fq.getId();
@@ -54,6 +56,7 @@ public class FQService {
         if (dto.getContents() != null) {
             fq.setContents(dto.getContents());
         }
+        fq.setUpdateDate(LocalDateTime.now());
     }
 
     @Transactional

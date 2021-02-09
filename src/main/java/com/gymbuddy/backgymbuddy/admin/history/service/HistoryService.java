@@ -38,6 +38,8 @@ public class HistoryService {
         History history = new History();
         history.setHistoryDate(dto.getHistoryDate());
         history.setTitle(dto.getTitle());
+        history.setCreateDate(LocalDateTime.now());
+        history.setUpdateDate(LocalDateTime.now());
 
         historyRepository.save(history);
         return history.getId();
@@ -52,6 +54,7 @@ public class HistoryService {
         if (dto.getTitle() != null) {
             history.setTitle(dto.getTitle());
         }
+        history.setUpdateDate(LocalDateTime.now());
     }
 
     @Transactional

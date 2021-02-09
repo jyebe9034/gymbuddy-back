@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -32,6 +33,8 @@ public class BiService {
         bi.setImgPath(dto.getImgPath());
         bi.setImgName(dto.getImgName());
         bi.setWebMobile(dto.getWebMobile());
+        bi.setCreateDate(LocalDateTime.now());
+        bi.setUpdateDate(LocalDateTime.now());
 
         biRepository.save(bi);
         return bi.getId();
@@ -49,5 +52,6 @@ public class BiService {
         if (dto.getWebMobile() != null) {
             bi.setWebMobile(dto.getWebMobile());
         }
+        bi.setUpdateDate(LocalDateTime.now());
     }
 }

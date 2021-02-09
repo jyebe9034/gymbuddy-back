@@ -95,6 +95,7 @@ public class MissionController extends BaseController {
         log.info("미션 수정 id: {}, dto: {}", id, dto);
 
         Mission mission = missionService.findOne(id);
+
         if (dto.getFile1() != null) {
             String imgName1 = dto.getFile1().getOriginalFilename();
             if (!mission.getImgName1().equals(imgName1)) {

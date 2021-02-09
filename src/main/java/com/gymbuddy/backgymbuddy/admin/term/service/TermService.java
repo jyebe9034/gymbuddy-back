@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +42,7 @@ public class TermService {
     }
 
     public List<Term> findPrivatePolicy() {
-        return termRepository.findByTitle("개인정보 처리 방침");
+        return termRepository.findByTitle("개인정보 처리방침");
     }
 
     public List<Term> findTermsOfUse() {
@@ -54,6 +56,8 @@ public class TermService {
         term.setImgName(dto.getImgName());
         term.setImgPath(dto.getImgPath());
         term.setWebMobile(dto.getWebMobile());
+        term.setCreateDate(LocalDateTime.now());
+        term.setUpdateDate(LocalDateTime.now());
 
         termRepository.save(term);
         return term.getId();
@@ -74,5 +78,6 @@ public class TermService {
         if (dto.getWebMobile() != null) {
             term.setWebMobile(dto.getWebMobile());
         }
+        term.setUpdateDate(LocalDateTime.now());
     }
 }

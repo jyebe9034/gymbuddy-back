@@ -88,22 +88,25 @@ public class MemberController extends BaseController {
         log.info("멤버소개 수정 id: {}, dto: {}", id, dto);
 
         Member member = memberService.findOne(id);
-        String imgName = dto.getFile().getOriginalFilename();
-        if (!member.getImgName().equals(imgName)) {
-            try {
-                // 이미지 업로드
-                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
-                dto.getFile().transferTo(realFile);
-                dto.setImgName(imgName);
-                dto.setImgPath(memberPath + realFile.getName());
 
-                // 기존 이미지를 파일 서버에서 삭제
-                File originFile = new File(saveFile + "/" + member.getImgPath());
-                if (originFile.exists()) {
-                    originFile.delete();
+        if (dto.getFile() != null) {
+            String imgName = dto.getFile().getOriginalFilename();
+            if (!member.getImgName().equals(imgName)) {
+                try {
+                    // 이미지 업로드
+                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
+                    dto.getFile().transferTo(realFile);
+                    dto.setImgName(imgName);
+                    dto.setImgPath(memberPath + realFile.getName());
+
+                    // 기존 이미지를 파일 서버에서 삭제
+                    File originFile = new File(saveFile + "/" + member.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
 
