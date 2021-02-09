@@ -40,7 +40,7 @@ public class TermController extends BaseController {
      * 약관 상세 (관리자)
      */
     @GetMapping(URI_PREFIX + "/detail/{title}")
-    public ResponseEntity<Map<String, Object>> findByTitle(@PathVariable("title") String title) {
+    public ResponseEntity<Map<String, Object>> selectTermDetail(@PathVariable("title") String title) {
         return createResponseEntity(true, termService.findByTitle(title));
     }
 
@@ -48,7 +48,7 @@ public class TermController extends BaseController {
      * 푸터 - 개인정보처리방침 보기 (사용자)
      */
     @GetMapping(URI_PREFIX + "/footer/private_policy")
-    public ResponseEntity<List<Term>> selectPrivacyPolicy() {
+    public ResponseEntity<List<Term>> selectPrivatePolicy() {
         return createResponseEntity(true, termService.findPrivatePolicy());
     }
 
@@ -94,22 +94,25 @@ public class TermController extends BaseController {
         log.info("약관 수정 id: {}, dto: {}", dto);
 
         Term term = termService.findOne(id);
-        String imgName = dto.getFile().getOriginalFilename();
-        if (!term.getImgName().equals(imgName)) {
-            try {
-                // 이미지 업로드
-                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
-                dto.getFile().transferTo(realFile);
-                dto.setImgName(imgName);
-                dto.setImgPath(termPath + realFile.getName());
 
-                // 기존 이미지를 파일 서버에서 삭제
-                File originFile = new File(saveFile + "/" + term.getImgPath());
-                if (originFile.exists()) {
-                    originFile.delete();
+        if (dto.getFile() != null) {
+            String imgName = dto.getFile().getOriginalFilename();
+            if (!term.getImgName().equals(imgName)) {
+                try {
+                    // 이미지 업로드
+                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
+                    dto.getFile().transferTo(realFile);
+                    dto.setImgName(imgName);
+                    dto.setImgPath(termPath + realFile.getName());
+
+                    // 기존 이미지를 파일 서버에서 삭제
+                    File originFile = new File(saveFile + "/" + term.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
 

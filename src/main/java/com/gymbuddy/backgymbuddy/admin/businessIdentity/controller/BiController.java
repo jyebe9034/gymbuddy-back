@@ -86,20 +86,23 @@ public class BiController extends BaseController {
         log.info("BI 수정 id: {}, bi: {}", id, dto);
 
         BusinessIdentity bi = biService.findOne(id);
-        String imgName = dto.getFile().getOriginalFilename();
-        if (!bi.getImgName().equals(imgName)) {
-            try {
-                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
-                dto.getFile().transferTo(realFile);
-                dto.setImgName(imgName);
-                dto.setImgPath(biPath + realFile.getName());
 
-                File originFile = new File(saveFile + "/" + bi.getImgPath());
-                if (originFile.exists()) {
-                    originFile.delete();
+        if (dto.getFile() != null) {
+            String imgName = dto.getFile().getOriginalFilename();
+            if (!bi.getImgName().equals(imgName)) {
+                try {
+                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
+                    dto.getFile().transferTo(realFile);
+                    dto.setImgName(imgName);
+                    dto.setImgPath(biPath + realFile.getName());
+
+                    File originFile = new File(saveFile + "/" + bi.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
 

@@ -69,6 +69,8 @@ public class MissionService {
         mission.setImgPath2(dto.getImgPath2());
         mission.setImgName3(dto.getImgName3());
         mission.setImgPath3(dto.getImgPath3());
+        mission.setCreateDate(LocalDateTime.now());
+        mission.setUpdateDate(LocalDateTime.now());
 
         missionRepository.save(mission);
         return mission.getId();
@@ -98,6 +100,7 @@ public class MissionService {
         if (dto.getImgName3() != null) {
             mission.setImgName3(dto.getImgName3());
         }
+        mission.setUpdateDate(LocalDateTime.now());
     }
 
     @Transactional

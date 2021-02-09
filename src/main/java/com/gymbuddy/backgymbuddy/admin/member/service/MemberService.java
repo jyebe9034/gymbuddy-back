@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +39,8 @@ public class MemberService {
         member.setImgName(dto.getImgName());
         member.setImgPath(dto.getImgPath());
         member.setWebOrMobile(dto.getWebMobile());
+        member.setCreateDate(LocalDateTime.now());
+        member.setUpdateDate(LocalDateTime.now());
 
         memberRepository.save(member);
         return member.getId();
@@ -54,5 +58,6 @@ public class MemberService {
         if (dto.getWebMobile() != null) {
             member.setWebOrMobile(dto.getWebMobile());
         }
+        member.setUpdateDate(LocalDateTime.now());
     }
 }
