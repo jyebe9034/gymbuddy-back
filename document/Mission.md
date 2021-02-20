@@ -1,12 +1,12 @@
 # Mission API
 
-### 운동친구 소개 조회 (관리자)
+### 운동친구 소개 조회
 * 기본 정보 및 파라미터 설명
 * 미션, 활동기록, BI가 리스트 형태로 전달되므로 biList.imgName 등으로 사용 가능
 ```
 HTTP METHOD: GET
-METHOD NAME: selectAdminMissions
-PATH: /api/mission/allToAdmin
+METHOD NAME: selectMission
+PATH: /api/mission/allByMap
 PARAM: 없음
 ```
 * 결과 구조
@@ -73,81 +73,6 @@ PARAM: 없음
     ]
 }
 ```
-
-### 운동친구 소개 조회 (사용자) -> 아직 수정 중
-* 기본 정보 및 파라미터 설명
-* 미션, 활동기록, BI가 리스트 형태로 전달되므로 biList.imgName 등으로 사용 가능
-```
-HTTP METHOD: GET
-METHOD NAME: selectUserMissions
-PATH: /api/mission/allToUser
-PARAM: 없음
-```
-* 결과 구조
-```
-{
-    "biList": [
-        {
-            "createDate": 생성일,
-            "createId": 생성자,
-            "updateDate": 수정일,
-            "updateId": 수정자,
-            "id": 아이디(JPA 생성),
-            "imgPath": 이미지 경로,
-            "imgName": 이미지 명,
-            "webMobile": 웹/모바일 여부
-        },
-        {
-            "createDate": 생성일,
-            "createId": 생성자,
-            "updateDate": 수정일,
-            "updateId": 수정자,
-            "id": 아이디(JPA 생성),
-            "imgPath": 이미지 경로,
-            "imgName": 이미지 명,
-            "webMobile": 웹/모바일 여부
-        }
-    ],
-    "historyList": [
-        {
-            "createDate": 생성일
-            "createId": 생성자,
-            "updateDate": 수정일,
-            "updateId": 수정자,
-            "id": 아이디(JPA 생성),
-            "historyDate": 활동기록 날짜,
-            "title": 활동기록 제목
-        },
-        {
-            "createDate": 생성일
-            "createId": 생성자,
-            "updateDate": 수정일,
-            "updateId": 수정자,
-            "id": 아이디(JPA 생성),
-            "historyDate": 활동기록 날짜,
-            "title": 활동기록 제목
-        },
-        ...
-    ],
-    "missionList": [
-        {
-            "createDate": 생성일
-            "createId": 생성자,
-            "updateDate": 수정일,
-            "updateId": 수정자, 
-            "id": 아이디(JPA 생성),
-            "contents": "미션 소개",
-            "imgPath1": 이미지 경로1,
-            "imgName1": 이미지 명1,
-            "imgPath2": 이미지 경로2,
-            "imgName2": 이미지 명2,
-            "imgPath3": 이미지 경로3,
-            "imgName3": 이미지 명3
-        }
-    ]
-}
-```
-
 * 결과 예시
 ```
 {

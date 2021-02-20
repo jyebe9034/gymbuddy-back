@@ -26,6 +26,14 @@ public class NewsletterController extends BaseController {
     private final NewsletterService newsletterService;
 
     /**
+     * 뉴스레터 구독 이메일 전체 조회
+     */
+    @GetMapping(URI_PREFIX + "/all")
+    public ResponseEntity<List<Newsletter>> selectSubscriberList() {
+        return createResponseEntity(true, newsletterService.findAll());
+    }
+
+    /**
      * 뉴스레터 구독 이메일 등록
      */
     @PostMapping(URI_PREFIX + "/newSubscribe")

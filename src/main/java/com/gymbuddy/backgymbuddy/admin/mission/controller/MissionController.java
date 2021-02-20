@@ -1,7 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.mission.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
-import com.gymbuddy.backgymbuddy.admin.history.domain.History;
 import com.gymbuddy.backgymbuddy.admin.mission.domain.Mission;
 import com.gymbuddy.backgymbuddy.admin.mission.domain.MissionDto;
 import com.gymbuddy.backgymbuddy.admin.mission.service.MissionService;
@@ -29,57 +28,49 @@ public class MissionController extends BaseController {
     private final MissionService missionService;
 
     /**
-     * 미션과 비전 조회(관리자)
-     */
-    @GetMapping(URI_PREFIX + "/allToAdmin")
-    public ResponseEntity<Map<String, Object>> selectAdminMissions() {
-        return createResponseEntity(true, missionService.findAllToAdmin());
-    }
-
-    /**
      * 미션과 비전 조회
      */
-    @GetMapping(URI_PREFIX + "/allToUser")
-    public ResponseEntity<Map<String, Object>> selectUserMissions() {
-        return createResponseEntity(true, missionService.findAllToUser());
+    @GetMapping(URI_PREFIX + "/allByMap")
+    public ResponseEntity<Map<String, Object>> selectMission() {
+        return createResponseEntity(true, missionService.findAllByMap());
     }
 
     /**
      * 미션 등록
      */
     @PostMapping(URI_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertMission(@ModelAttribute MissionDto mission) {
-        log.info("공지사항 등록: {}", mission);
+    public ResponseEntity<Map<String, Object>> insertMission(@ModelAttribute MissionDto dto) {
+        log.info("공지사항 등록: {}", dto);
 
-        String imgName1 = mission.getFile1().getOriginalFilename();
-        String imgName2 = mission.getFile2().getOriginalFilename();
-        String imgName3 = mission.getFile3().getOriginalFilename();
+        String imgName1 = dto.getFile1().getOriginalFilename();
+        String imgName2 = dto.getFile2().getOriginalFilename();
+        String imgName3 = dto.getFile3().getOriginalFilename();
         try {
             if (!saveFile.exists()) {
                 saveFile.mkdir();
             }
             // 파일1
             File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
-            mission.getFile1().transferTo(realFile1);
-            mission.setImgName1(imgName1);
-            mission.setImgPath1(missionPath + "/" + realFile1.getName());
+            dto.getFile1().transferTo(realFile1);
+            dto.setImgName1(imgName1);
+            dto.setImgPath1(missionPath + "/" + realFile1.getName());
 
             // 파일2
             File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
-            mission.getFile2().transferTo(realFile2);
-            mission.setImgName2(imgName2);
-            mission.setImgPath2(missionPath + "/" + realFile2.getName());
+            dto.getFile2().transferTo(realFile2);
+            dto.setImgName2(imgName2);
+            dto.setImgPath2(missionPath + "/" + realFile2.getName());
 
             // 파일3
             File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
-            mission.getFile3().transferTo(realFile3);
-            mission.setImgName3(imgName3);
-            mission.setImgPath3(missionPath + "/" + realFile3.getName());
+            dto.getFile3().transferTo(realFile3);
+            dto.setImgName3(imgName3);
+            dto.setImgPath3(missionPath + "/" + realFile3.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
-        Long id = missionService.save(mission);
+        Long id = missionService.save(dto);
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", id);

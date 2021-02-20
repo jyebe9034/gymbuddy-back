@@ -4,17 +4,18 @@ import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BusinessIdentity;
 import com.gymbuddy.backgymbuddy.admin.businessIdentity.repository.BiRepository;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
 import com.gymbuddy.backgymbuddy.admin.history.repository.HistoryRepository;
-import com.gymbuddy.backgymbuddy.admin.history.service.HistoryService;
 import com.gymbuddy.backgymbuddy.admin.mission.domain.Mission;
 import com.gymbuddy.backgymbuddy.admin.mission.domain.MissionDto;
 import com.gymbuddy.backgymbuddy.admin.mission.repository.MissionRepository;
-import com.gymbuddy.backgymbuddy.admin.term.domain.Term;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -35,20 +36,8 @@ public class MissionService {
         return missionRepository.findById(id).get();
     }
 
-    public Map<String, Object> findAllToAdmin() {
+    public Map<String, Object> findAllByMap() {
         List<History> histories = historyRepository.findAll();
-        List<BusinessIdentity> biList = biRepository.findAll();
-        List<Mission> mission = missionRepository.findAll();
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("historyList", histories);
-        result.put("biList", biList);
-        result.put("missionList", mission);
-        return result;
-    }
-
-    public Map<String, Object> findAllToUser() {
-        List<History> histories = historyRepository.findAllByDate();
         List<BusinessIdentity> biList = biRepository.findAll();
         List<Mission> mission = missionRepository.findAll();
 
