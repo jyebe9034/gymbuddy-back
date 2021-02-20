@@ -1,5 +1,58 @@
 # Newsletter API
 
+### 전체 뉴스레터 구독자 조회 (관리자)
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectSubscriberList
+PATH: /api/newsletter/all
+PARAM: 없음
+```
+* 결과 구조
+```
+[
+    {
+        "createDate": 생성일
+        "createId": 생성자,
+        "updateDate": 수정일,
+        "updateId": 수정자,
+        "id": 아이디(JPA 생성),
+        "email": 이메일 주소
+    },
+    {
+        "createDate": 생성일
+        "createId": 생성자,
+        "updateDate": 수정일,
+        "updateId": 수정자,
+        "id": 아이디(JPA 생성),
+        "email": 이메일 주소
+    },
+    ...
+]
+```
+* 결과 예시
+```
+[
+    {
+        "createDate": "2021-02-09T13:07:13.285257",
+        "createId": test,
+        "updateDate": "2021-02-09T13:07:13.28572",
+        "updateId": test,
+        "id": 1,
+        "email": test1@gmail.com
+    },
+    {
+        "createDate": "2021-02-09T13:07:21.871573",
+        "createId": test,
+        "updateDate": "2021-02-09T13:07:21.871612",
+        "updateId": test,
+        "id": 2,
+        "email": test2@gmail.com
+    },
+    ...
+]
+```
+
 ### 뉴스레터 등록
 * 기본 정보 및 파라미터 설명
 ```

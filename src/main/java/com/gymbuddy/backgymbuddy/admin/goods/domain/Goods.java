@@ -23,11 +23,14 @@ public class Goods extends Product {
     @Column(name = "goods_id")
     private Long id;
 
-    /**
-     * 굿즈 이름
-     */
     @Column(length = 200, nullable = false)
     private String name;
+
+    /**
+     * 메인 노출 여부
+     */
+    @Column
+    private String mainYn;
 
     @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
     private List<OrderGoods> orderGoods = new ArrayList<>();

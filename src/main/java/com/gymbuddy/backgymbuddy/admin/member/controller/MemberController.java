@@ -64,16 +64,16 @@ public class MemberController extends BaseController {
         return createResponseEntity(true, result);
     }
 
-    private void memberFileUpload(MemberDto member) {
-        String imgName = member.getFile().getOriginalFilename();
+    private void memberFileUpload(MemberDto dto) {
+        String imgName = dto.getFile().getOriginalFilename();
         try {
             if (!saveFile.exists()) {
                 saveFile.mkdir();
             }
             File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
-            member.getFile().transferTo(realFile);
-            member.setImgName(imgName);
-            member.setImgPath(memberPath + realFile.getName());
+            dto.getFile().transferTo(realFile);
+            dto.setImgName(imgName);
+            dto.setImgPath(memberPath + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }

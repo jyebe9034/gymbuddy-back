@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -26,7 +28,12 @@ public class HistoryService {
     }
 
     public List<History> findAllByDate() {
-        return historyRepository.findAllByDate();
+        List<History> allByDate = findAllByDate();
+        for (History history : allByDate) {
+            String historyDate = history.getHistoryDate();
+        }
+        return allByDate;
+        //LocalDateTime historyDate = LocalDateTime.parse(historyDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public History findOne(Long id) {

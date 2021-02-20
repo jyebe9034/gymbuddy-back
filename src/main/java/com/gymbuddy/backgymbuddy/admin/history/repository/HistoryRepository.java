@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface HistoryRepository extends JpaRepository<History, Long> {
 
-    @Query(value = "SELECT h FROM History h ORDER BY h.historyDate")
+    @Query(value = "SELECT h.historyDate FROM History h")
     List<History> findAllByDate();
 }

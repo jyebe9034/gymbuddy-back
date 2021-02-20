@@ -48,7 +48,70 @@ PARAM: 없음
         "title": "이용약관",
         "imgPath": "/resources/static/img/term1612843633229_cat.jpg",
         "imgName": "cat.jpg",
-        "webMobile": "WEB"
+        "webMobile": "WE### 전체 약관 목록 조회 (관리자)
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectTermList
+PATH: /api/term/all
+PARAM: 없음
+```
+* 결과 구조
+```
+[
+{
+"createDate": 생성일
+"createId": 생성자,
+"updateDate": 수정일,
+"updateId": 수정자,
+"id": 아이디(JPA 생성),
+"title": 제목,
+"imgPath": 이미지 경로,
+"imgName": 이미지 명,
+"webMobile": 웹/모바일 여부
+},
+{
+"createDate": 생성일
+"createId": 생성자,
+"updateDate": 수정일,
+"updateId": 수정자,
+"id": 아이디(JPA 생성),
+"title": 제목,
+"imgPath": 이미지 경로,
+"imgName": 이미지 명,
+"webMobile": 웹/모바일 여부
+},
+...
+]
+```
+* 결과 예시
+```
+[
+{
+"createDate": "2021-02-09T13:07:13.285257",
+"createId": test,
+"updateDate": "2021-02-09T13:07:13.28572",
+"updateId": test,
+"id": 1,
+"title": "이용약관",
+"imgPath": "/resources/static/img/term1612843633229_cat.jpg",
+"imgName": "cat.jpg",
+"webMobile": "WEB"
+},
+{
+"createDate": "2021-02-09T13:07:21.871573",
+"createId": test,
+"updateDate": "2021-02-09T13:07:21.871612",
+"updateId": test,
+"id": 2,
+"title": "이용약관",
+"imgPath": "/resources/static/img/term1612843641821_cat2.jpg",
+"imgName": "cat2.jpg",
+"webMobile": "MOBILE"
+},
+...
+]
+```B"
     },
     {
         "createDate": "2021-02-09T13:07:21.871573",
