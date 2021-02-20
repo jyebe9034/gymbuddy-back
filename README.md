@@ -1,7 +1,7 @@
 # back-gymbuddy
 
 ### API 사용법
-* [메인] (https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Main.md)
+* [메인](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Main.md)
 * [배너](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Banner.md)
 * [컬럼](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Columns.md)
 * [칼럼 작성자](https://github.com/Hyenasystem/back-gymbuddy/blob/master/document/ColumnWriter.md)
