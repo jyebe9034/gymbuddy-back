@@ -133,7 +133,7 @@ public class BannerController extends BaseController {
      */
     @DeleteMapping(BANNER_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteMainBanner(@RequestBody List<Integer> ids) {
-        log.info("메인 베너 삭제: {}", ids.toString());
+        log.info("메인 베너 삭제: {}", ids);
 
         for (int id : ids) {
             long idL = new Long(id);

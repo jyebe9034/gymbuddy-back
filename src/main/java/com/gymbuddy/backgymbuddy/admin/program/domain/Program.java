@@ -7,6 +7,7 @@ import com.gymbuddy.backgymbuddy.admin.order.domain.OrderProgram;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,21 +44,33 @@ public class Program extends Product {
     /**
      * 클래스가 열리는 날짜
      */
-    @Column(length = 30, nullable = false)
+    @Column(length = 100, nullable = false)
     private String classDate;
 
     /**
      * 클래스가 열리는 시간
      */
-    @Column(length = 10, nullable = false)
+    @Column(length = 100, nullable = false)
     private String classTime;
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
-    private List<OrderProgram> orderProduct = new ArrayList<>();
+    /**
+     * 수강료
+     */
+    @Column(nullable = false)
+    private BigDecimal price;
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
-    private List<CartProgram> cartProgram = new ArrayList<>();
+    /**
+     * 메인 노출 여부
+     */
+    @Column
+    private String mainYn;
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
-    private List<ProgramOption> programOptions = new ArrayList<>();
+//    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+//    private List<OrderProgram> orderProduct = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+//    private List<CartProgram> cartProgram = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+//    private List<ProgramOption> programOptions = new ArrayList<>();
 }

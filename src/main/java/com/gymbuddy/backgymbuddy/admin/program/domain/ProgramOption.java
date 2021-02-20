@@ -4,6 +4,7 @@ import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "program_option")
@@ -26,6 +27,9 @@ public class ProgramOption extends BaseDomain {
      */
     @Column(nullable = false)
     private int userCount;
+
+    @Column(nullable = false)
+    private BigDecimal addPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "program_id")

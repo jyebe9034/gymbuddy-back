@@ -55,6 +55,7 @@ public class ColumnService {
         entity.setColumnWriter(columnWriter);
         entity.setImgPath(columns.getImgPath());
         entity.setImgName(columns.getImgName());
+        // TODO 메인 노출여부 삭제필요...
         entity.setMainYn(columns.getMainYn());
         entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
@@ -72,22 +73,23 @@ public class ColumnService {
 //        String loginId = userDetails.getUsername();
 
         Columns origin = findOne(id);
-        if (column.getTitle() != null) {
+        if (!origin.getTitle().equals(column.getTitle())) {
             origin.setTitle(column.getTitle());
         }
-        if (column.getContents() != null) {
-            origin.setTitle(column.getContents());
+        if (!origin.getContents().equals(column.getContents())) {
+            origin.setContents(column.getContents());
         }
-        if (column.getColumnWriterId() != null) {
+        if (!origin.getColumnWriter().equals(column.getColumnWriterId())) {
             ColumnWriter columnWriter = cwRepository.findById(column.getColumnWriterId()).get();
             origin.setColumnWriter(columnWriter);
         }
-        if (column.getImgPath() != null) {
+        if (!origin.getImgPath().equals(column.getImgPath())) {
             origin.setImgPath(column.getImgPath());
         }
-        if (column.getImgName() != null) {
+        if (!origin.getImgName().equals(column.getImgName())) {
             origin.setImgName(column.getImgName());
         }
+        // TODO 메인 노출여부 삭제필요...
         if (column.getMainYn() != null) {
             origin.setMainYn(column.getMainYn());
         }
