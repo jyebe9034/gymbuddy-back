@@ -55,8 +55,6 @@ public class ColumnService {
         entity.setColumnWriter(columnWriter);
         entity.setImgPath(columns.getImgPath());
         entity.setImgName(columns.getImgName());
-        // TODO 메인 노출여부 삭제필요...
-        entity.setMainYn(columns.getMainYn());
         entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
         entity.setUpdateDate(LocalDateTime.now());
@@ -88,10 +86,6 @@ public class ColumnService {
         }
         if (!origin.getImgName().equals(column.getImgName())) {
             origin.setImgName(column.getImgName());
-        }
-        // TODO 메인 노출여부 삭제필요...
-        if (column.getMainYn() != null) {
-            origin.setMainYn(column.getMainYn());
         }
         origin.setUpdateDate(LocalDateTime.now());
 //        origin.setUpdateId(loginId);

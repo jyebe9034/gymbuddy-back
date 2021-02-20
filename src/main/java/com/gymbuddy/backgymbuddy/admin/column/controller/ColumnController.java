@@ -118,9 +118,6 @@ public class ColumnController extends BaseController {
         if (columns.getImgName() != null) {
             flag = columns.getImgName().equals(findColumn.getImgName()) ? true : false;
         }
-        if (columns.getMainYn() != null) {
-            flag = columns.getMainYn().equals(findColumn.getMainYn()) ? true : false;
-        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("result", flag);
