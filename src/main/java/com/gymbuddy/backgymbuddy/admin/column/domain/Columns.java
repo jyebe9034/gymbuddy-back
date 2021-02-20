@@ -38,6 +38,7 @@ public class Columns extends BaseDomain {
     @Column(length = 50, nullable = false)
     private String imgName;
 
+    // TODO 메인 노출여부 삭제필요...
     @Column(length = 1, nullable = false)
     private String mainYn;
 }

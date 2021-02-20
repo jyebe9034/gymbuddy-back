@@ -20,5 +20,6 @@ public class ColumnsDto {
 
     private String imgName;
 
+    // TODO 메인 노출여부 삭제필요...
     private String mainYn;
 }

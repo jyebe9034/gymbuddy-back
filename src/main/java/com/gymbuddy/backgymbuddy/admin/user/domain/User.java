@@ -64,7 +64,7 @@ public class User extends BaseDomain implements UserDetails {
      * 회원등급
      */
     @Column(length = 10, nullable = false)
-    private Grade grade;
+    private String grade;
 
     /**
      * 주소
@@ -75,8 +75,8 @@ public class User extends BaseDomain implements UserDetails {
     /**
      * 장바구니
      */
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Cart> cartList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<Cart> cartList = new ArrayList<>();
 
     /**
     * 광고 및 뉴스레터 수신동의
