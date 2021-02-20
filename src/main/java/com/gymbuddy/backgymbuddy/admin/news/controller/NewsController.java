@@ -53,17 +53,19 @@ public class NewsController extends BaseController {
         log.info("대외뉴스 등록: {}", news);
 
         // 이미지 업로드
-        String filename = news.getFile().getOriginalFilename();
-        try {
-            if (!newfile.exists()) {
-                newfile.mkdir();
+        if (news.getFile() != null) {
+            String filename = news.getFile().getOriginalFilename();
+            try {
+                if (!newfile.exists()) {
+                    newfile.mkdir();
+                }
+                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                news.getFile().transferTo(realFile);
+                news.setImgName(filename);
+                news.setImgPath(newsPath + "/" + realFile.getName());
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
-            File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
-            news.getFile().transferTo(realFile);
-            news.setImgName(filename);
-            news.setImgPath(newsPath + "/" + realFile.getName());
-        } catch (Exception e) {
-            log.error(e.getMessage());
         }
 
         Map<String, Object> result = new HashMap<>();
