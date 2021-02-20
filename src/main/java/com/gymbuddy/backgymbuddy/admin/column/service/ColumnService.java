@@ -5,6 +5,7 @@ import com.gymbuddy.backgymbuddy.admin.column.domain.ColumnsDto;
 import com.gymbuddy.backgymbuddy.admin.column.repository.ColumnRepository;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.repository.CWRepository;
+import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,10 @@ public class ColumnService {
 
     private final ColumnRepository columnRepository;
     private final CWRepository cwRepository;
+
+    public List<Columns> findAllForMain() {
+        return columnRepository.findTop9ByOrderByIdDesc();
+    }
 
     public List<Columns> findAll(int page) {
         return columnRepository.findAll(PageRequest.of(page, 10)).getContent();

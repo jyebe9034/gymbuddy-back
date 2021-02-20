@@ -37,14 +37,6 @@ public class NewsController extends BaseController {
     }
 
     /**
-     * 메인 노출 대외뉴스 조회(최근 5개만)
-     */
-    @GetMapping(URI_PREFIX + "/mainAll")
-    public ResponseEntity<List<News>> selectMainNewsList() {
-        return createResponseEntity(true, newsService.findAllForMain());
-    }
-
-    /**
      * 대외뉴스 상세
      */
     @GetMapping(URI_PREFIX + "/detail/{id}")

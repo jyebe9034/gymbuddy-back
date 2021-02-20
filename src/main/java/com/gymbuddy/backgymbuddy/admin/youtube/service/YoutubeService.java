@@ -25,6 +25,10 @@ public class YoutubeService {
 
     private final YoutubeRepository youtubeRepository;
 
+    public List<Youtube> findAllForMain() {
+        return youtubeRepository.findTop9ByOrderByIdDesc();
+    }
+
     public List<Youtube> findAll(int page) {
         return youtubeRepository.findAll(PageRequest.of(page, 10)).getContent();
     }
@@ -47,7 +51,6 @@ public class YoutubeService {
         entity.setLink(youtube.getLink());
         entity.setImgPath(youtube.getImgPath());
         entity.setImgName(youtube.getImgName());
-        entity.setMainYn(youtube.getMainYn());
         entity.setCreateDate(LocalDateTime.now());
         entity.setCreateId(loginId);
         entity.setUpdateDate(LocalDateTime.now());

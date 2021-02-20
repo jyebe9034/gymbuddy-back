@@ -24,7 +24,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.COLUMN_PREFIX;
 @RequiredArgsConstructor
 public class ColumnController extends BaseController {
 
-    private final String URI_PREFIX = COLUMN_PREFIX;
     private String columnPath = "/resources/static/img/columns";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + columnPath;
     private File newfile = new File(rootPath);
@@ -34,7 +33,7 @@ public class ColumnController extends BaseController {
     /**
      * 전체 칼럼 조회(관리자)
      */
-    @GetMapping(URI_PREFIX + "/all/{page}")
+    @GetMapping(COLUMN_PREFIX + "/all/{page}")
     public ResponseEntity<List<Columns>> selectColumnList(@PathVariable("page") int page) {
         return createResponseEntity(true, columnService.findAll(page));
     }
@@ -42,7 +41,7 @@ public class ColumnController extends BaseController {
     /**
      * 칼럼 상세
      */
-    @GetMapping(URI_PREFIX + "/detail/{id}")
+    @GetMapping(COLUMN_PREFIX + "/detail/{id}")
     public ResponseEntity<Columns> selectColumnDetail(@PathVariable("id") Long id) {
         log.info("컬럼 아이디로 조회: {}", id);
         return createResponseEntity(true, columnService.findOne(id));
@@ -51,7 +50,7 @@ public class ColumnController extends BaseController {
     /**
      * 칼럼 등록
      */
-    @PostMapping(URI_PREFIX + "/new")
+    @PostMapping(COLUMN_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertColumn(@ModelAttribute ColumnsDto columns) {
         log.info("컬럼 등록: {}", columns);
 
@@ -63,7 +62,7 @@ public class ColumnController extends BaseController {
             }
             File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
             columns.getFile().transferTo(realFile);
-            columns.setImgName(filename);
+            columns.setImgName(realFile.getName());
             columns.setImgPath(columnPath + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -77,7 +76,7 @@ public class ColumnController extends BaseController {
     /**
      * 칼럼 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
+    @PutMapping(COLUMN_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateColumn(@PathVariable("id") Long id, @ModelAttribute ColumnsDto columns) {
         log.info("컬럼 수정 - id: {}, columns: {}", id, columns);
 
@@ -131,7 +130,7 @@ public class ColumnController extends BaseController {
     /**
      * 칼럼 삭제
      */
-    @DeleteMapping(URI_PREFIX + "/delete")
+    @DeleteMapping(COLUMN_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteColumn(@RequestBody List<Integer> ids) {
         log.info("컬럼 삭제: {}", ids);
 

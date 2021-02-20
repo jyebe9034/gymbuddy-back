@@ -23,6 +23,4 @@ public class YoutubeDto {
 
     private String imgName;
 
-    private String mainYn;
-
 }
