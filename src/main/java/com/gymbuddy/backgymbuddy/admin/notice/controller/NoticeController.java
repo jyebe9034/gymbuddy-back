@@ -35,14 +35,6 @@ public class NoticeController extends BaseController {
     }
 
     /**
-     * 메인 노출 공지사항 조회(최근 5개만)
-     */
-    @GetMapping(URI_PREFIX + "/mainAll")
-    public ResponseEntity<List<Notice>> selectMainNoticeList() {
-        return createResponseEntity(true, noticeService.findAllForMain());
-    }
-
-    /**
      * 공지사항 상세
      */
     @GetMapping(URI_PREFIX + "/detail/{id}")

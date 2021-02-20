@@ -35,7 +35,4 @@ public class Youtube extends BaseDomain {
     @Column(length = 50, nullable = false)
     private String imgName;
 
-    @Column(length = 1, nullable = false)
-    private String mainYn;
-
 }

@@ -32,8 +32,7 @@ public class NoticeService {
     }
 
     public List<Notice> findAllForMain() {
-        List<Notice> list = noticeRepository.findTop5ByOrderByIdDesc();
-        return list;
+        return noticeRepository.findTop5ByOrderByIdDesc();
     }
 
     public Notice findOne(Long id) {
