@@ -8,6 +8,7 @@
 * [대외뉴스](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/News.md)
 * [공지사항](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Notice.md)
 * [유튜브](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Youtube.md)
+* [문의](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Question.md)
 * [약관](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Term.md)
 * [미션(소개)](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Mission.md)
 * [활동기록](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/History.md)
