@@ -51,17 +51,19 @@ public class NoticeController extends BaseController {
         log.info("공지사항 등록: {}", notice);
 
         // 이미지 업로드
-        String filename = notice.getFile().getOriginalFilename();
-        try {
-            if (!newfile.exists()) {
-                newfile.mkdir();
+        if (notice.getFile() != null) {
+            String filename = notice.getFile().getOriginalFilename();
+            try {
+                if (!newfile.exists()) {
+                    newfile.mkdir();
+                }
+                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                notice.getFile().transferTo(realFile);
+                notice.setImgName(filename);
+                notice.setImgPath(noticePath + "/" + realFile.getName());
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
-            File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
-            notice.getFile().transferTo(realFile);
-            notice.setImgName(filename);
-            notice.setImgPath(noticePath + "/" + realFile.getName());
-        } catch (Exception e) {
-            log.error(e.getMessage());
         }
 
         Map<String, Object> result = new HashMap<>();
