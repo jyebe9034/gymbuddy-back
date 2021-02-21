@@ -75,7 +75,8 @@ public class QuestionController extends BaseController {
      * 사용자가 쓴 문의 전체 조회
      */
     @GetMapping("/user/question/all/{id}/{page}")
-    public ResponseEntity<Map<String, Object>> selectUserQuestionList(@PathVariable("id") Long id, @PathVariable("page") int page) {
+    public ResponseEntity<Map<String, Object>> selectUserQuestionList(
+            @PathVariable("id") Long id, @PathVariable("page") int page) {
         return createResponseEntity(true, questionService.findAllByUser(id, page));
     }
 
@@ -244,12 +245,13 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 댓글 등록(관리자)
      */
-    @PostMapping("/question/newReply")
-    public ResponseEntity<History> insertQuestionReply(@RequestBody QuestionCommentDto dto) {
+    @PostMapping("/question/newReply/{id}")
+    public ResponseEntity<History> insertQuestionReply(
+            @PathVariable("id") Long id, @RequestBody QuestionCommentDto dto) {
         log.info("1:1 문의 댓글 등록: {}", dto);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("id", questionCommentService.save(dto));
+        result.put("id", questionCommentService.save(id, dto));
         return createResponseEntity(true, result);
     }
 
@@ -265,9 +267,6 @@ public class QuestionController extends BaseController {
         QuestionComment findComment = questionCommentService.findOne(id);
 
         boolean flag = true;
-        if (dto.getTitle() != null) {
-            flag = dto.getTitle().equals(findComment.getTitle()) ? true : false;
-        }
         if (dto.getContents() != null) {
             flag = dto.getContents().equals(findComment.getContents()) ? true : false;
         }
@@ -281,8 +280,9 @@ public class QuestionController extends BaseController {
      * 1:1 문의 댓글 삭제(관리자)
      */
     @DeleteMapping("/question/deleteReply/{id}")
-    public ResponseEntity<History> deleteQuestionReply(@PathVariable("id") Long id) {
+    public ResponseEntity<List<QuestionComment>> deleteQuestionReply(@PathVariable("id") Long id) {
         log.info("1:1 문의 댓글 삭제: {}", id);
+
         questionCommentService.delete(id);
 
         Map<String, Object> result = new HashMap<>();

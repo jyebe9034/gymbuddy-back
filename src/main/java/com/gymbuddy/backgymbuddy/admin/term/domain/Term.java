@@ -26,5 +26,6 @@ public class Term extends BaseDomain {
     private String imgName;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private WebMobileStatus webMobile;
 }

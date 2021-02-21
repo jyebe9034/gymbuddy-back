@@ -6,7 +6,7 @@ import lombok.Data;
 public class QuestionCommentDto {
 
     private Long question_comment_id;
-    private Long question_id;
+    private Question question;
     private String title;
     private String contents;
 }

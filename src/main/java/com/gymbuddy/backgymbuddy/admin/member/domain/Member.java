@@ -23,6 +23,7 @@ public class Member extends BaseDomain {
     private String imgName;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private WebMobileStatus webOrMobile;
 
 }

@@ -17,6 +17,7 @@ public class FrequencyQuestion extends BaseDomain {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private FaqEnum categoryId;
 
     @Column(length = 300, nullable = false)
