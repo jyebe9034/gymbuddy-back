@@ -5,11 +5,15 @@ import com.gymbuddy.backgymbuddy.admin.columnWriter.repository.CWRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -30,22 +34,46 @@ public class CWService {
 
     @Transactional
     public Long save(ColumnWriter columnWriter) {
+        // 현재 로그인한 아이디 정보 조회
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
+
+        columnWriter.setCreateDate(LocalDateTime.now());
+//        columnWriter.setCreateId(loginId);
+        columnWriter.setUpdateDate(LocalDateTime.now());
+//        columnWriter.setUpdateId(loginId);
+
         cwRepository.save(columnWriter);
         return columnWriter.getId();
     }
 
     @Transactional
-    public void update(Long id, String contents) {
-        ColumnWriter columnWriter = cwRepository.findById(id).get();
-        columnWriter.setContents(contents);
+    public void update(Long id, ColumnWriter columnWriter) {
+        // 현재 로그인한 아이디 정보 조회
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
+
+        ColumnWriter origin = cwRepository.findById(id).get();
+        if (columnWriter.getName() != null) {
+            origin.setName(columnWriter.getName());
+        }
+        if (columnWriter.getJob() != null) {
+            origin.setJob(columnWriter.getJob());
+        }
+        if (columnWriter.getContents() != null) {
+            origin.setContents(columnWriter.getContents());
+        }
+        origin.setUpdateDate(LocalDateTime.now());
+//        origin.setUpdateId(loginId);
     }
 
     @Transactional
-    public int delete(List<Long> ids) {
-        Long deletedRows = cwRepository.deleteByIdIn(ids); // 삭제된 row 수
-        if (ids.size() == deletedRows.intValue()) {
-            return 1;
+    public void delete(List<Integer> ids) {
+        for (int id : ids) {
+            long idL = new Long(id);
+            cwRepository.deleteById(idL);
         }
-        return 0;
     }
 }

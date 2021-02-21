@@ -1,12 +1,13 @@
 package com.gymbuddy.backgymbuddy.admin.term.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
-import com.gymbuddy.backgymbuddy.admin.base.WebMobile;
+import com.gymbuddy.backgymbuddy.admin.enums.status.WebMobileStatus;
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
+@Table(name = "term")
 @Data
 public class Term extends BaseDomain {
 
@@ -18,12 +19,13 @@ public class Term extends BaseDomain {
     @Column(length = 100)
     private String title;
 
-    @Column(length = 300)
+    @Column(length = 300, nullable = false)
     private String imgPath;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String imgName;
 
     @Enumerated(EnumType.STRING)
-    private WebMobile webOrMobile;
+    @Column(nullable = false)
+    private WebMobileStatus webMobile;
 }

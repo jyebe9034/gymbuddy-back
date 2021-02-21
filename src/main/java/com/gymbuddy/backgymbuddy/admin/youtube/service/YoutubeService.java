@@ -1,15 +1,21 @@
 package com.gymbuddy.backgymbuddy.admin.youtube.service;
 
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
+import com.gymbuddy.backgymbuddy.admin.youtube.domain.YoutubeDto;
 import com.gymbuddy.backgymbuddy.admin.youtube.repository.YoutubeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -18,6 +24,10 @@ import java.util.List;
 public class YoutubeService {
 
     private final YoutubeRepository youtubeRepository;
+
+    public List<Youtube> findAllForMain() {
+        return youtubeRepository.findTop9ByOrderByIdDesc();
+    }
 
     public List<Youtube> findAll(int page) {
         return youtubeRepository.findAll(PageRequest.of(page, 10)).getContent();
@@ -28,26 +38,60 @@ public class YoutubeService {
     }
 
     @Transactional
-    public Long save(Youtube youtube) {
-        youtubeRepository.save(youtube);
-        return youtube.getId();
+    public Long save(YoutubeDto youtube) {
+        // 현재 로그인한 아이디 정보 조회
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
+
+        Youtube entity = new Youtube();
+        entity.setUploadDate(youtube.getUploadDate());
+        entity.setTitle(youtube.getTitle());
+        entity.setContents(youtube.getContents());
+        entity.setLink(youtube.getLink());
+        entity.setImgPath(youtube.getImgPath());
+        entity.setImgName(youtube.getImgName());
+        entity.setCreateDate(LocalDateTime.now());
+//        entity.setCreateId(loginId);
+        entity.setUpdateDate(LocalDateTime.now());
+//        entity.setUpdateId(loginId);
+
+        youtubeRepository.save(entity);
+        return entity.getId();
     }
 
     @Transactional
-    public void update(Long id, String uploadDate, String title, String contents, String link) {
-        Youtube youtube = youtubeRepository.findById(id).get();
-        youtube.setUploadDate(uploadDate);
-        youtube.setTitle(title);
-        youtube.setContents(contents);
-        youtube.setLink(link);
-    }
+    public void update(Long id, YoutubeDto youtube) {
+        // 현재 로그인한 아이디 정보 조회
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
 
-    @Transactional
-    public int delete(List<Long> ids) {
-        Long deletedRows = youtubeRepository.deleteByIdIn(ids);
-        if (ids.size() == deletedRows.intValue()) {
-            return 1;
+        Youtube origin = findOne(id);
+        if (youtube.getUploadDate() != null) {
+            origin.setUploadDate(youtube.getUploadDate());
         }
-        return 0;
+        if (youtube.getTitle() != null) {
+            origin.setTitle(youtube.getTitle());
+        }
+        if (youtube.getContents() != null) {
+            origin.setContents(youtube.getContents());
+        }
+        if (youtube.getLink() != null) {
+            origin.setLink(youtube.getLink());
+        }
+        if (youtube.getImgPath() != null) {
+            origin.setImgPath(youtube.getImgPath());
+        }
+        if (youtube.getImgName() != null) {
+            origin.setImgName(youtube.getImgName());
+        }
+        origin.setUpdateDate(LocalDateTime.now());
+//        origin.setUpdateId(loginId);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        youtubeRepository.deleteById(id);
     }
 }

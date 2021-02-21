@@ -1,11 +1,13 @@
 package com.gymbuddy.backgymbuddy.admin.review.domain;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
+import com.gymbuddy.backgymbuddy.admin.enums.category.ReviewEnum;
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
+@Table(name = "review")
 @Data
 public class Review extends BaseDomain {
 
@@ -17,28 +19,28 @@ public class Review extends BaseDomain {
     /**
      * 카테고리
      */
-    @Column(length = 20)
-    private String categoryId;
+    @Enumerated(EnumType.STRING)
+    private ReviewEnum categoryId;
 
     /**
      * 제목
      */
-    @Column(length = 300)
+    @Column(length = 100, nullable = false)
     private String title;
 
     /**
      * 내용
      */
-    @Column
+    @Column(nullable = false)
     private String contents;
 
     /**
      * 별점
      */
-    @Column
+    @Column(nullable = false)
     private float rating;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "review_comments_id")
-    private ReviewComments reviewComments;
+    @JoinColumn(name = "review_comment_id")
+    private ReviewComment reviewComment;
 }

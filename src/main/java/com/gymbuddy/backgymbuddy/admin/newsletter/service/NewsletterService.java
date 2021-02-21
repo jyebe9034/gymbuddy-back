@@ -1,16 +1,13 @@
 package com.gymbuddy.backgymbuddy.admin.newsletter.service;
 
 import com.gymbuddy.backgymbuddy.admin.newsletter.domain.Newsletter;
-import com.gymbuddy.backgymbuddy.admin.newsletter.repository.NewsletterRespository;
+import com.gymbuddy.backgymbuddy.admin.newsletter.repository.NewsletterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Table;
 import java.util.List;
-
-import static com.gymbuddy.backgymbuddy.admin.base.Constants.NEWSLETTER_PREFIX;
 
 @Slf4j
 @Service
@@ -18,21 +15,21 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.NEWSLETTER_PREFIX;
 @RequiredArgsConstructor
 public class NewsletterService {
 
-    private final NewsletterRespository newsletterRespository;
+    private final NewsletterRepository newsletterRepository;
 
     public List<Newsletter> findAll() {
-        return newsletterRespository.findAll();
+        return newsletterRepository.findAll();
     }
 
     @Transactional
     public Long save(Newsletter newsletter) {
-        newsletterRespository.save(newsletter);
+        newsletterRepository.save(newsletter);
         return newsletter.getId();
     }
 
     @Transactional
     public Long delete(Long id) {
-        newsletterRespository.deleteById(id);
+        newsletterRepository.deleteById(id);
         return id;
     }
 }

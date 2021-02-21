@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ColumnRepository extends JpaRepository<Columns, Long> {
 
-    Long deleteByIdIn(List<Long> ids);
+    List<Columns> findTop9ByOrderByIdDesc();
+
 }

@@ -2,16 +2,17 @@ package com.gymbuddy.backgymbuddy.admin.term.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.term.domain.Term;
+import com.gymbuddy.backgymbuddy.admin.term.domain.TermDto;
 import com.gymbuddy.backgymbuddy.admin.term.service.TermService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.TERM_PREFIX;
 
@@ -21,116 +22,119 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.TERM_PREFIX;
 public class TermController extends BaseController {
 
     private final String URI_PREFIX = TERM_PREFIX;
+    private String termPath = "/resources/static/img/term";
+    private String rootPath = System.getProperty("user.dir") + "/src/main" + termPath;
+    private File saveFile = new File(rootPath);
 
     private final TermService termService;
 
     /**
-     * 전체 이용약관 조회
+     * 전체 약관 조회 (관리자)
      */
-    @GetMapping(URI_PREFIX + "/allTerm")
+    @GetMapping(URI_PREFIX + "/all")
     public ResponseEntity<List<Term>> selectTermList() {
-        return createResponseEntity(true, termService.findALl());
+        return createResponseEntity(true, termService.findAll());
     }
 
     /**
-     * 웹 이용약관 상세
+     * 약관 상세 (관리자)
      */
-    @GetMapping(URI_PREFIX + "/termDetail/{id}")
-    public ResponseEntity<Term> selectTermDetail(@PathVariable("id") Long id) {
-        log.info("약관 아이디 및 웹모바일여부로 조회: {}", id);
-        return createResponseEntity(true, termService.findOne(id));
+    @GetMapping(URI_PREFIX + "/detail/{title}")
+    public ResponseEntity<Map<String, Object>> selectTermDetail(@PathVariable("title") String title) {
+        return createResponseEntity(true, termService.findByTitle(title));
     }
 
     /**
-     * 웹 이용약관 등록
+     * 푸터 - 개인정보처리방침 보기 (사용자)
      */
-    @PostMapping(URI_PREFIX + "/newWebTerm")
-    public ResponseEntity<Map<String, Object>> insertWebTerm(@RequestBody Term term) {
+    @GetMapping(URI_PREFIX + "/footer/private_policy")
+    public ResponseEntity<List<Term>> selectPrivatePolicy() {
+        return createResponseEntity(true, termService.findPrivatePolicy());
+    }
+
+    /**
+     * 푸터 - 이용약관 보기 (사용자)
+     */
+    @GetMapping(URI_PREFIX + "/footer/term_of_use")
+    public ResponseEntity<List<Term>> selectTermOfUser() {
+        return createResponseEntity(true, termService.findTermsOfUse());
+    }
+
+    /**
+     * 약관 등록
+     */
+    @PostMapping(URI_PREFIX + "/new")
+    public ResponseEntity<Map<String, Object>> insertTerm(@ModelAttribute TermDto term) {
         log.info("약관 등록: {}", term);
-        Long id = termService.save(term);
+
+        String imgName = term.getFile().getOriginalFilename();
+        try {
+            if (!saveFile.exists()) {
+                saveFile.mkdir();
+            }
+            File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
+            term.getFile().transferTo(realFile);
+            term.setImgName(imgName);
+            term.setImgPath(termPath + realFile.getName());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
+        result.put("id", termService.save(term));
         return createResponseEntity(true, result);
     }
 
     /**
-     * 웹 이용약관 수정
+     * 약관 (이미지) 수정(삭제 & 등록)
      */
-    @PutMapping(URI_PREFIX + "/updateTerm/{id}")
-    public ResponseEntity<Map<String, Object>> updateWebTerm(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
-        log.info("약관 수정 id: {}, param: {}", id, param);
-        String title = Objects.toString(param.get("title"));
-        termService.update(id, title);
+    @PutMapping(URI_PREFIX + "/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateTerm(
+            @PathVariable("id") Long id, @ModelAttribute TermDto dto) {
+        log.info("약관 수정 id: {}, dto: {}", dto);
 
+        Term term = termService.findOne(id);
+
+        if (dto.getFile() != null) {
+            String imgName = dto.getFile().getOriginalFilename();
+            if (!term.getImgName().equals(imgName)) {
+                try {
+                    // 이미지 업로드
+                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
+                    dto.getFile().transferTo(realFile);
+                    dto.setImgName(imgName);
+                    dto.setImgPath(termPath + realFile.getName());
+
+                    // 기존 이미지를 파일 서버에서 삭제
+                    File originFile = new File(saveFile + "/" + term.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
+            }
+        }
+
+        termService.update(id, dto);
         Term findTerm = termService.findOne(id);
-        Map<String, Object> result = new HashMap<>();
-        result.put("id", findTerm.getId());
-        result.put("title", findTerm.getTitle());
-        return createResponseEntity(true, result);
-    }
 
-    /**
-     * 웹 이용약관 삭제
-     */
-    @DeleteMapping(URI_PREFIX + "/deleteWebTerm")
-    public ResponseEntity<Map<String, Object>> deleteWebTerm(@RequestParam List<Long> ids) {
-        log.info("웹 이용약관 삭제: {}", ids.toString());
-        int deleteResult = termService.delete(ids);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", deleteResult);
-        return createResponseEntity(true, result);
-    }
-
-    /**
-     * 모바일 이용약관 상세
-     */
-    @GetMapping(URI_PREFIX + "/mobileTermDetail/{id}")
-    public ResponseEntity<Term> selectMobileTermDetail(@PathVariable("id") Long id) {
-        log.info("약관 아이디 및 웹모바일여부로 조회: {}", id);
-        return createResponseEntity(true, termService.findOne(id));
-    }
-
-    /**
-     * 모바일 이용약관 등록
-     */
-    @PostMapping(URI_PREFIX + "/newMobileTerm")
-    public ResponseEntity<Map<String, Object>> insertMobileTerm(@RequestBody Term term) {
-        log.info("약관 등록(수정): {}", term);
-        Long id = termService.save(term);
+        boolean flag = true;
+        if (dto.getTitle() != null) {
+            flag = dto.getTitle().equals(findTerm.getTitle());
+        }
+        if (dto.getImgPath() != null) {
+            flag = dto.getImgPath().equals(findTerm.getImgPath());
+        }
+        if (dto.getImgName() != null) {
+            flag = dto.getImgName().equals(findTerm.getImgName());
+        }
+        if (dto.getWebMobile() != null) {
+            flag = dto.getWebMobile().equals(findTerm.getWebMobile());
+        }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
-        return createResponseEntity(true, result);
-    }
-
-    /**
-     * 모바일 이용약관 수정
-     */
-    @PutMapping(URI_PREFIX + "/updateMobileTerm/{id}")
-    public ResponseEntity<Map<String, Object>> updateMobileTerm(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
-        log.info("약관 수정 id: {}, param: {}", id, param);
-        String title = Objects.toString(param.get("title"));
-        termService.update(id, title);
-
-        Term findTerm = termService.findOne(id);
-        Map<String, Object> result = new HashMap<>();
-        result.put("id", findTerm.getId());
-        result.put("title", findTerm.getTitle());
-        return createResponseEntity(true, result);
-    }
-
-    /**
-     * 모바일 이용약관 삭제
-     */
-    @GetMapping(URI_PREFIX + "/deleteMobileTerm")
-    public ResponseEntity<Map<String, Object>> deleteMobileTerm(@RequestParam List<Long> ids) {
-        log.info("웹 이용약관 삭제: {}", ids.toString());
-        int deleteResult = termService.delete(ids);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", deleteResult);
+        result.put("result", flag);
         return createResponseEntity(true, result);
     }
 }

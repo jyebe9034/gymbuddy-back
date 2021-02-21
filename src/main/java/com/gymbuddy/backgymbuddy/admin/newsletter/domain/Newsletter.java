@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "newsletter")
 @Data
 public class Newsletter {
 
@@ -13,7 +14,7 @@ public class Newsletter {
     @Column(name = "newsletter_id")
     private Long id;
 
-    @Column(length = 300)
+    @Column(length = 100, nullable = false)
     private String email;
 
 }

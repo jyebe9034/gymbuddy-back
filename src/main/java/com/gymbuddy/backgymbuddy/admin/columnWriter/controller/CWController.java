@@ -3,7 +3,6 @@ package com.gymbuddy.backgymbuddy.admin.columnWriter.controller;
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.service.CWService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.COLUMN_WRITER_PREFI
 @RequiredArgsConstructor
 public class CWController extends BaseController {
 
-    private final String URI_PREFIX = COLUMN_WRITER_PREFIX;
+private final String URI_PREFIX = COLUMN_WRITER_PREFIX;
 
     private final CWService cwService;
 
@@ -59,15 +58,24 @@ public class CWController extends BaseController {
      * 칼럼 작성자 내용 수정
      */
     @PutMapping(URI_PREFIX + "/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateColumnWriter(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
-        log.info("컬럼 작성자 수정 - id: {}, param: {}", id, param);
-        String contents = Objects.toString(param.get("contents"));
-        cwService.update(id, contents);
+    public ResponseEntity<Map<String, Object>> updateColumnWriter(@PathVariable("id") Long id, @RequestBody ColumnWriter columnWriter) {
+        log.info("컬럼 작성자 수정 - id: {}, columnWriter: {}", id, columnWriter);
+        cwService.update(id, columnWriter);
         ColumnWriter findColumnWriter = cwService.findOne(id);
 
+        boolean flag = true;
+        if (columnWriter.getName() != null) {
+            flag = columnWriter.getName().equals(findColumnWriter.getName()) ? true : false;
+        }
+        if (columnWriter.getJob() != null) {
+            flag = columnWriter.getJob().equals(findColumnWriter.getJob()) ? true : false;
+        }
+        if (columnWriter.getContents() != null) {
+            flag = columnWriter.getContents().equals(findColumnWriter.getContents()) ? true : false;
+        }
+
         Map<String, Object> result = new HashMap<>();
-        result.put("id", findColumnWriter.getId());
-        result.put("contents", findColumnWriter.getContents());
+        result.put("id", flag);
         return createResponseEntity(true, result);
     }
 
@@ -75,13 +83,12 @@ public class CWController extends BaseController {
      * 칼럼 작성자 삭제
      */
     @DeleteMapping(URI_PREFIX + "/delete")
-    public ResponseEntity<Map<String, Object>> deleteColumnWriter(@RequestParam List<Long> ids) {
-        // TODO 로그가 어떻게 남는지 확인 필요
-        log.info("컬럼 작성자 삭제 : {}", ids.toString());
-        int deleteResult = cwService.delete(ids);
+    public ResponseEntity<Map<String, Object>> deleteColumnWriter(@RequestBody List<Integer> ids) {
+        log.info("컬럼 작성자 삭제 : {}", ids);
+        cwService.delete(ids);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result", deleteResult);
+        result.put("result", "success");
         return createResponseEntity(true, result);
     }
 

@@ -13,6 +13,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.USER_AUTH;
+
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -41,9 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
                 .antMatchers("/api/admin/**").authenticated()
                 .antMatchers("/api/user/**").authenticated()
-                .antMatchers("/**").permitAll() // 그외 나머지 요청은 누구나 접근 가능
+                .antMatchers("/api/userApi/**").permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-                // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다.
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)// JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다.
+                .logout() // 로그아웃
+                .logoutUrl(USER_AUTH + "/logout")
+                .logoutSuccessUrl("/login");
     }
 }

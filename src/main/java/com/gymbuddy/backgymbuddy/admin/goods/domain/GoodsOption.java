@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "goods_option")
 @Data
 public class GoodsOption extends BaseDomain {
 
@@ -17,12 +18,16 @@ public class GoodsOption extends BaseDomain {
     /**
      * 색상 & 사이즈
      */
-    @Column(length = 300)
+    @Column(length = 100, nullable = false)
     private String colorAndSize;
 
     /**
      * 재고
      */
-    @Column
+    @Column(nullable = false)
     private int inventory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "goods_id")
+    private Goods goods;
 }

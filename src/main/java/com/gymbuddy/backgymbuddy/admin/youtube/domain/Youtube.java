@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.youtube.domain;
 
+import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,8 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "youtube")
 @Data
-public class Youtube {
+public class Youtube extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,25 +20,19 @@ public class Youtube {
     @Column
     private String uploadDate;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String contents;
 
-    @Column(length = 500)
+    @Column(length = 500, nullable = false)
     private String link;
 
-    @Column(length = 20)
-    private String categoryId;
-
-    @Column(length = 300)
+    @Column(length = 300, nullable = false)
     private String imgPath;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String imgName;
-
-    @Column(length = 1)
-    private String mainYn;
 
 }

@@ -11,6 +11,12 @@ public final class Constants {
     /** 회원만 접근 가능한 API 경로 PREFIX */
     public static final String USER_AUTH = "/api/user";
 
+    /** 회원가입 및 로그인과 같은 회원 관리를 위한 API 경로 PREFIX */
+    public static final String USER_API = "/api/userApi";
+
+    /** 사용자 쪽 메인화면 API 경로 PREFIX */
+    public static final String MAIN_PREFIX = "/api/main";
+
     /** 메인 배너 API 경로 PREFIX */
     public static final String BANNER_PREFIX = "/api/banner";
 
@@ -52,6 +58,9 @@ public final class Constants {
 
     /** 공지사항 API 경로 PREFIX */
     public static final String NOTICE_PREFIX = "/api/notice";
+
+    /** 공지사항 API 경로 PREFIX */
+    public static final String ADMIN_NOTICE_PREFIX = ADMIN_AUTH + "/notice";
 
     /** 주문 API 경로 PREFIX */
     public static final String ORDER_PREFIX = "/api/order";

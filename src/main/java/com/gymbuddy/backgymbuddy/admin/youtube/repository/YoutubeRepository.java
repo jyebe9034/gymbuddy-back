@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface YoutubeRepository extends JpaRepository<Youtube, Long> {
 
-    Long deleteByIdIn(List<Long> ids);
+    List<Youtube> findTop9ByOrderByIdDesc();
+
 }

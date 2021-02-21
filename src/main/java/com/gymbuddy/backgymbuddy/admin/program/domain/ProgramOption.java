@@ -4,8 +4,10 @@ import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
+@Table(name = "program_option")
 @Data
 public class ProgramOption extends BaseDomain {
 
@@ -17,13 +19,20 @@ public class ProgramOption extends BaseDomain {
     /**
      * 클래스가 열리는 날짜 & 시간
      */
-    @Column(length = 200)
+    @Column(length = 100, nullable = false)
     private String classDateTime;
 
     /**
      * 인원수
      */
-    @Column
+    @Column(nullable = false)
     private int userCount;
+
+    @Column(nullable = false)
+    private BigDecimal addPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "program_id")
+    private Program program;
 
 }

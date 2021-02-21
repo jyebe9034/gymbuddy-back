@@ -1,22 +1,32 @@
 package com.gymbuddy.backgymbuddy.admin.question.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
+import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "question")
 @Data
-public class Question {
+public class Question extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
     private Long id;
 
-    @Column(length = 300)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private QuestionEnum categoryId;
+
+    @Column(length = 100, nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String contents;
 
     @Column(length = 300)
@@ -37,7 +47,7 @@ public class Question {
     @Column(length = 50)
     private String imgName3;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "question_comments_id")
-    private QuestionComments questionComments;
+    @JsonIgnore
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<QuestionComment> questionCommentList = new ArrayList<>();
 }

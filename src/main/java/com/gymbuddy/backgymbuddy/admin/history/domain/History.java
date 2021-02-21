@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "history")
 @Data
 public class History extends BaseDomain {
 
@@ -15,10 +16,10 @@ public class History extends BaseDomain {
     @Column(name = "history_id")
     private Long id;
 
-    @Column
-    private LocalDateTime historyDate;
+    @Column(nullable = false)
+    private String historyDate;
 
-    @Column(length = 150)
+    @Column(length = 150, nullable = false)
     private String title;
 
 }

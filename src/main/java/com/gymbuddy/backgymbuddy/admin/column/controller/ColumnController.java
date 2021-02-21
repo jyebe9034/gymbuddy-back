@@ -2,13 +2,16 @@ package com.gymbuddy.backgymbuddy.admin.column.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
+import com.gymbuddy.backgymbuddy.admin.column.domain.ColumnsDto;
 import com.gymbuddy.backgymbuddy.admin.column.service.ColumnService;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
+import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,14 +24,16 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.COLUMN_PREFIX;
 @RequiredArgsConstructor
 public class ColumnController extends BaseController {
 
-    private final String URI_PREFIX = COLUMN_PREFIX;
+    private String columnPath = "/resources/static/img/columns";
+    private String rootPath = System.getProperty("user.dir") + "/src/main" + columnPath;
+    private File newfile = new File(rootPath);
 
     private final ColumnService columnService;
 
     /**
-     * 전체 칼럼 조회
+     * 전체 칼럼 조회(관리자)
      */
-    @GetMapping(URI_PREFIX + "/all/{page}")
+    @GetMapping(COLUMN_PREFIX + "/all/{page}")
     public ResponseEntity<List<Columns>> selectColumnList(@PathVariable("page") int page) {
         return createResponseEntity(true, columnService.findAll(page));
     }
@@ -36,7 +41,7 @@ public class ColumnController extends BaseController {
     /**
      * 칼럼 상세
      */
-    @GetMapping(URI_PREFIX + "/detail/{id}")
+    @GetMapping(COLUMN_PREFIX + "/detail/{id}")
     public ResponseEntity<Columns> selectColumnDetail(@PathVariable("id") Long id) {
         log.info("컬럼 아이디로 조회: {}", id);
         return createResponseEntity(true, columnService.findOne(id));
@@ -45,45 +50,100 @@ public class ColumnController extends BaseController {
     /**
      * 칼럼 등록
      */
-    @PostMapping(URI_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertNewColumn(@RequestBody Columns columns) {
+    @PostMapping(COLUMN_PREFIX + "/new")
+    public ResponseEntity<Map<String, Object>> insertColumn(@ModelAttribute ColumnsDto columns) {
         log.info("컬럼 등록: {}", columns);
-        Long id = columnService.save(columns);
+
+        // 이미지 업로드
+        String filename = columns.getFile().getOriginalFilename();
+        try {
+            if (!newfile.exists()) {
+                newfile.mkdir();
+            }
+            File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+            columns.getFile().transferTo(realFile);
+            columns.setImgName(realFile.getName());
+            columns.setImgPath(columnPath + "/" + realFile.getName());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
+        result.put("id", columnService.save(columns));
         return createResponseEntity(true, result);
     }
 
     /**
      * 칼럼 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateColumn(@PathVariable("id") Long id, @RequestBody Map<String, Object> param) {
-        log.info("컬럼 수정 - id: {}, param: {}", id, param);
-        String title = Objects.toString(param.get("title"));
-        String contents = Objects.toString(param.get("contents"));
-        ColumnWriter columnWriter = (ColumnWriter) param.get("columnWriter");
-        columnService.update(id, title, contents, columnWriter);
+    @PutMapping(COLUMN_PREFIX + "/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateColumn(@PathVariable("id") Long id, @ModelAttribute ColumnsDto columns) {
+        log.info("컬럼 수정 - id: {}, columns: {}", id, columns);
+
+        if (columns.getFile() != null) {
+            Columns origin = columnService.findOne(id);
+            String filename = columns.getFile().getOriginalFilename();
+            if (!origin.getImgName().equals(filename)) {
+                // 이미지 업로드
+                try {
+                    File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                    columns.getFile().transferTo(realFile);
+                    columns.setImgName(filename);
+                    columns.setImgPath(columnPath + "/" + realFile.getName());
+
+                    // 기존 이미지 파일 서버에서 삭제
+                    File originFile = new File(newfile + "/" + origin.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
+            }
+        }
+
+        columnService.update(id, columns);
         Columns findColumn = columnService.findOne(id);
 
+        boolean flag = true;
+        if (columns.getTitle() != null) {
+            flag = columns.getTitle().equals(findColumn.getTitle()) ? true : false;
+        }
+        if (columns.getContents() != null) {
+            flag = columns.getContents().equals(findColumn.getContents()) ? true : false;
+        }
+        if (columns.getImgPath() != null) {
+            flag = columns.getImgPath().equals(findColumn.getImgPath()) ? true : false;
+        }
+        if (columns.getImgName() != null) {
+            flag = columns.getImgName().equals(findColumn.getImgName()) ? true : false;
+        }
+
         Map<String, Object> result = new HashMap<>();
-        result.put("title", findColumn.getTitle());
-        result.put("contents", findColumn.getContents());
-        result.put("columnWriter", findColumn.getColumnWriter());
+        result.put("result", flag);
         return createResponseEntity(true, result);
     }
 
     /**
      * 칼럼 삭제
      */
-    @DeleteMapping(URI_PREFIX + "/delete")
-    public ResponseEntity<Map<String, Object>> deleteColumn(@RequestParam List<Long> ids) {
+    @DeleteMapping(COLUMN_PREFIX + "/delete")
+    public ResponseEntity<Map<String, Object>> deleteColumn(@RequestBody List<Integer> ids) {
         log.info("컬럼 삭제: {}", ids);
-        int deleteResult = columnService.delete(ids);
+
+        for (int id : ids) {
+            long idL = new Long(id);
+            Columns origin = columnService.findOne(idL);
+            // 이미지 삭제
+            File originFile = new File(newfile + "/" + origin.getImgPath());
+            if (originFile.exists()) {
+                originFile.delete();
+            }
+            columnService.delete(idL);
+        }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result", deleteResult);
+        result.put("result", "success");
         return createResponseEntity(true, result);
     }
 }

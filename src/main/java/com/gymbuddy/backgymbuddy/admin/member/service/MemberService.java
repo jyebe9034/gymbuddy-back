@@ -1,10 +1,21 @@
 package com.gymbuddy.backgymbuddy.admin.member.service;
 
+import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BiDto;
+import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BusinessIdentity;
+import com.gymbuddy.backgymbuddy.admin.enums.status.WebMobileStatus;
+import com.gymbuddy.backgymbuddy.admin.member.domain.Member;
+import com.gymbuddy.backgymbuddy.admin.member.domain.MemberDto;
 import com.gymbuddy.backgymbuddy.admin.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -13,4 +24,40 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+
+    public List<Member> findAll() {
+        return memberRepository.findAll();
+    }
+
+    public Member findOne(Long id) {
+        return memberRepository.findById(id).get();
+    }
+
+    @Transactional
+    public Long save(MemberDto dto) {
+        Member member = new Member();
+        member.setImgName(dto.getImgName());
+        member.setImgPath(dto.getImgPath());
+        member.setWebOrMobile(dto.getWebMobile());
+        member.setCreateDate(LocalDateTime.now());
+        member.setUpdateDate(LocalDateTime.now());
+
+        memberRepository.save(member);
+        return member.getId();
+    }
+
+    @Transactional
+    public void update(Long id, MemberDto dto) {
+        Member member = findOne(id);
+        if (dto.getImgPath() != null) {
+            member.setImgPath(dto.getImgPath());
+        }
+        if (dto.getImgName() != null) {
+            member.setImgName(dto.getImgName());
+        }
+        if (dto.getWebMobile() != null) {
+            member.setWebOrMobile(dto.getWebMobile());
+        }
+        member.setUpdateDate(LocalDateTime.now());
+    }
 }
