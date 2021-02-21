@@ -26,7 +26,26 @@ public class UserLogicService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public Long join(UserDto user) {
+    /**
+     * 회원가입
+     */
+    public Map<String, Object> join(UserDto user) {
+        Map<String, Object> result = new HashMap<>();
+        // 이이디 중복 확인
+        Optional<User> byIdentity = userRepository.findByIdentity(user.getIdentity());
+        if (byIdentity.isPresent()) {
+            result.put("successYn", "N");
+            result.put("msg", "이미 사용중인 아이디입니다.");
+            return result;
+        }
+        // 이메일 중복 확인
+        Optional<User> byEmail = userRepository.findByEmail(user.getEmail());
+        if (byEmail.isPresent()) {
+            result.put("successYn", "N");
+            result.put("msg", "이미 가입된 이메일입니다.");
+            return result;
+        }
+
         User entity = new User();
         entity.setIdentity(user.getIdentity());
         entity.setEmail(user.getEmail());
@@ -41,9 +60,15 @@ public class UserLogicService {
         entity.setRoles(Collections.emptyList());
 
         userRepository.save(entity);
-        return entity.getId();
+
+        result.put("successYn", "Y");
+        result.put("id", entity.getId());
+        return result;
     }
 
+    /**
+     * 로그인
+     */
     public String login(UserDto user) {
         User member = userRepository.findByIdentity(user.getIdentity())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
@@ -53,12 +78,16 @@ public class UserLogicService {
         return jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
     }
 
+    /**
+     * 전체 회원 조회
+     */
     public List<UserDto> findAll(int page) {
         List<User> entities = userRepository.findAll(PageRequest.of(page, 10)).getContent();
 
         List<UserDto> list = new ArrayList<>();
         for (User user : entities) {
             UserDto dto = new UserDto();
+            dto.setId(user.getId());
             dto.setGrade(user.getGrade());
             dto.setIdentity(user.getIdentity());
             dto.setName(user.getName());
@@ -70,10 +99,16 @@ public class UserLogicService {
         return list;
     }
 
+    /**
+     * 회원정보 조회(엔티티)
+     */
     public User findOne(Long id) {
         return userRepository.findById(id).get();
     }
 
+    /**
+     * 회원정보 조회(dto)
+     */
     public UserDto findUserDto(Long id) {
         User user = findOne(id);
 
@@ -91,6 +126,9 @@ public class UserLogicService {
         return dto;
     }
 
+    /**
+     * 정보수정
+     */
     @Transactional
     public void update(Long id, UserDto user) {
         User origin = findOne(id);
@@ -99,9 +137,6 @@ public class UserLogicService {
         }
         if (user.getPassword() != null) {
             origin.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-        if (user.getEmail() != null) {
-            origin.setEmail(user.getEmail());
         }
         if (user.getPhone() != null) {
             origin.setPhone(user.getPhone());
@@ -114,8 +149,24 @@ public class UserLogicService {
         }
     }
 
-    public void signOut(UserDto user) {
-        User origin = findOne(user.getId());
+    /**
+     * 탈퇴
+     */
+    @Transactional
+    public void signOut(Long id) {
+        User origin = findOne(id);
         userRepository.delete(origin);
+    }
+
+    /**
+     * 비밀번호 변경
+     * @param user 회원정보
+     * @param num 임시비밀번호
+     */
+    @Transactional
+    public void updatePassword(UserDto user, int num) {
+        User origin = findOne(user.getId());
+        String password = passwordEncoder.encode(Objects.toString(num));
+        origin.setPassword(password);
     }
 }
