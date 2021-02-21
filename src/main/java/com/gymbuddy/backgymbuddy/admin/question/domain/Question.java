@@ -1,9 +1,13 @@
 package com.gymbuddy.backgymbuddy.admin.question.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
+import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "question")
@@ -14,6 +18,10 @@ public class Question extends BaseDomain {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private QuestionEnum categoryId;
 
     @Column(length = 100, nullable = false)
     private String title;
@@ -39,7 +47,7 @@ public class Question extends BaseDomain {
     @Column(length = 50)
     private String imgName3;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "question_comment_id")
-    private QuestionComment questionComment;
+    @JsonIgnore
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<QuestionComment> questionCommentList = new ArrayList<>();
 }

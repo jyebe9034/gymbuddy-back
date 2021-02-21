@@ -3,11 +3,9 @@ package com.gymbuddy.backgymbuddy.admin.question.service;
 import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
 import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionComment;
 import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionDto;
-import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionCommentRepository;
 import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,11 +33,11 @@ public class QuestionService {
     }
 
     public Map<String, Object> findDetail(Long id) {
-        Question question = qr.findById(id).get();
+        Question findQuestion = findOne(id);
         List<QuestionComment> commentList = questionCommentService.findAll(id);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("question", question);
+        result.put("question", findQuestion);
         result.put("commentList", commentList);
         return result;
     }
@@ -57,6 +55,7 @@ public class QuestionService {
         Question question = new Question();
         question.setTitle(dto.getTitle());
         question.setContents(dto.getContents());
+        question.setCategoryId(dto.getCategoryId());
         question.setImgName1(dto.getImgName1());
         question.setImgPath1(dto.getImgPath1());
         question.setImgName2(dto.getImgName2());
@@ -78,6 +77,9 @@ public class QuestionService {
         }
         if (dto.getContents() != null) {
             question.setContents(dto.getContents());
+        }
+        if (dto.getCategoryId() != null) {
+            question.setCategoryId(dto.getCategoryId());
         }
         if (dto.getImgPath1() != null) {
             question.setImgPath1(dto.getImgPath1());

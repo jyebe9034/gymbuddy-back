@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.question.service;
 
+import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
 import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionComment;
 import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionCommentDto;
 import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionCommentRepository;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,10 +32,12 @@ public class QuestionCommentService {
     }
 
     @Transactional
-    public Long save(QuestionCommentDto dto) {
+    public Long save(Long id, QuestionCommentDto dto) {
         QuestionComment comment = new QuestionComment();
 
-        comment.setTitle(dto.getTitle());
+        Optional<Question> findQuestion = qr.findById(id);
+
+        comment.setQuestion(findQuestion.get());
         comment.setContents(dto.getContents());
         comment.setCreateDate(LocalDateTime.now());
         comment.setUpdateDate(LocalDateTime.now());
@@ -45,9 +49,6 @@ public class QuestionCommentService {
     @Transactional
     public void update(Long id, QuestionCommentDto dto) {
         QuestionComment comment = findOne(id);
-        if (dto.getTitle() != null) {
-            comment.setTitle(dto.getTitle());
-        }
         if (dto.getContents() != null) {
             comment.setContents(dto.getContents());
         }

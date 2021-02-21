@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.question.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
 
@@ -15,12 +16,11 @@ public class QuestionComment extends BaseDomain {
     @Column(name = "question_comment_id")
     private Long id;
 
-    @OneToOne(mappedBy = "questionComment", fetch = FetchType.LAZY)
-    private Question question;
-
-    @Column(length = 100, nullable = false)
-    private String title;
-
     @Column(nullable = false)
     private String contents;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id")
+    private Question question;
 }
