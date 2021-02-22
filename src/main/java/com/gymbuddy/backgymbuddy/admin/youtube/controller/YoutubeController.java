@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_YOUTUBE_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.YOUTUBE_PREFIX;
 
 @Slf4j
@@ -22,7 +23,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.YOUTUBE_PREFIX;
 @RequiredArgsConstructor
 public class YoutubeController extends BaseController {
 
-    private final String URI_PREFIX = YOUTUBE_PREFIX;
     private String youtubePath = "/resources/static/img/youtube";
     private String rootpath = System.getProperty("user.dir") + "/src/main" + youtubePath;
     private File newFile = new File(rootpath);
@@ -32,7 +32,7 @@ public class YoutubeController extends BaseController {
     /**
      * 전체 유튜브 조회
      */
-    @GetMapping(URI_PREFIX + "/all/{page}")
+    @GetMapping(YOUTUBE_PREFIX + "/all/{page}")
     public ResponseEntity<List<Youtube>> selectYoutubeList(@PathVariable("page") int page) {
         return createResponseEntity(true, youtubeService.findAll(page));
     }
@@ -42,7 +42,7 @@ public class YoutubeController extends BaseController {
     /**
      * 유튜브 상세
      */
-    @GetMapping(URI_PREFIX + "/detail/{id}")
+    @GetMapping(YOUTUBE_PREFIX + "/detail/{id}")
     public ResponseEntity<Youtube> selectYoutubeDetail(@PathVariable("id") Long id) {
         log.info("유튜브 아이디로 조회: {}", id);
         return createResponseEntity(true, youtubeService.findOne(id));
@@ -51,7 +51,7 @@ public class YoutubeController extends BaseController {
     /**
      * 유튜브 등록
      */
-    @PostMapping(URI_PREFIX + "/new")
+    @PostMapping(ADMIN_YOUTUBE_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertYoutube(@ModelAttribute YoutubeDto youtube) {
         log.info("유튜브 등록: {}", youtube);
 
@@ -77,7 +77,7 @@ public class YoutubeController extends BaseController {
     /**
      * 업로드 날짜, 제목, 내용, 링크, 이미지 수정
      */
-    @PutMapping(value = URI_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_YOUTUBE_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateYoutube(@PathVariable("id") Long id, @ModelAttribute YoutubeDto youtube) {
         log.info("유튜브 수정 - id: {}, youtube: {}", id, youtube);
 
@@ -136,7 +136,7 @@ public class YoutubeController extends BaseController {
     /**
      * 유튜브 삭제
      */
-    @DeleteMapping(URI_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_YOUTUBE_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteYoutube(@RequestBody List<Integer> ids) {
         log.info("유튜브 삭제: {}", ids);
 

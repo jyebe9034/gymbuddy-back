@@ -50,11 +50,21 @@ public class ColumnService {
         ColumnWriter columnWriter = cwRepository.findById(columns.getColumnWriterId()).get();
 
         Columns entity = new Columns();
-        entity.setTitle(columns.getTitle());
-        entity.setContents(columns.getContents());
-        entity.setColumnWriter(columnWriter);
-        entity.setImgPath(columns.getImgPath());
-        entity.setImgName(columns.getImgName());
+        if (columns.getTitle() != null) {
+            entity.setTitle(columns.getTitle());
+        }
+        if (columns.getContents() != null) {
+            entity.setContents(columns.getContents());
+        }
+        if (columnWriter != null) {
+            entity.setColumnWriter(columnWriter);
+        }
+        if (columns.getImgPath() != null) {
+            entity.setImgPath(columns.getImgPath());
+        }
+        if (columns.getImgName() != null) {
+            entity.setImgName(columns.getImgName());
+        }
         entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
         entity.setUpdateDate(LocalDateTime.now());
@@ -71,20 +81,20 @@ public class ColumnService {
 //        String loginId = userDetails.getUsername();
 
         Columns origin = findOne(id);
-        if (!origin.getTitle().equals(column.getTitle())) {
+        if (origin.getTitle() != null && !origin.getTitle().equals(column.getTitle())) {
             origin.setTitle(column.getTitle());
         }
-        if (!origin.getContents().equals(column.getContents())) {
+        if (origin.getContents() != null && !origin.getContents().equals(column.getContents())) {
             origin.setContents(column.getContents());
         }
-        if (!origin.getColumnWriter().equals(column.getColumnWriterId())) {
+        if (origin.getColumnWriter() != null && !origin.getColumnWriter().equals(column.getColumnWriterId())) {
             ColumnWriter columnWriter = cwRepository.findById(column.getColumnWriterId()).get();
             origin.setColumnWriter(columnWriter);
         }
-        if (!origin.getImgPath().equals(column.getImgPath())) {
+        if (origin.getImgPath() != null && !origin.getImgPath().equals(column.getImgPath())) {
             origin.setImgPath(column.getImgPath());
         }
-        if (!origin.getImgName().equals(column.getImgName())) {
+        if (origin.getImgName() != null && !origin.getImgName().equals(column.getImgName())) {
             origin.setImgName(column.getImgName());
         }
         origin.setUpdateDate(LocalDateTime.now());

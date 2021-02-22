@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_COLUMN_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.COLUMN_PREFIX;
 
 @Slf4j
@@ -50,7 +51,7 @@ public class ColumnController extends BaseController {
     /**
      * 칼럼 등록
      */
-    @PostMapping(COLUMN_PREFIX + "/new")
+    @PostMapping(ADMIN_COLUMN_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertColumn(@ModelAttribute ColumnsDto columns) {
         log.info("컬럼 등록: {}", columns);
 
@@ -76,7 +77,7 @@ public class ColumnController extends BaseController {
     /**
      * 칼럼 수정
      */
-    @PutMapping(COLUMN_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_COLUMN_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateColumn(@PathVariable("id") Long id, @ModelAttribute ColumnsDto columns) {
         log.info("컬럼 수정 - id: {}, columns: {}", id, columns);
 
@@ -127,7 +128,7 @@ public class ColumnController extends BaseController {
     /**
      * 칼럼 삭제
      */
-    @DeleteMapping(COLUMN_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_COLUMN_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteColumn(@RequestBody List<Integer> ids) {
         log.info("컬럼 삭제: {}", ids);
 

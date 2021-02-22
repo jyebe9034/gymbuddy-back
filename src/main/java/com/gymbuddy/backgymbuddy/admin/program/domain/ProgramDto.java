@@ -23,6 +23,8 @@ public class ProgramDto {
 
     private BigDecimal price;
 
+    private String mainYn;
+
     private MultipartFile thumbnailFile;
 
     private String thumbnailImgPath;

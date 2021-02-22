@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_BANNER_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.BANNER_PREFIX;
 
 @Slf4j
@@ -47,7 +48,7 @@ public class BannerController extends BaseController {
     /**
      * 메인 베너 등록
      */
-    @PostMapping(BANNER_PREFIX + "/new")
+    @PostMapping(ADMIN_BANNER_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertMainBanner(@ModelAttribute BannerDto banner) {
         log.info("메인 배너 등록: {}", banner);
 
@@ -74,9 +75,9 @@ public class BannerController extends BaseController {
     }
 
     /**
-     * 메인 베너의 제목과 링크 수정
+     * 메인 베너 수정
      */
-    @PutMapping(BANNER_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_BANNER_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateMainBanner(@PathVariable("id") Long id, @ModelAttribute BannerDto banner) {
         log.info("메인 배너 수정 - id: {}, banner: {}", id, banner);
 
@@ -131,7 +132,7 @@ public class BannerController extends BaseController {
     /**
      * 메인 베너 삭제
      */
-    @DeleteMapping(BANNER_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_BANNER_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteMainBanner(@RequestBody List<Integer> ids) {
         log.info("메인 베너 삭제: {}", ids);
 

@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
                 .antMatchers("/api/admin/**").authenticated()
                 .antMatchers("/api/user/**").authenticated()
-                .antMatchers("/api/userApi/**").permitAll() // 그외 나머지 요청은 누구나 접근 가능
+                .antMatchers("/api/**").permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)// JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다.
                 .logout() // 로그아웃

@@ -49,10 +49,19 @@ public class NewsService {
 //        String loginId = userDetails.getUsername();
 
         News entity = new News();
-        entity.setTitle(news.getTitle());
-        entity.setContents(news.getContents());
-        entity.setImgPath(news.getImgPath());
-        entity.setImgName(news.getImgName());
+        if (news.getTitle() != null) {
+            entity.setTitle(news.getTitle());
+        }
+        if (news.getContents() != null) {
+            entity.setContents(news.getContents());
+        }
+        if (news.getImgPath() != null) {
+            entity.setImgPath(news.getImgPath());
+        }
+        if (news.getImgName() != null) {
+            entity.setImgName(news.getImgName());
+        }
+
         entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
         entity.setUpdateDate(LocalDateTime.now());
@@ -70,16 +79,16 @@ public class NewsService {
 //        String loginId = userDetails.getUsername();
 
         News origin = findOne(id);
-        if (news.getTitle() != null) {
+        if (origin.getTitle() != null && !origin.getTitle().equals(news.getTitle())) {
             origin.setTitle(news.getTitle());
         }
-        if (news.getContents() != null) {
+        if (origin.getContents() != null && !origin.getContents().equals(news.getContents())) {
             origin.setContents(news.getContents());
         }
-        if (news.getImgPath() != null) {
+        if (origin.getImgPath() != null && !origin.getImgPath().equals(news.getImgPath())) {
             origin.setImgPath(news.getImgPath());
         }
-        if (news.getImgName() != null) {
+        if (origin.getImgName() != null && !origin.getImgName().equals(news.getImgName())) {
             origin.setImgName(news.getImgName());
         }
         origin.setUpdateDate(LocalDateTime.now());

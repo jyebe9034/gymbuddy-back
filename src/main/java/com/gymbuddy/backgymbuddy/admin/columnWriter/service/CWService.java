@@ -56,13 +56,13 @@ public class CWService {
 //        String loginId = userDetails.getUsername();
 
         ColumnWriter origin = cwRepository.findById(id).get();
-        if (columnWriter.getName() != null) {
+        if (origin.getName() != null && !origin.getName().equals(columnWriter.getName())) {
             origin.setName(columnWriter.getName());
         }
-        if (columnWriter.getJob() != null) {
+        if (origin.getJob() != null && !origin.getJob().equals(columnWriter.getJob())) {
             origin.setJob(columnWriter.getJob());
         }
-        if (columnWriter.getContents() != null) {
+        if (origin.getContents() != null && !origin.getContents().equals(columnWriter.getContents())) {
             origin.setContents(columnWriter.getContents());
         }
         origin.setUpdateDate(LocalDateTime.now());

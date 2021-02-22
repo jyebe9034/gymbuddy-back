@@ -47,13 +47,27 @@ public class UserLogicService {
         }
 
         User entity = new User();
-        entity.setIdentity(user.getIdentity());
-        entity.setEmail(user.getEmail());
-        entity.setPassword(passwordEncoder.encode(user.getPassword()));
-        entity.setName(user.getName());
-        entity.setPhone(user.getPhone());
-        entity.setAddress(new Address(user.getZipcode(), user.getStreet1(), user.getStreet2()));
-        entity.setAgreeYn(user.getAgreeYn());
+        if (user.getIdentity() != null) {
+            entity.setIdentity(user.getIdentity());
+        }
+        if (user.getEmail() != null) {
+            entity.setEmail(user.getEmail());
+        }
+        if (user.getPassword() != null) {
+            entity.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        if (user.getName() != null) {
+            entity.setName(user.getName());
+        }
+        if (user.getPhone() != null) {
+            entity.setPhone(user.getPhone());
+        }
+        if (user.getStreet1() != null && user.getStreet2() != null && user.getZipcode() != null) {
+            entity.setAddress(new Address(user.getZipcode(), user.getStreet1(), user.getStreet2()));
+        }
+        if (user.getAgreeYn() != null) {
+            entity.setAgreeYn(user.getAgreeYn());
+        }
         entity.setGrade(Grade.NORMAL.toString());
         entity.setCreateDate(LocalDateTime.now());
         entity.setUpdateDate(LocalDateTime.now());
@@ -132,19 +146,26 @@ public class UserLogicService {
     @Transactional
     public void update(Long id, UserDto user) {
         User origin = findOne(id);
-        if (user.getName() != null) {
+        if (origin.getName() != null && !origin.getName().equals(user.getName())) {
             origin.setName(user.getName());
         }
         if (user.getPassword() != null) {
-            origin.setPassword(passwordEncoder.encode(user.getPassword()));
+            String originPw = origin.getPassword();
+            String newPw = passwordEncoder.encode(user.getPassword());
+            if (!originPw.equals(newPw)) {
+                origin.setPassword(newPw);
+            }
         }
-        if (user.getPhone() != null) {
+        if (origin.getPhone() != null && !origin.getPhone().equals(user.getPhone())) {
             origin.setPhone(user.getPhone());
         }
         if (user.getStreet1() != null && user.getStreet2() != null && user.getZipcode() != null) {
-            origin.setAddress(new Address(user.getZipcode(), user.getStreet1(), user.getStreet2()));
+            Address address = new Address(user.getZipcode(), user.getStreet1(), user.getStreet2());
+            if (!origin.getAddress().equals(address)) {
+                origin.setAddress(address);
+            }
         }
-        if (user.getAgreeYn() != null) {
+        if (origin.getAgreeYn() != null && !origin.getAgreeYn().equals(user.getAgreeYn())) {
             origin.setAgreeYn(user.getAgreeYn());
         }
     }

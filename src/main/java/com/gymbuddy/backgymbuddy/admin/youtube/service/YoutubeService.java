@@ -45,12 +45,24 @@ public class YoutubeService {
 //        String loginId = userDetails.getUsername();
 
         Youtube entity = new Youtube();
-        entity.setUploadDate(youtube.getUploadDate());
-        entity.setTitle(youtube.getTitle());
-        entity.setContents(youtube.getContents());
-        entity.setLink(youtube.getLink());
-        entity.setImgPath(youtube.getImgPath());
-        entity.setImgName(youtube.getImgName());
+        if (youtube.getUploadDate() != null) {
+            entity.setUploadDate(youtube.getUploadDate());
+        }
+        if (youtube.getTitle() != null) {
+            entity.setTitle(youtube.getTitle());
+        }
+        if (youtube.getContents() != null) {
+            entity.setContents(youtube.getContents());
+        }
+        if (youtube.getLink() != null) {
+            entity.setLink(youtube.getLink());
+        }
+        if (youtube.getImgPath() != null) {
+            entity.setImgPath(youtube.getImgPath());
+        }
+        if (youtube.getImgName() != null) {
+            entity.setImgName(youtube.getImgName());
+        }
         entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
         entity.setUpdateDate(LocalDateTime.now());
@@ -68,22 +80,22 @@ public class YoutubeService {
 //        String loginId = userDetails.getUsername();
 
         Youtube origin = findOne(id);
-        if (youtube.getUploadDate() != null) {
+        if (origin.getUploadDate() != null && !origin.getUploadDate().equals(youtube.getUploadDate())) {
             origin.setUploadDate(youtube.getUploadDate());
         }
-        if (youtube.getTitle() != null) {
+        if (origin.getTitle() != null && !origin.getTitle().equals(youtube.getTitle())) {
             origin.setTitle(youtube.getTitle());
         }
-        if (youtube.getContents() != null) {
+        if (origin.getContents() != null && !origin.getContents().equals(youtube.getContents())) {
             origin.setContents(youtube.getContents());
         }
-        if (youtube.getLink() != null) {
+        if (origin.getLink() != null && !origin.getLink().equals(youtube.getLink())) {
             origin.setLink(youtube.getLink());
         }
-        if (youtube.getImgPath() != null) {
+        if (origin.getImgPath() != null && !origin.getImgPath().equals(youtube.getImgPath())) {
             origin.setImgPath(youtube.getImgPath());
         }
-        if (youtube.getImgName() != null) {
+        if (origin.getImgName() != null && !origin.getImgName().equals(youtube.getImgName())) {
             origin.setImgName(youtube.getImgName());
         }
         origin.setUpdateDate(LocalDateTime.now());

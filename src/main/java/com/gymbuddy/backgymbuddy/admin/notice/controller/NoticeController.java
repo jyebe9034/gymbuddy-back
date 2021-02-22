@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.util.*;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_NOTICE_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.NOTICE_PREFIX;
 
 @Slf4j
@@ -19,7 +20,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.NOTICE_PREFIX;
 @RequiredArgsConstructor
 public class NoticeController extends BaseController {
 
-    private final String URI_PREFIX = NOTICE_PREFIX;
     private String noticePath = "/resources/static/img/notice";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + noticePath;
     private File newfile = new File(rootPath);
@@ -29,7 +29,7 @@ public class NoticeController extends BaseController {
     /**
      * 전체 공지사항 조회(관리자)
      */
-    @GetMapping(URI_PREFIX + "/all/{page}")
+    @GetMapping(NOTICE_PREFIX + "/all/{page}")
     public ResponseEntity<List<Notice>> selectNoticeList(@PathVariable("page") int page) {
         return createResponseEntity(true, noticeService.findAll(page));
     }
@@ -37,7 +37,7 @@ public class NoticeController extends BaseController {
     /**
      * 공지사항 상세
      */
-    @GetMapping(URI_PREFIX + "/detail/{id}")
+    @GetMapping(NOTICE_PREFIX + "/detail/{id}")
     public ResponseEntity<Notice> selectNoticeDetail(@PathVariable("id") Long id) {
         log.info("공지사항 아이디로 조회: {}", id);
         return createResponseEntity(true, noticeService.findOne(id));
@@ -46,7 +46,7 @@ public class NoticeController extends BaseController {
     /**
      * 공지사항 등록
      */
-    @PostMapping(URI_PREFIX + "/new")
+    @PostMapping(ADMIN_NOTICE_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertNotice(@ModelAttribute NoticeDto notice) {
         log.info("공지사항 등록: {}", notice);
 
@@ -72,9 +72,9 @@ public class NoticeController extends BaseController {
     }
 
     /**
-     * 공지사항의 제목, 내용, 이미지, 메인 노출 여부 수정
+     * 공지사항 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_NOTICE_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateNotice(@PathVariable("id") Long id, @ModelAttribute NoticeDto notice) {
         log.info("공지사항 수정 - id: {}, notice: {}", id, notice);
 
@@ -126,7 +126,7 @@ public class NoticeController extends BaseController {
     /**
      * 공지사항 삭제
      */
-    @DeleteMapping(URI_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_NOTICE_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteNotice(@RequestBody List<Integer> ids) {
         log.info("공지사항 삭제: {}", ids);
 

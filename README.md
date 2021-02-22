@@ -16,3 +16,5 @@
 * [멤버](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Member.md)
 * [FAQ](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Faq.md)
 * [뉴스레터](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Newsletter.md)
+* [프로그램](https://github.com/Hyenasystem/back-gymbuddy/blob/master/document/Program.md)
+* [회원](https://github.com/Hyenasystem/back-gymbuddy/blob/master/document/User.md)

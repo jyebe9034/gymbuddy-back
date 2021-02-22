@@ -120,7 +120,7 @@ PARAM: 없음
 ```
 HTTP METHOD : POST
 METHOD NAME: insertMainBanner
-PATH : /api/banner/new
+PATH : /api/admin/banner/new
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 title: 제목
@@ -147,7 +147,7 @@ file: 이미지 파일
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateMainBanner
-PATH : /api/banner/update/{id}
+PATH : /api/admin/banner/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 title: 제목
@@ -175,10 +175,10 @@ file: 이미지 파일
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteMainBanner
-PATH : /api/banner/delete
+PATH : /api/admin/banner/delete
 PARAM : List<Integer>
 === PARAM 설명 ===
-그냥 아이 배열만 넘기면 됌
+아이디 배열을 넘기면 됌
 ```
 * 파라미터 구조
 ```
