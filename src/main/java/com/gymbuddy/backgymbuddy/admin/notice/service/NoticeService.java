@@ -47,10 +47,19 @@ public class NoticeService {
 //        String loginId = userDetails.getUsername();
 
         Notice entity = new Notice();
-        entity.setTitle(notice.getTitle());
-        entity.setContents(notice.getContents());
-        entity.setImgPath(notice.getImgPath());
-        entity.setImgName(notice.getImgName());
+        if (notice.getTitle() != null) {
+            entity.setTitle(notice.getTitle());
+        }
+        if (notice.getContents() != null) {
+            entity.setContents(notice.getContents());
+        }
+        if (notice.getImgPath() != null) {
+            entity.setImgPath(notice.getImgPath());
+        }
+        if (notice.getImgName() != null) {
+            entity.setImgName(notice.getImgName());
+        }
+
         entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
         entity.setUpdateDate(LocalDateTime.now());
@@ -68,16 +77,16 @@ public class NoticeService {
 //        String loginId = userDetails.getUsername();
 
         Notice origin = findOne(id);
-        if (notice.getTitle() != null) {
+        if (notice.getTitle() != null && !origin.getTitle().equals(notice.getTitle())) {
             origin.setTitle(notice.getTitle());
         }
-        if (notice.getContents() != null) {
+        if (notice.getContents() != null && !origin.getContents().equals(notice.getContents())) {
             origin.setContents(notice.getContents());
         }
-        if (notice.getImgPath() != null) {
+        if (notice.getImgPath() != null && !origin.getImgPath().equals(notice.getImgPath())) {
             origin.setImgPath(notice.getImgPath());
         }
-        if (notice.getImgName() != null) {
+        if (notice.getImgName() != null && !origin.getImgName().equals(notice.getImgName())) {
             origin.setImgName(notice.getImgName());
         }
         origin.setUpdateDate(LocalDateTime.now());

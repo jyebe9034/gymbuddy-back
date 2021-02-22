@@ -5,8 +5,6 @@ import com.gymbuddy.backgymbuddy.admin.banner.domain.BannerDto;
 import com.gymbuddy.backgymbuddy.admin.banner.repository.BannerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,12 +35,24 @@ public class BannerService {
 //        String loginId = userDetails.getUsername();
 
         Banner entity = new Banner();
-        entity.setTitle(banner.getTitle());
-        entity.setCategoryId(banner.getCategoryId());
-        entity.setLink(banner.getLink());
-        entity.setBtnTitle(banner.getBtnTitle());
-        entity.setImgPath(banner.getImgPath());
-        entity.setImgName(banner.getImgName());
+        if (banner.getTitle() != null) {
+            entity.setTitle(banner.getTitle());
+        }
+        if (banner.getCategoryId() != null) {
+            entity.setCategoryId(banner.getCategoryId());
+        }
+        if (banner.getLink() != null) {
+            entity.setLink(banner.getLink());
+        }
+        if (banner.getBtnTitle() != null) {
+            entity.setBtnTitle(banner.getBtnTitle());
+        }
+        if (banner.getImgPath() != null) {
+            entity.setImgPath(banner.getImgPath());
+        }
+        if (banner.getImgName() != null) {
+            entity.setImgName(banner.getImgName());
+        }
         entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
         entity.setUpdateDate(LocalDateTime.now());
@@ -60,22 +70,22 @@ public class BannerService {
 //        String loginId = userDetails.getUsername();
 
         Banner origin = findOne(id);
-        if (banner.getTitle() != null) {
+        if (origin.getTitle() != null && !origin.getTitle().equals(banner.getTitle())) {
             origin.setTitle(banner.getTitle());
         }
-        if (banner.getCategoryId() != null) {
+        if (origin.getCategoryId() != null && !origin.getCategoryId().equals(banner.getCategoryId())) {
             origin.setCategoryId(banner.getCategoryId());
         }
-        if (banner.getLink() != null) {
+        if (origin.getLink() != null && !origin.getLink().equals(banner.getLink())) {
             origin.setLink(banner.getLink());
         }
-        if (banner.getBtnTitle() != null) {
+        if (origin.getBtnTitle() != null && !origin.getBtnTitle().equals(banner.getBtnTitle())) {
             origin.setBtnTitle(banner.getBtnTitle());
         }
-        if (banner.getImgPath() != null) {
+        if (origin.getImgPath() != null && !origin.getImgPath().equals(banner.getImgPath())) {
             origin.setImgPath(banner.getImgPath());
         }
-        if (banner.getImgName() != null) {
+        if (origin.getImgName() != null && !origin.getImgName().equals(banner.getImgName())) {
             origin.setImgName(banner.getImgName());
         }
         origin.setUpdateDate(LocalDateTime.now());

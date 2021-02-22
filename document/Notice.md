@@ -206,7 +206,7 @@ PARAM: 없음
 ```
 HTTP METHOD : POST
 METHOD NAME: insertNotice
-PATH : /api/notice/new
+PATH : /api/admin/notice/new
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 title: 제목
@@ -231,7 +231,7 @@ file: 이미지 파일
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateNotice
-PATH : /api/notice/update/{id}
+PATH : /api/admin/notice/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 title: 제목
@@ -257,10 +257,10 @@ file: 이미지 파일
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteNotice
-PATH : /api/notice/delete
+PATH : /api/admin/notice/delete
 PARAM : List<Integer>
 === PARAM 설명 ===
-그냥 숫자 배열만 넘기면 됌
+아이디 배열을 넘기면 됌
 ```
 * 파라미터 구조
 ```

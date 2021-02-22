@@ -115,7 +115,7 @@ PARAM: 없음
 ```
 HTTP METHOD : POST
 METHOD NAME: insertColumn
-PATH : /api/column/new
+PATH : /api/admin/column/new
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 title: 제목
@@ -142,7 +142,7 @@ mainYn: 메인 노출 여부(Y or N)
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateColumn
-PATH : /api/column/update/{id}
+PATH : /api/admin/column/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 title: 제목
@@ -170,10 +170,10 @@ mainYn: 메인 노출 여부(Y or N)
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteColumn
-PATH : /api/column/delete
+PATH : /api/admin/column/delete
 PARAM : List<Integer>
 === PARAM 설명 ===
-그냥 아이디 배열만 넘기면 됌
+아이디 배열을 넘기면 됌
 ```
 * 파라미터 구조
 ```

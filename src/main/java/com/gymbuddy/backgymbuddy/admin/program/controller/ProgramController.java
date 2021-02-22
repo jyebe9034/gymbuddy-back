@@ -34,24 +34,24 @@ public class ProgramController extends BaseController {
      * 전체 프로그램 조회(관리자)
      */
     @GetMapping(PROGRAM_PREFIX + "/all/{page}")
-    public ResponseEntity<List<Program>> selectProgramList(@PathVariable("page") int page) {
-        return createResponseEntity(true, programService.findAll(page));
+    public ResponseEntity<List<ProgramDto>> selectProgramList(@PathVariable("page") int page) {
+        return createResponseEntity(true, programService.findAllDto(page));
     }
 
     /**
      * 프로그램 상세
      */
     @GetMapping(PROGRAM_PREFIX + "/detail/{id}")
-    public ResponseEntity<Program> selectProgramDetail(@PathVariable("id") Long id) {
+    public ResponseEntity<ProgramDto> selectProgramDetail(@PathVariable("id") Long id) {
         log.info("프로그램 아이디로 조회: {}", id);
-        return createResponseEntity(true, programService.findOne(id));
+        return createResponseEntity(true, programService.findOneDto(id));
     }
 
     /**
      * 프로그램 등록
      */
     @PostMapping(PROGRAM_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertProgram(@ModelAttribute ProgramDto program) {
+    public ResponseEntity<Map<String, Object>> insertProgram(@RequestBody ProgramDto program) {
         // 여기에서 받은 프로그램 + 프로그램 옵션...
         log.info("프로그램 등록: {}", program);
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -30,8 +31,87 @@ public class ProgramService {
         return programRepository.findAll(PageRequest.of(page, 10)).getContent();
     }
 
+    public List<ProgramDto> findAllDto(int page) {
+        List<Program> list = findAll(page);
+        List<ProgramDto> dtoList = new ArrayList<>();
+        for (Program one : list) {
+            ProgramDto dto = entityToDto(one);
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
     public Program findOne(Long id) {
-        return programRepository.findById(id).get();
+        Program program = programRepository.findById(id).get();
+        List<ProgramOption> options = optionRepository.findAllByProgramId(id);
+        program.setProgramOptions(options);
+        return program;
+    }
+
+    public ProgramDto findOneDto(Long id) {
+        Program one = findOne(id);
+        return entityToDto(one);
+    }
+
+    private ProgramDto entityToDto(Program one) {
+        ProgramDto dto = new ProgramDto();
+        if (one.getId() != null) {
+            dto.setId(one.getId());
+        }
+        if (one.getTitle() != null) {
+            dto.setTitle(one.getTitle());
+        }
+        if (one.getCoach() != null) {
+            dto.setCoach(one.getCoach());
+        }
+        if (one.getClassAddress() != null) {
+            dto.setClassAddress(one.getClassAddress());
+        }
+        if (one.getClassDate() != null) {
+            dto.setClassDate(one.getClassDate());
+        }
+        if (one.getClassTime() != null) {
+            dto.setClassTime(one.getClassTime());
+        }
+        if (one.getPrice() != null) {
+            dto.setPrice(one.getPrice());
+        }
+        if (one.getMainYn() != null) {
+            dto.setMainYn(one.getMainYn());
+        }
+        if (one.getThumbnailImgPath() != null) {
+            dto.setThumbnailImgPath(one.getThumbnailImgPath());
+        }
+        if (one.getThumbnailImgName() != null) {
+            dto.setThumbnailImgName(one.getThumbnailImgName());
+        }
+        if (one.getDetailImgPath() != null) {
+            dto.setDetailImgPath(one.getDetailImgPath());
+        }
+        if (one.getDetailImgName() != null) {
+            dto.setDetailImgName(one.getDetailImgName());
+        }
+        if (!one.getProgramOptions().isEmpty()) {
+            List<ProgramOptionDto> optionList = new ArrayList<>();
+            for (ProgramOption opt : one.getProgramOptions()) {
+                ProgramOptionDto optDto = new ProgramOptionDto();
+                if (opt.getId() != null) {
+                    optDto.setId(opt.getId());
+                }
+                if (opt.getClassDateTime() != null) {
+                    optDto.setClassDateTime(opt.getClassDateTime());
+                }
+                if (opt.getUserCount() != 0) {
+                    optDto.setUserCount(opt.getUserCount());
+                }
+                if (opt.getAddPrice() != null) {
+                    optDto.setAddPrice(opt.getAddPrice());
+                }
+                optionList.add(optDto);
+            }
+            dto.setOptionList(optionList);
+        }
+        return dto;
     }
 
     public ProgramOption findOneOption(Long id) {
@@ -63,6 +143,9 @@ public class ProgramService {
         }
         if (program.getPrice() != null) {
             entity.setPrice(program.getPrice());
+        }
+        if (program.getMainYn() != null) {
+            entity.setMainYn(program.getMainYn());
         }
         if (program.getThumbnailImgName() != null) {
 //        entity.setThumbnailImgName(program.getThumbnailImgName());
@@ -133,7 +216,9 @@ public class ProgramService {
         if (!origin.getPrice().equals(program.getPrice())) {
             origin.setPrice(program.getPrice());
         }
-
+        if (!origin.getMainYn().equals(program.getMainYn())) {
+            origin.setMainYn(program.getMainYn());
+        }
         if (origin.getThumbnailImgPath() != null && !origin.getThumbnailImgPath().equals(program.getThumbnailImgPath())) {
             origin.setThumbnailImgPath(program.getThumbnailImgPath());
         }
@@ -167,6 +252,7 @@ public class ProgramService {
         }
     }
 
+    @Transactional
     public void delete(long id) {
         programRepository.deleteById(id);
         // 옵션 목록 삭제..

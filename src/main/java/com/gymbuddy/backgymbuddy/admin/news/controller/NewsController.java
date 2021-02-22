@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_NEWS_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.NEWS_PREFIX;
 
 @Slf4j
@@ -21,7 +22,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.NEWS_PREFIX;
 @RequiredArgsConstructor
 public class NewsController extends BaseController {
 
-    private final String URI_PREFIX = NEWS_PREFIX;
     private String newsPath = "/resources/static/img/news";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + newsPath;
     private File newfile = new File(rootPath);
@@ -31,7 +31,7 @@ public class NewsController extends BaseController {
     /**
      * 전체 대외뉴스 조회(관리자)
      */
-    @GetMapping(URI_PREFIX + "/all/{page}")
+    @GetMapping(NEWS_PREFIX + "/all/{page}")
     public ResponseEntity<List<News>> selectNewsList(@PathVariable("page") int page) {
         return createResponseEntity(true, newsService.findAll(page));
     }
@@ -39,7 +39,7 @@ public class NewsController extends BaseController {
     /**
      * 대외뉴스 상세
      */
-    @GetMapping(URI_PREFIX + "/detail/{id}")
+    @GetMapping(NEWS_PREFIX + "/detail/{id}")
     public ResponseEntity<News> selectNewsDetail(@PathVariable("id") Long id) {
         log.info("대외뉴스 아이디로 조회: {}", id);
         return createResponseEntity(true, newsService.findOne(id));
@@ -48,7 +48,7 @@ public class NewsController extends BaseController {
     /**
      * 대외뉴스 등록
      */
-    @PostMapping(URI_PREFIX + "/new")
+    @PostMapping(ADMIN_NEWS_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertNews(@ModelAttribute NewsDto news) {
         log.info("대외뉴스 등록: {}", news);
 
@@ -76,7 +76,7 @@ public class NewsController extends BaseController {
     /**
      * 대외뉴스 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_NEWS_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateNews(@PathVariable("id") Long id, @ModelAttribute NewsDto news) {
         log.info("대외뉴스 수정 - id: {}, param: {}", id, news);
 
@@ -125,7 +125,7 @@ public class NewsController extends BaseController {
     /**
      * 대외뉴스 삭제
      */
-    @DeleteMapping(URI_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_NEWS_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteNews(@RequestBody List<Integer> ids) {
         log.info("대외뉴스 삭제: {}", ids);
 

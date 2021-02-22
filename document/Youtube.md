@@ -103,7 +103,7 @@ PARAM: 없음
 ```
 HTTP METHOD : POST
 METHOD NAME: insertYoutube
-PATH : /api/youtube/new
+PATH : /api/admin/youtube/new
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 uploadDate: 업로드 날짜(YYYY-MM-DD)
@@ -131,7 +131,7 @@ mainYn: 메인 노출 여부 (Y or N)
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateYoutube
-PATH : /api/youtube/update/{id}
+PATH : /api/admin/youtube/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 uploadDate: 업로드 날짜(YYYY-MM-DD)
@@ -160,10 +160,10 @@ mainYn: 메인 노출 여부 (Y or N)
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteYoutube
-PATH : /api/youtube/delete
+PATH : /api/admin/youtube/delete
 PARAM : List<Integer>
 === PARAM 설명 ===
-그냥 숫자 배열만 넘기면 됌
+아이디 배열을 넘기면 됌
 ```
 * 파라미터 구조
 ```

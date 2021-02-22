@@ -1,5 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.program.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
 
@@ -34,5 +36,7 @@ public class ProgramOption extends BaseDomain {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "program_id")
     private Program program;
+
+
 
 }

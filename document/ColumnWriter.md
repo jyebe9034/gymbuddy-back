@@ -92,7 +92,7 @@ PARAM: 없음
 ```
 HTTP METHOD : POST
 METHOD NAME: insertColumnWriter
-PATH : /api/columnWriter/new
+PATH : /api/admin/columnWriter/new
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 name: 이름
@@ -117,7 +117,7 @@ contents: 내용
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateColumnWriter
-PATH : /api/columnWriter/update/{id}
+PATH : /api/admin/columnWriter/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 name: 이름
@@ -143,10 +143,10 @@ contents: 내용
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteColumnWriter
-PATH : /api/columnWriter/delete
+PATH : /api/admin/columnWriter/delete
 PARAM : List<Integer>
 === PARAM 설명 ===
-그냥 아이 배열만 넘기면 됌
+아이디 배열을 넘기면 됌
 ```
 * 파라미터 구조
 ```
