@@ -26,11 +26,15 @@ public class YoutubeService {
     private final YoutubeRepository youtubeRepository;
 
     public List<Youtube> findAllForMain() {
-        return youtubeRepository.findTop9ByOrderByIdDesc();
+        return youtubeRepository.findAll(PageRequest.of(0, 9, Sort.by("id").descending())).getContent();
     }
 
     public List<Youtube> findAll(int page) {
-        return youtubeRepository.findAll(PageRequest.of(page, 10)).getContent();
+        return youtubeRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+    }
+
+    public List<Youtube> findAllForUser(int page) {
+        return youtubeRepository.findAll(PageRequest.of(page, 15, Sort.by("id").descending())).getContent();
     }
 
     public Youtube findOne(Long id) {
@@ -83,19 +87,19 @@ public class YoutubeService {
         if (origin.getUploadDate() != null && !origin.getUploadDate().equals(youtube.getUploadDate())) {
             origin.setUploadDate(youtube.getUploadDate());
         }
-        if (origin.getTitle() != null && !origin.getTitle().equals(youtube.getTitle())) {
+        if (origin.getTitle() != null) {
             origin.setTitle(youtube.getTitle());
         }
-        if (origin.getContents() != null && !origin.getContents().equals(youtube.getContents())) {
+        if (origin.getContents() != null) {
             origin.setContents(youtube.getContents());
         }
-        if (origin.getLink() != null && !origin.getLink().equals(youtube.getLink())) {
+        if (origin.getLink() != null) {
             origin.setLink(youtube.getLink());
         }
-        if (origin.getImgPath() != null && !origin.getImgPath().equals(youtube.getImgPath())) {
+        if (origin.getImgPath() != null) {
             origin.setImgPath(youtube.getImgPath());
         }
-        if (origin.getImgName() != null && !origin.getImgName().equals(youtube.getImgName())) {
+        if (origin.getImgName() != null) {
             origin.setImgName(youtube.getImgName());
         }
         origin.setUpdateDate(LocalDateTime.now());

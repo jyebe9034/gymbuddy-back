@@ -171,9 +171,7 @@ public class UserController extends BaseController {
     @PostMapping(USER_API + "/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserDto user) {
         log.info("회원 로그인: {}", user.getIdentity());
-        Map<String, Object> result = new HashMap<>();
-        result.put("jwt-token", logicService.login(user));
-        return createResponseEntity(true, result);
+        return createResponseEntity(true, logicService.login(user));
     }
 
     /**

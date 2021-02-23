@@ -32,11 +32,21 @@ public class ColumnController extends BaseController {
     private final ColumnService columnService;
 
     /**
-     * 전체 칼럼 조회(관리자)
+     * 전체 칼럼 조회 (관리자 화면 목록, 10개씩)
      */
     @GetMapping(COLUMN_PREFIX + "/all/{page}")
     public ResponseEntity<List<Columns>> selectColumnList(@PathVariable("page") int page) {
         return createResponseEntity(true, columnService.findAll(page));
+    }
+
+    /**
+     * 전체 컬럼 조회 (사용자 화면 목록, 15개씩)
+     * @param page
+     * @return
+     */
+    @GetMapping(COLUMN_PREFIX + "/allForUser/{page}")
+    public ResponseEntity<List<Columns>> selectColumnListForUser(@PathVariable("page") int page) {
+        return createResponseEntity(true, columnService.findAllForUser(page));
     }
 
     /**

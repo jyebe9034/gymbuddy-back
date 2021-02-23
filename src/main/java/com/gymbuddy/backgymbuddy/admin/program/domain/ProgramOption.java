@@ -30,6 +30,9 @@ public class ProgramOption extends BaseDomain {
     @Column(nullable = false)
     private int userCount;
 
+    /**
+     * 추가 금액
+     */
     @Column(nullable = false)
     private BigDecimal addPrice;
 
