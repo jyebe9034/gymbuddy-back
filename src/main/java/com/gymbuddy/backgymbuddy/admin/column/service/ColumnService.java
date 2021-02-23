@@ -9,6 +9,7 @@ import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,17 @@ public class ColumnService {
     private final CWRepository cwRepository;
 
     public List<Columns> findAllForMain() {
-        return columnRepository.findTop9ByOrderByIdDesc();
+        return columnRepository.findAll(PageRequest.of(0, 9, Sort.by("id").descending())).getContent();
     }
 
     public List<Columns> findAll(int page) {
-        return columnRepository.findAll(PageRequest.of(page, 10)).getContent();
+        List<Columns> list = columnRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        return list;
+    }
+
+    public List<Columns> findAllForUser(int page) {
+        List<Columns> list = columnRepository.findAll(PageRequest.of(page, 15, Sort.by("id").descending())).getContent();
+        return list;
     }
 
     public Columns findOne(Long id) {
@@ -65,9 +72,7 @@ public class ColumnService {
         if (columns.getImgName() != null) {
             entity.setImgName(columns.getImgName());
         }
-        entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
-        entity.setUpdateDate(LocalDateTime.now());
 //        entity.setUpdateId(loginId);
 
         columnRepository.save(entity);
@@ -81,7 +86,7 @@ public class ColumnService {
 //        String loginId = userDetails.getUsername();
 
         Columns origin = findOne(id);
-        if (origin.getTitle() != null && !origin.getTitle().equals(column.getTitle())) {
+        if (origin.getTitle() != null) {
             origin.setTitle(column.getTitle());
         }
         if (origin.getContents() != null && !origin.getContents().equals(column.getContents())) {
@@ -91,13 +96,12 @@ public class ColumnService {
             ColumnWriter columnWriter = cwRepository.findById(column.getColumnWriterId()).get();
             origin.setColumnWriter(columnWriter);
         }
-        if (origin.getImgPath() != null && !origin.getImgPath().equals(column.getImgPath())) {
+        if (origin.getImgPath() != null) {
             origin.setImgPath(column.getImgPath());
         }
-        if (origin.getImgName() != null && !origin.getImgName().equals(column.getImgName())) {
+        if (origin.getImgName() != null) {
             origin.setImgName(column.getImgName());
         }
-        origin.setUpdateDate(LocalDateTime.now());
 //        origin.setUpdateId(loginId);
     }
 

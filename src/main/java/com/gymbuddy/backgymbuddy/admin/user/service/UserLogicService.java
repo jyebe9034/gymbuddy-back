@@ -9,6 +9,7 @@ import com.gymbuddy.backgymbuddy.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,8 +70,6 @@ public class UserLogicService {
             entity.setAgreeYn(user.getAgreeYn());
         }
         entity.setGrade(Grade.NORMAL.toString());
-        entity.setCreateDate(LocalDateTime.now());
-        entity.setUpdateDate(LocalDateTime.now());
         entity.setRoles(Collections.emptyList());
 
         userRepository.save(entity);
@@ -83,20 +82,25 @@ public class UserLogicService {
     /**
      * 로그인
      */
-    public String login(UserDto user) {
+    public Map<String, Object> login(UserDto user) {
         User member = userRepository.findByIdentity(user.getIdentity())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
         if (!passwordEncoder.matches(user.getPassword(), member.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
         }
-        return jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
+        Map<String, Object> result = new HashMap<>();
+        result.put("identity", member.getIdentity());
+        result.put("name", member.getName());
+        result.put("adminYn", member.getGrade().equals(Grade.ADMIN) ? "Y" : "N");
+        result.put("jwt-token", jwtTokenProvider.createToken(member.getUsername(), member.getRoles()));
+        return result;
     }
 
     /**
      * 전체 회원 조회
      */
     public List<UserDto> findAll(int page) {
-        List<User> entities = userRepository.findAll(PageRequest.of(page, 10)).getContent();
+        List<User> entities = userRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
 
         List<UserDto> list = new ArrayList<>();
         for (User user : entities) {
@@ -146,17 +150,14 @@ public class UserLogicService {
     @Transactional
     public void update(Long id, UserDto user) {
         User origin = findOne(id);
-        if (origin.getName() != null && !origin.getName().equals(user.getName())) {
+        if (origin.getName() != null) {
             origin.setName(user.getName());
         }
         if (user.getPassword() != null) {
-            String originPw = origin.getPassword();
             String newPw = passwordEncoder.encode(user.getPassword());
-            if (!originPw.equals(newPw)) {
-                origin.setPassword(newPw);
-            }
+            origin.setPassword(newPw);
         }
-        if (origin.getPhone() != null && !origin.getPhone().equals(user.getPhone())) {
+        if (origin.getPhone() != null) {
             origin.setPhone(user.getPhone());
         }
         if (user.getStreet1() != null && user.getStreet2() != null && user.getZipcode() != null) {
@@ -165,7 +166,7 @@ public class UserLogicService {
                 origin.setAddress(address);
             }
         }
-        if (origin.getAgreeYn() != null && !origin.getAgreeYn().equals(user.getAgreeYn())) {
+        if (origin.getAgreeYn() != null) {
             origin.setAgreeYn(user.getAgreeYn());
         }
     }

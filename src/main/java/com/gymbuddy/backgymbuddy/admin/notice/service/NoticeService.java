@@ -6,6 +6,7 @@ import com.gymbuddy.backgymbuddy.admin.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,11 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
 
     public List<Notice> findAll(int page) {
-        return noticeRepository.findAll(PageRequest.of(page, 10)).getContent();
+        return noticeRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
     public List<Notice> findAllForMain() {
-        return noticeRepository.findTop5ByOrderByIdDesc();
+        return noticeRepository.findAll(PageRequest.of(0, 5, Sort.by("id").descending())).getContent();
     }
 
     public Notice findOne(Long id) {
@@ -59,10 +60,7 @@ public class NoticeService {
         if (notice.getImgName() != null) {
             entity.setImgName(notice.getImgName());
         }
-
-        entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
-        entity.setUpdateDate(LocalDateTime.now());
 //        entity.setUpdateId(loginId);
 
         noticeRepository.save(entity);
@@ -77,10 +75,10 @@ public class NoticeService {
 //        String loginId = userDetails.getUsername();
 
         Notice origin = findOne(id);
-        if (notice.getTitle() != null && !origin.getTitle().equals(notice.getTitle())) {
+        if (notice.getTitle() != null) {
             origin.setTitle(notice.getTitle());
         }
-        if (notice.getContents() != null && !origin.getContents().equals(notice.getContents())) {
+        if (notice.getContents() != null) {
             origin.setContents(notice.getContents());
         }
         if (notice.getImgPath() != null && !origin.getImgPath().equals(notice.getImgPath())) {
@@ -89,7 +87,6 @@ public class NoticeService {
         if (notice.getImgName() != null && !origin.getImgName().equals(notice.getImgName())) {
             origin.setImgName(notice.getImgName());
         }
-        origin.setUpdateDate(LocalDateTime.now());
 //        origin.setUpdateId(loginId);
     }
 

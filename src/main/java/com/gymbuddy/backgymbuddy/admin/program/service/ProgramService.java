@@ -9,6 +9,7 @@ import com.gymbuddy.backgymbuddy.admin.program.repository.ProgramRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,38 @@ public class ProgramService {
     private final ProgramRepository programRepository;
     private final ProgramOptionRepository optionRepository;
 
+    public List<ProgramDto> findAllForMain() {
+        List<Program> list = programRepository.findAllByMainYn("Y");
+        List<ProgramDto> dtoList = new ArrayList<>();
+        list.stream().forEach(program -> {
+            ProgramDto dto = new ProgramDto();
+            dto.setId(program.getId());
+            dto.setTitle(program.getTitle());
+            dto.setCoach(program.getCoach());
+            dto.setClassAddress(program.getClassAddress());
+            dto.setClassDate(program.getClassDate());
+            dto.setClassTime(program.getClassTime());
+            dto.setPrice(program.getPrice());
+            dto.setMainYn(program.getMainYn());
+            if (program.getThumbnailImgPath() != null) {
+                dto.setThumbnailImgPath(program.getThumbnailImgPath());
+            }
+            if (program.getThumbnailImgName() != null) {
+                dto.setThumbnailImgName(program.getThumbnailImgName());
+            }
+            if (program.getDetailImgPath() != null) {
+                dto.setDetailImgPath(program.getDetailImgPath());
+            }
+            if (program.getDetailImgName() != null) {
+                dto.setDetailImgName(program.getDetailImgName());
+            }
+            dtoList.add(dto);
+        });
+        return dtoList;
+    }
+
     public List<Program> findAll(int page) {
-        return programRepository.findAll(PageRequest.of(page, 10)).getContent();
+        return programRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
     public List<ProgramDto> findAllDto(int page) {
@@ -146,20 +177,18 @@ public class ProgramService {
             entity.setMainYn(program.getMainYn());
         }
         if (program.getThumbnailImgName() != null) {
-//        entity.setThumbnailImgName(program.getThumbnailImgName());
+        entity.setThumbnailImgName(program.getThumbnailImgName());
         }
         if (program.getThumbnailImgPath() != null) {
-//        entity.setThumbnailImgPath(program.getThumbnailImgPath());
+        entity.setThumbnailImgPath(program.getThumbnailImgPath());
         }
         if (program.getDetailImgName() != null) {
-//        entity.setDetailImgName(program.getDetailImgName());
+        entity.setDetailImgName(program.getDetailImgName());
         }
         if (program.getDetailImgPath() != null) {
-//        entity.setDetailImgPath(program.getDetailImgPath());
+        entity.setDetailImgPath(program.getDetailImgPath());
         }
-        entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
-        entity.setUpdateDate(LocalDateTime.now());
 //        entity.setUpdateId(loginId);
 
         programRepository.save(entity);
@@ -178,9 +207,7 @@ public class ProgramService {
                 option.setAddPrice(dto.getAddPrice());
             }
             option.setProgram(entity);
-            option.setCreateDate(LocalDateTime.now());
 //        option.setCreateId(loginId);
-            option.setUpdateDate(LocalDateTime.now());
 //        option.setUpdateId(loginId);
             optionRepository.save(option);
         }
@@ -196,25 +223,25 @@ public class ProgramService {
 //        String loginId = userDetails.getUsername();
 
         Program origin = findOne(id);
-        if (!origin.getTitle().equals(program.getTitle())) {
+        if (program.getTitle() != null) {
             origin.setTitle(program.getTitle());
         }
-        if (!origin.getCoach().equals(program.getCoach())) {
+        if (program.getCoach() != null) {
             origin.setCoach(program.getCoach());
         }
-        if (!origin.getClassAddress().equals(program.getClassAddress())) {
+        if (program.getClassAddress() != null) {
             origin.setClassAddress(program.getClassAddress());
         }
-        if (!origin.getClassDate().equals(program.getClassDate())) {
+        if (program.getClassDate() != null) {
             origin.setClassDate(program.getClassDate());
         }
-        if (!origin.getClassTime().equals(program.getClassTime())) {
+        if (program.getClassTime() != null) {
             origin.setClassTime(program.getClassTime());
         }
-        if (!origin.getPrice().equals(program.getPrice())) {
+        if (program.getPrice() != null) {
             origin.setPrice(program.getPrice());
         }
-        if (!origin.getMainYn().equals(program.getMainYn())) {
+        if (program.getMainYn() != null) {
             origin.setMainYn(program.getMainYn());
         }
         if (origin.getThumbnailImgPath() != null && !origin.getThumbnailImgPath().equals(program.getThumbnailImgPath())) {
@@ -229,7 +256,6 @@ public class ProgramService {
         if (origin.getDetailImgName() != null && !origin.getDetailImgName().equals(program.getDetailImgName())) {
             origin.setDetailImgName(program.getDetailImgName());
         }
-        origin.setUpdateDate(LocalDateTime.now());
 //        origin.setUpdateId(loginId);
 
         // 옵션 수정..
@@ -237,15 +263,16 @@ public class ProgramService {
         if (!optionList.isEmpty()) {
             for (ProgramOptionDto dto : optionList) {
                 ProgramOption originOption = findOneOption(dto.getId());
-                if (!originOption.getClassDateTime().equals(dto.getClassDateTime())) {
+                if (dto.getClassDateTime() != null) {
                     originOption.setClassDateTime(dto.getClassDateTime());
                 }
-                if (originOption.getUserCount() != dto.getUserCount()) {
+                if (dto.getUserCount() != 0) {
                     originOption.setUserCount(dto.getUserCount());
                 }
-                if (!originOption.getAddPrice().equals(dto.getAddPrice())) {
+                if (dto.getAddPrice() != null) {
                     originOption.setAddPrice(dto.getAddPrice());
                 }
+                // origin.setUpdateId(loginId);
             }
         }
     }

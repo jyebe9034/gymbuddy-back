@@ -108,13 +108,19 @@ password : 비밀번호
 * 결과구조
 ```
 {
-    "jwt-token" : 발행된 토큰
+    "identity": 회원 아이디
+    "jwt-token": 발행된 토큰
+    "adminYn": 관리자 여부(Y or N)
+    "name": 이름
 }
 ```
 * 결과 예시
 ```
 {
-    "jwt-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaWh5ZS50MDIyMUBnbWFpbC5jb20iLCJyb2xlcyI6W10sImlhdCI6MTYxMzkwNzE0MSwiZXhwIjoxNjEzOTA4OTQxfQ.jkrBkeQXg5EWjWF3z1ZNHus0EyezBdReEYCkC98_WUA"
+    "identity": "왜이래", (이건 가데이터가 잘못 들어가 있는거에요ㅎㅎ아이디는 영문과 숫자 조합만 가능합니다!)
+    "jwt-token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaWh5ZS50MDIyMUBnbWFpbC5jb20iLCJyb2xlcyI6W10sImlhdCI6MTYxNDA4NDc0NCwiZXhwIjoxNjE0MDg2NTQ0fQ.Uf5luhR_fixgkMFI9rIw8eeXREbixX-aHn6AymXzylI",
+    "adminYn": "Y",
+    "name": "김운동"
 }
 ```
 

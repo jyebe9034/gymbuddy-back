@@ -5,6 +5,7 @@ import com.gymbuddy.backgymbuddy.admin.columnWriter.repository.CWRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class CWService {
     private final CWRepository cwRepository;
 
     public List<ColumnWriter> findAll(int page) {
-        return cwRepository.findAll(PageRequest.of(page, 10)).getContent();
+        return cwRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
     public ColumnWriter findOne(Long id) {
@@ -39,9 +40,7 @@ public class CWService {
 //        UserDetails userDetails = (UserDetails) principal;
 //        String loginId = userDetails.getUsername();
 
-        columnWriter.setCreateDate(LocalDateTime.now());
 //        columnWriter.setCreateId(loginId);
-        columnWriter.setUpdateDate(LocalDateTime.now());
 //        columnWriter.setUpdateId(loginId);
 
         cwRepository.save(columnWriter);
@@ -56,16 +55,15 @@ public class CWService {
 //        String loginId = userDetails.getUsername();
 
         ColumnWriter origin = cwRepository.findById(id).get();
-        if (origin.getName() != null && !origin.getName().equals(columnWriter.getName())) {
+        if (origin.getName() != null) {
             origin.setName(columnWriter.getName());
         }
-        if (origin.getJob() != null && !origin.getJob().equals(columnWriter.getJob())) {
+        if (origin.getJob() != null) {
             origin.setJob(columnWriter.getJob());
         }
-        if (origin.getContents() != null && !origin.getContents().equals(columnWriter.getContents())) {
+        if (origin.getContents() != null) {
             origin.setContents(columnWriter.getContents());
         }
-        origin.setUpdateDate(LocalDateTime.now());
 //        origin.setUpdateId(loginId);
     }
 

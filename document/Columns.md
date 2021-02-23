@@ -1,6 +1,6 @@
 # Columns API
 
-### 전체 컬럼 목록조회
+### 전체 컬럼 목록조회 (관리자)
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: GET
@@ -24,6 +24,50 @@ PARAM: 없음
         "imgName": 이미지 명,
         "mainYn": 메인 노출 여부
     },
+    ...
+]
+```
+* 결과 예시
+```
+[
+    {
+        "createDate": "2021-02-22T08:53:40.256",
+        "createId": null,
+        "updateDate": "2021-02-22T08:53:40.256",
+        "updateId": null,
+        "id": 15,
+        "title": "컬럼15",
+        "contents": "컬럼입니다.",
+        "imgPath": "/resources/static/img/columns/1613951620222_테스트.png",
+        "imgName": "1613951620222_테스트.png"
+    },
+    {
+        "createDate": "2021-02-22T08:53:37.791",
+        "createId": null,
+        "updateDate": "2021-02-22T08:53:37.791",
+        "updateId": null,
+        "id": 14,
+        "title": "컬럼14",
+        "contents": "컬럼입니다.",
+        "imgPath": "/resources/static/img/columns/1613951617758_테스트.png",
+        "imgName": "1613951617758_테스트.png"
+    },
+    ...
+]
+```
+
+### 전체 컬럼 목록조회 (사용자)
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectColumnListForUser
+PATH : /api/column/allForUser/{page}
+*** page는 몇번째 페이지인지의 값으로 첫번째 페이지는 0, 두번째 페이지는 1 이런식으로 증가
+PARAM: 없음
+```
+* 결과구조
+```
+[
     {
         "createDate": 생성일
         "createId": 생성자,
@@ -43,28 +87,26 @@ PARAM: 없음
 ```
 [
     {
-        "createDate": "2021-02-06T21:43:05.866",
-        "createId": test,
-        "updateDate": "2021-02-06T21:43:05.866",
-        "updateId": test,
-        "id": 1,
-        "title": "컬럼1",
-        "contents": "컬럼1 입니다.",
-        "imgPath": "/resources/static/img/columns/1612615385796_테스트.png",
-        "imgName": "테스트.png",
-        "mainYn": "Y"
+        "createDate": "2021-02-22T08:53:40.256",
+        "createId": null,
+        "updateDate": "2021-02-22T08:53:40.256",
+        "updateId": null,
+        "id": 15,
+        "title": "컬럼15",
+        "contents": "컬럼입니다.",
+        "imgPath": "/resources/static/img/columns/1613951620222_테스트.png",
+        "imgName": "1613951620222_테스트.png"
     },
     {
-        "createDate": "2021-02-06T21:50:00.96",
-        "createId": test,
-        "updateDate": "2021-02-06T21:50:00.96",
-        "updateId": test,
-        "id": 2,
-        "title": "컬럼2",
-        "contents": "컬럼2 입니다.",
-        "imgPath": "/resources/static/img/columns/1612615800922_테스트.png",
-        "imgName": "테스트.png",
-        "mainYn": "Y"
+        "createDate": "2021-02-22T08:53:37.791",
+        "createId": null,
+        "updateDate": "2021-02-22T08:53:37.791",
+        "updateId": null,
+        "id": 14,
+        "title": "컬럼14",
+        "contents": "컬럼입니다.",
+        "imgPath": "/resources/static/img/columns/1613951617758_테스트.png",
+        "imgName": "1613951617758_테스트.png"
     },
     ...
 ]

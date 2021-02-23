@@ -7,6 +7,7 @@ import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -29,12 +30,11 @@ public class NewsService {
     private final NewsRepository newsRepository;
 
     public List<News> findAll(int page) {
-        return newsRepository.findAll(PageRequest.of(page, 10)).getContent();
+        return newsRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
     public List<News> findAllForMain() {
-        List<News> list = newsRepository.findTop5ByOrderByIdDesc();
-        return list;
+        return newsRepository.findAll(PageRequest.of(0, 5, Sort.by("id").descending())).getContent();
     }
 
     public News findOne(Long id) {
@@ -61,10 +61,7 @@ public class NewsService {
         if (news.getImgName() != null) {
             entity.setImgName(news.getImgName());
         }
-
-        entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
-        entity.setUpdateDate(LocalDateTime.now());
 //        entity.setUpdateId(loginId);
 
         newsRepository.save(entity);
@@ -79,10 +76,10 @@ public class NewsService {
 //        String loginId = userDetails.getUsername();
 
         News origin = findOne(id);
-        if (origin.getTitle() != null && !origin.getTitle().equals(news.getTitle())) {
+        if (origin.getTitle() != null) {
             origin.setTitle(news.getTitle());
         }
-        if (origin.getContents() != null && !origin.getContents().equals(news.getContents())) {
+        if (origin.getContents() != null) {
             origin.setContents(news.getContents());
         }
         if (origin.getImgPath() != null && !origin.getImgPath().equals(news.getImgPath())) {

@@ -30,14 +30,20 @@ public class YoutubeController extends BaseController {
     private final YoutubeService youtubeService;
 
     /**
-     * 전체 유튜브 조회
+     * 전체 유튜브 조회 (관리자 화면 목록, 10개씩)
      */
     @GetMapping(YOUTUBE_PREFIX + "/all/{page}")
     public ResponseEntity<List<Youtube>> selectYoutubeList(@PathVariable("page") int page) {
         return createResponseEntity(true, youtubeService.findAll(page));
     }
 
-    // TODO 홈화면 쪽에서 어떻게 보여주는지? 최신 9개만 보여주면 되는지 아니면 3개씩 나눠서 콜할건지?
+    /**
+     * 전체 유튜브 조회 (사용자 화면 목록, 15개씩)
+     */
+    @GetMapping(YOUTUBE_PREFIX + "/allForUser/{page}")
+    public ResponseEntity<List<Youtube>> selectYoutubeListForUser(@PathVariable("page") int page) {
+        return createResponseEntity(true, youtubeService.findAllForUser(page));
+    }
 
     /**
      * 유튜브 상세

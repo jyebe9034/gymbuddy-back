@@ -53,9 +53,7 @@ public class BannerService {
         if (banner.getImgName() != null) {
             entity.setImgName(banner.getImgName());
         }
-        entity.setCreateDate(LocalDateTime.now());
 //        entity.setCreateId(loginId);
-        entity.setUpdateDate(LocalDateTime.now());
 //        entity.setUpdateId(loginId);
 
         bannerRepository.save(entity);
@@ -70,10 +68,10 @@ public class BannerService {
 //        String loginId = userDetails.getUsername();
 
         Banner origin = findOne(id);
-        if (origin.getTitle() != null && !origin.getTitle().equals(banner.getTitle())) {
+        if (origin.getTitle() != null) {
             origin.setTitle(banner.getTitle());
         }
-        if (origin.getCategoryId() != null && !origin.getCategoryId().equals(banner.getCategoryId())) {
+        if (origin.getCategoryId() != null) {
             origin.setCategoryId(banner.getCategoryId());
         }
         if (origin.getLink() != null && !origin.getLink().equals(banner.getLink())) {
@@ -82,13 +80,12 @@ public class BannerService {
         if (origin.getBtnTitle() != null && !origin.getBtnTitle().equals(banner.getBtnTitle())) {
             origin.setBtnTitle(banner.getBtnTitle());
         }
-        if (origin.getImgPath() != null && !origin.getImgPath().equals(banner.getImgPath())) {
+        if (origin.getImgPath() != null) {
             origin.setImgPath(banner.getImgPath());
         }
-        if (origin.getImgName() != null && !origin.getImgName().equals(banner.getImgName())) {
+        if (origin.getImgName() != null) {
             origin.setImgName(banner.getImgName());
         }
-        origin.setUpdateDate(LocalDateTime.now());
 //        origin.setUpdateId(loginId);
     }
 
