@@ -70,7 +70,7 @@ PARAM: 없음
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateMember
-PATH : /api/member/update/{id}
+PATH : /api/admin/member/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 id: 1 - 웹, 2 - 모바일
@@ -92,4 +92,4 @@ webMobile: 웹/모바일 여부 (이 파라미터는 수정하지 않는 것을 
 ```
 
 ### 멤버 삭제
-* 멤버는 삭제할 수 없고 수정만 가능함. (사진은 업데이트 시 삭제됨.)
+* 멤버는 삭제할 수 없고 수정만 가능합니다. (*사진은 수정 시에만 삭제됩니다.)

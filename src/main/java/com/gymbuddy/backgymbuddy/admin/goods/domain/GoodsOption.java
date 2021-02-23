@@ -4,6 +4,7 @@ import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "goods_option")
@@ -26,6 +27,12 @@ public class GoodsOption extends BaseDomain {
      */
     @Column(nullable = false)
     private int inventory;
+
+    /**
+     * 추가 금액
+     */
+    @Column(nullable = false)
+    private BigDecimal extraPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goods_id")

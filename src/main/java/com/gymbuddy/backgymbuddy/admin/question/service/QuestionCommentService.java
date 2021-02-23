@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +20,14 @@ import java.util.Optional;
 public class QuestionCommentService {
 
     private final QuestionCommentRepository questionCommentRepository;
-    private final QuestionRepository qr;
+    private final QuestionRepository questionRepository;
 
     public List<QuestionComment> findAll(Long id) {
-        return questionCommentRepository.findQuestionCommentsById(id);
+        return questionCommentRepository.findAll();
+    }
+
+    public List<QuestionComment> findAllByQuestionId(Long id) {
+        return questionCommentRepository.findByQuestionId(id);
     }
 
     public QuestionComment findOne(Long id) {
@@ -35,24 +38,22 @@ public class QuestionCommentService {
     public Long save(Long id, QuestionCommentDto dto) {
         QuestionComment comment = new QuestionComment();
 
-        Optional<Question> findQuestion = qr.findById(id);
+        Optional<Question> findQuestion = questionRepository.findById(id);
 
-        comment.setQuestion(findQuestion.get());
-        comment.setContents(dto.getContents());
-        comment.setCreateDate(LocalDateTime.now());
-        comment.setUpdateDate(LocalDateTime.now());
-
-        questionCommentRepository.save(comment);
+        if (findQuestion.get() != null) {
+            comment.setQuestion(findQuestion.get());
+            comment.setContents(dto.getContents());
+            questionCommentRepository.save(comment);
+        }
         return comment.getId();
     }
 
     @Transactional
     public void update(Long id, QuestionCommentDto dto) {
         QuestionComment comment = findOne(id);
-        if (dto.getContents() != null) {
+        if (dto.getContents() != null && !dto.getContents().equals(comment.getContents())) {
             comment.setContents(dto.getContents());
         }
-        comment.setUpdateDate(LocalDateTime.now());
     }
 
     @Transactional

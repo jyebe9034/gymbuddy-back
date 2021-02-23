@@ -5,25 +5,17 @@
 ```
 HTTP METHOD: GET
 METHOD NAME: selectSubscriberList
-PATH: /api/newsletter/all
+PATH: /api/newsLetter/all
 PARAM: 없음
 ```
 * 결과 구조
 ```
 [
     {
-        "createDate": 생성일
-        "createId": 생성자,
-        "updateDate": 수정일,
-        "updateId": 수정자,
         "id": 아이디(JPA 생성),
         "email": 이메일 주소
     },
     {
-        "createDate": 생성일
-        "createId": 생성자,
-        "updateDate": 수정일,
-        "updateId": 수정자,
         "id": 아이디(JPA 생성),
         "email": 이메일 주소
     },
@@ -34,20 +26,16 @@ PARAM: 없음
 ```
 [
     {
-        "createDate": "2021-02-09T13:07:13.285257",
-        "createId": test,
-        "updateDate": "2021-02-09T13:07:13.28572",
-        "updateId": test,
         "id": 1,
-        "email": test1@gmail.com
+        "email": "test@gmail.com"
     },
     {
-        "createDate": "2021-02-09T13:07:21.871573",
-        "createId": test,
-        "updateDate": "2021-02-09T13:07:21.871612",
-        "updateId": test,
         "id": 2,
-        "email": test2@gmail.com
+        "email": "test2@gmail.com"
+    },
+    {
+        "id": 3,
+        "email": "test3@gmail.com"
     },
     ...
 ]
@@ -58,7 +46,7 @@ PARAM: 없음
 ```
 HTTP METHOD : POST
 METHOD NAME: insertNewSubscribe
-PATH : /api/newsletter/newSubscribe
+PATH : /api/newsLetter/newSubscribe
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 email: 이메일
@@ -81,7 +69,7 @@ email: 이메일
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteNewsletter
-PATH : /api/newsletter/deleteSubscribe/{id}
+PATH : /api/newsLetter/deleteSubscribe/{id}
 *** id는 JPA에서 생성된 값으로 목록에서 가지고 있는 값을 넘겨주면 됨.
 PARAM : 없음
 ```

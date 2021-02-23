@@ -2,18 +2,24 @@ package com.gymbuddy.backgymbuddy.admin.goods.domain;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Data
 public class GoodsDto {
 
     private Long id;
     private String name;
-    private String colorAndSize;
-    private int inventory;
+    private BigDecimal price;
+    private String mainYn;
 
-    // 썸네일 이미지
+    /*private MultipartFile thumbnailFile;
     private String thumbnailImgPath;
     private String thumbnailImgName;
-    // 상세 이미지
+
+    private MultipartFile detailFile;
     private String detailImgPath;
-    private String detailImgName;
+    private String detailImgName;*/
+
+    private List<GoodsOptionDto> optionList;
 }
