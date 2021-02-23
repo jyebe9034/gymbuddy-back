@@ -131,7 +131,7 @@ public class QuestionController extends BaseController {
      */
     @PutMapping("/question/update/{id}")
     public ResponseEntity<Map<String, Object>> updateQuestion(
-            @PathVariable("id") Long id, @RequestBody QuestionDto dto) {
+            @PathVariable("id") Long id, @ModelAttribute QuestionDto dto) {
         log.info("미션 수정 id: {}, dto: {}", id, dto);
 
         Question question = questionService.findOne(id);
@@ -253,7 +253,7 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 댓글 수정(관리자)
      */
-    @PutMapping(ADMIN_QUESTION_PREFIX + "/updateReply/{id}")
+    @PutMapping("/updateReply/{id}")
     public ResponseEntity<History> updateQuestionReply(
             @PathVariable("id") Long id, @RequestBody QuestionCommentDto dto) {
         log.info("1:1 문의 댓글 수정 id: {}, dto: {}", id, dto);

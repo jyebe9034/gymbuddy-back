@@ -35,8 +35,8 @@ public class MemberService {
         if (dto.getImgName() != null) {
             member.setImgName(dto.getImgName());
         }
-        if (dto.getWebOrMobile() != null) {
-            member.setWebOrMobile(dto.getWebOrMobile());
+        if (dto.getWebMobile() != null) {
+            member.setWebMobile(dto.getWebMobile());
         }
 
         memberRepository.save(member);
@@ -52,8 +52,8 @@ public class MemberService {
         if (!member.getImgName().equals(dto.getImgName())) {
             member.setImgName(dto.getImgName());
         }
-        if (!member.getWebOrMobile().equals(dto.getWebOrMobile())) {
-            member.setWebOrMobile(dto.getWebOrMobile());
+        if (dto.getWebMobile() != null) {
+            member.setWebMobile(dto.getWebMobile());
         }
     }
 }

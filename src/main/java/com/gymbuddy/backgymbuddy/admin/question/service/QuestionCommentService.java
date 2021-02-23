@@ -34,6 +34,23 @@ public class QuestionCommentService {
         return questionCommentRepository.findById(id).get();
     }
 
+    public QuestionCommentDto findOneByDto(Long id) {
+        QuestionComment comment = findOne(id);
+        return commentToDto(comment);
+    }
+
+    private QuestionCommentDto commentToDto(QuestionComment comment) {
+        QuestionCommentDto dto = new QuestionCommentDto();
+
+        if (comment.getId() != null) {
+            dto.setId(comment.getId());
+        }
+        if (comment.getContents() != null) {
+            dto.setContents(dto.getContents());
+        }
+        return dto;
+    }
+
     @Transactional
     public Long save(Long id, QuestionCommentDto dto) {
         QuestionComment comment = new QuestionComment();
@@ -42,16 +59,18 @@ public class QuestionCommentService {
 
         if (findQuestion.get() != null) {
             comment.setQuestion(findQuestion.get());
-            comment.setContents(dto.getContents());
-            questionCommentRepository.save(comment);
+            if (dto.getContents() != null) {
+                comment.setContents(dto.getContents());
+            }
         }
+        questionCommentRepository.save(comment);
         return comment.getId();
     }
 
     @Transactional
     public void update(Long id, QuestionCommentDto dto) {
         QuestionComment comment = findOne(id);
-        if (dto.getContents() != null && !dto.getContents().equals(comment.getContents())) {
+        if (!comment.getContents().equals(dto.getContents())) {
             comment.setContents(dto.getContents());
         }
     }

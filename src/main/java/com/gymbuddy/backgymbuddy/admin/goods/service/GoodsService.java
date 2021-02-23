@@ -151,25 +151,25 @@ public class GoodsService {
     @Transactional
     public void update(Long id, GoodsDto dto) {
         Goods goods = findOne(id);
-        if (!goods.getName().equals(dto.getName())) {
+        if (dto.getName() != null) {
             goods.setName(dto.getName());
         }
-        if (!goods.getPrice().equals(dto.getPrice())) {
+        if (dto.getPrice() != null) {
             goods.setPrice(dto.getPrice());
         }
-        if (!goods.getMainYn().equals(dto.getMainYn())) {
+        if (dto.getMainYn() != null) {
             goods.setMainYn(dto.getMainYn());
         }
-        /*if (!goods.getThumbnailImgName().equals(dto.getThumbnailImgName())) {
+        /*if (dto.getThumbnailImgName() != null) {
             goods.setThumbnailImgName(dto.getThumbnailImgName());
         }
-        if (!goods.getThumbnailImgPath().equals(dto.getThumbnailImgPath())) {
+        if (dto.getThumbnailImgPath() != null) {
             goods.setThumbnailImgPath(dto.getThumbnailImgPath());
         }
-        if (!goods.getDetailImgName().equals(dto.getDetailImgName())) {
+        if (dto.getDetailImgName() != null) {
             goods.setDetailImgName(dto.getDetailImgName());
         }
-        if (!goods.getDetailImgPath().equals(dto.getDetailImgPath())) {
+        if (dto.getDetailImgPath() != null) {
             goods.setDetailImgPath(dto.getDetailImgPath());
         }*/
 
@@ -177,13 +177,13 @@ public class GoodsService {
         if (!optionList.isEmpty()) {
             for (GoodsOptionDto optionDto : optionList) {
                 GoodsOption option = findOption(optionDto.getId());
-                if (!option.getColorAndSize().equals(optionDto.getColorAndSize())) {
+                if (optionDto.getColorAndSize() != null) {
                     option.setColorAndSize(optionDto.getColorAndSize());
                 }
-                if (option.getInventory() != optionDto.getInventory()) {
+                if (optionDto.getInventory() != 0) {
                     option.setInventory(optionDto.getInventory());
                 }
-                if (!option.getExtraPrice().equals(optionDto.getExtraPrice())) {
+                if (optionDto.getExtraPrice() != null) {
                     option.setExtraPrice(optionDto.getExtraPrice());
                 }
             }
