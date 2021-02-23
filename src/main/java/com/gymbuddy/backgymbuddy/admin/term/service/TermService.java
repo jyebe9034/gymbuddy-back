@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,12 +50,18 @@ public class TermService {
     @Transactional
     public Long save(TermDto dto) {
         Term term = new Term();
-        term.setTitle(dto.getTitle());
-        term.setImgName(dto.getImgName());
-        term.setImgPath(dto.getImgPath());
-        term.setWebMobile(dto.getWebMobile());
-        term.setCreateDate(LocalDateTime.now());
-        term.setUpdateDate(LocalDateTime.now());
+        if (dto.getTitle() != null) {
+            term.setTitle(dto.getTitle());
+        }
+        if (dto.getImgName() != null) {
+            term.setImgName(dto.getImgName());
+        }
+        if (dto.getImgPath() != null) {
+            term.setImgPath(dto.getImgPath());
+        }
+        if (dto.getWebMobile() != null) {
+            term.setWebMobile(dto.getWebMobile());
+        }
 
         termRepository.save(term);
         return term.getId();
@@ -69,15 +73,14 @@ public class TermService {
         if (dto.getTitle() != null) {
             term.setTitle(dto.getTitle());
         }
-        if (dto.getImgPath() != null) {
+        if (!term.getImgPath().equals(dto.getImgPath())) {
             term.setImgPath(dto.getImgPath());
         }
-        if (dto.getImgName() != null) {
+        if (!term.getImgName().equals(dto.getImgName())) {
             term.setImgName(dto.getImgName());
         }
         if (dto.getWebMobile() != null) {
             term.setWebMobile(dto.getWebMobile());
         }
-        term.setUpdateDate(LocalDateTime.now());
     }
 }

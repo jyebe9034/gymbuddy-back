@@ -103,7 +103,7 @@ PARAM: 없음
 ```
 HTTP METHOD : POST
 METHOD NAME: insertFq
-PATH : /api/frequencyQuestion/new
+PATH : /api/admin/frequencyQuestion/new
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 title: 제목
@@ -128,7 +128,7 @@ contents: 내용
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateFq
-PATH : /api/frequencyQuestion/update/{id}
+PATH : /api/admin/frequencyQuestion/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 title: 제목
@@ -154,7 +154,7 @@ contents: 내용
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteFq
-PATH : /api/frequencyQuestion/delete
+PATH : /api/admin/frequencyQuestion/delete
 PARAM : List<Integer>
 === PARAM 설명 ===
 아이디를 배열로 넘기면 됨.

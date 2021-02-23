@@ -3,17 +3,13 @@ package com.gymbuddy.backgymbuddy.admin.frequencyQuestion.service;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain.FQDto;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain.FrequencyQuestion;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.repository.FQRepository;
-import com.gymbuddy.backgymbuddy.admin.history.domain.History;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -33,13 +29,19 @@ public class FQService {
 
     @Transactional
     public Long save(FQDto dto) {
-        FrequencyQuestion fq = new FrequencyQuestion();
-        fq.setCategoryId(dto.getCategoryId());
-        fq.setTitle(dto.getTitle());
-        fq.setContents(dto.getContents());
+        FrequencyQuestion frequencyQuestion = new FrequencyQuestion();
+        if (dto.getTitle() != null) {
+            frequencyQuestion.setTitle(dto.getTitle());
+        }
+        if (dto.getContents() != null) {
+            frequencyQuestion.setContents(dto.getContents());
+        }
+        if (dto.getCategoryId() != null) {
+            frequencyQuestion.setCategoryId(dto.getCategoryId());
+        }
 
-        fqRepository.save(fq);
-        return fq.getId();
+        fqRepository.save(frequencyQuestion);
+        return frequencyQuestion.getId();
     }
 
     @Transactional
@@ -54,7 +56,6 @@ public class FQService {
         if (dto.getContents() != null) {
             fq.setContents(dto.getContents());
         }
-        fq.setUpdateDate(LocalDateTime.now());
     }
 
     @Transactional

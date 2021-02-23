@@ -8,6 +8,7 @@ import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,7 @@ public class QuestionService {
     private final QuestionCommentService questionCommentService;
 
     public List<Question> findAll(int page) {
-        return questionRepository.findAll(PageRequest.of(page, 10)).getContent();
+        return questionRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
     public Question findOne(Long id) {
@@ -142,25 +143,25 @@ public class QuestionService {
         if (dto.getContents() != null) {
             question.setContents(dto.getContents());
         }
-        if (dto.getCategoryId() != null ) {
+        if (dto.getCategoryId() != null) {
             question.setCategoryId(dto.getCategoryId());
         }
-        if (!question.getImgPath1().equals(dto.getImgPath1())) {
+        if (dto.getImgPath1() != null) {
             question.setImgPath1(dto.getImgPath1());
         }
-        if (!question.getImgName1().equals(dto.getImgName1())) {
+        if (dto.getImgName1() != null) {
             question.setImgName1(dto.getImgName1());
         }
-        if (!question.getImgPath2().equals(dto.getImgPath2())) {
+        if (dto.getImgPath2() != null) {
             question.setImgPath2(dto.getImgPath2());
         }
-        if (!question.getImgName2().equals(dto.getImgName2())) {
+        if (dto.getImgName2() != null) {
             question.setImgName2(dto.getImgName2());
         }
-        if (!question.getImgPath3().equals(dto.getImgPath3())) {
+        if (dto.getImgPath3() != null) {
             question.setImgPath3(dto.getImgPath3());
         }
-        if (!question.getImgName3().equals(dto.getImgName3())) {
+        if (dto.getImgName3() != null) {
             question.setImgName3(dto.getImgName3());
         }
     }

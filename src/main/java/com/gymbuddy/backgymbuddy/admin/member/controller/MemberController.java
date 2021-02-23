@@ -20,6 +20,7 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.MEMBER_PREFIX;
 @RestController
 @RequiredArgsConstructor
 public class MemberController extends BaseController {
+
     private String memberPath = "/resources/static/img/member";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + memberPath;
     private File saveFile = new File(rootPath);
@@ -109,17 +110,17 @@ public class MemberController extends BaseController {
         }
 
         memberService.update(id, dto);
-        Member findBi = memberService.findOne(id);
+        Member findMember = memberService.findOne(id);
 
         boolean flag = true;
         if (dto.getImgPath() != null) {
-            flag = dto.getImgPath().equals(findBi.getImgPath()) ? true : false;
+            flag = dto.getImgPath().equals(findMember.getImgPath()) ? true : false;
         }
         if (dto.getImgName() != null) {
-            flag = dto.getImgName().equals(findBi.getImgName()) ? true : false;
+            flag = dto.getImgName().equals(findMember.getImgName()) ? true : false;
         }
-        if (dto.getWebOrMobile() != null) {
-            flag = dto.getWebOrMobile().equals(findBi.getWebOrMobile()) ? true : false;
+        if (dto.getWebMobile() != null) {
+            flag = dto.getWebMobile().equals(findMember.getWebMobile()) ? true : false;
         }
 
         Map<String, Object> result = new HashMap<>();

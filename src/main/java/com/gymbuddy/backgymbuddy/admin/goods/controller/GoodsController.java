@@ -23,8 +23,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.GOODS_PREFIX;
 @RequiredArgsConstructor
 public class GoodsController extends BaseController {
 
-    private final String URI_PREFIX = GOODS_PREFIX;
-
     private String goodsPath = "/resources/static/img/goods";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + goodsPath;
     private File saveFile = new File(rootPath);
@@ -34,7 +32,7 @@ public class GoodsController extends BaseController {
     /**
      * 전체 굿즈 조회
      */
-    @GetMapping(URI_PREFIX + "/all/{page}")
+    @GetMapping(GOODS_PREFIX + "/all/{page}")
     public ResponseEntity<List<GoodsDto>> selectGoodsList(@PathVariable("page") int page) {
         return createResponseEntity(true, goodsService.findAllByDto(page));
     }
@@ -42,7 +40,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 상세
      */
-    @GetMapping(URI_PREFIX + "/detail/{id}")
+    @GetMapping(GOODS_PREFIX + "/detail/{id}")
     public ResponseEntity<GoodsDto> selectGoodsDetail(@PathVariable("id") Long id) {
         log.info("굿즈 상세 조회: {}", id);
         return createResponseEntity(true, goodsService.findOneByDto(id));
@@ -51,7 +49,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 등록
      */
-    @PostMapping(URI_PREFIX + "/new")
+    @PostMapping(GOODS_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertGoods(@RequestBody GoodsDto dto) {
         log.info("굿즈 등록: {}", dto);
 
@@ -88,10 +86,10 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
+    @PutMapping(GOODS_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateGoods(
             @PathVariable("id") Long id, @RequestBody GoodsDto dto) {
-        log.info("굿즈 수정 - id: {}, dto: {}", id, dto);
+        log.info("굿즈 수정 id: {}, dto: {}", id, dto);
 
         Goods goods = goodsService.findOne(id);
 //
@@ -179,7 +177,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 삭제
      */
-    @DeleteMapping(URI_PREFIX + "/delete")
+    @DeleteMapping(GOODS_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteGoods(@RequestBody List<Integer> ids) {
         log.info("굿즈 삭제: {}", ids);
 

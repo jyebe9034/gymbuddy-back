@@ -11,5 +11,5 @@ public class MemberDto {
     private MultipartFile file;
     private String imgName;
     private String imgPath;
-    private WebMobileStatus webOrMobile;
+    private WebMobileStatus webMobile;
 }

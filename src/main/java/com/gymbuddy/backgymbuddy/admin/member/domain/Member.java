@@ -24,6 +24,6 @@ public class Member extends BaseDomain {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private WebMobileStatus webOrMobile;
+    private WebMobileStatus webMobile;
 
 }
