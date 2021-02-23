@@ -26,9 +26,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.USER_QUESTION_PREFI
 @RequiredArgsConstructor
 public class QuestionController extends BaseController {
 
-    private final String ADMIN_URI = ADMIN_QUESTION_PREFIX;
-    private final String USER_URI = USER_QUESTION_PREFIX;
-
     private String questionPath = "/resources/static/img/question";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + questionPath;
     private File saveFile = new File(rootPath);
@@ -47,16 +44,16 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 상세 조회(관리자)
      */
-    @GetMapping("/question/detail/{id}")
+    @GetMapping(ADMIN_QUESTION_PREFIX + "/detail/{id}")
     public ResponseEntity<Map<String, Object>> selectAdminQuestionDetail(@PathVariable("id") Long id) {
         log.info("1:1 문의 조회: {}", id);
-        return createResponseEntity(true, questionService.findDetail(id));
+        return createResponseEntity(true, questionService.findOneByDto(id));
     }
 
     /**
      * 1:1 문의 삭제(관리자)
      */
-    @DeleteMapping("/question/delete")
+    @DeleteMapping(ADMIN_QUESTION_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteQuestionByAdmin(@RequestBody List<Integer> ids) {
         log.info("1:1 문의 삭제: {}", ids);
 
@@ -74,25 +71,25 @@ public class QuestionController extends BaseController {
      * 전체 1:1 문의 조회(사용자)
      * 사용자가 쓴 문의 전체 조회
      */
-    @GetMapping("/user/question/all/{id}/{page}")
+    @GetMapping(USER_QUESTION_PREFIX + "/all/{create_id}/{page}")
     public ResponseEntity<Map<String, Object>> selectUserQuestionList(
-            @PathVariable("id") Long id, @PathVariable("page") int page) {
-        return createResponseEntity(true, questionService.findAllByUser(id, page));
+            @PathVariable("create_id") String create_id, @PathVariable("page") int page) {
+        return createResponseEntity(true, questionService.findAllByUser(create_id, page));
     }
 
     /**
      * 1:1 문의 상세 조회(사용자)
      */
-    @GetMapping("/user/question/detail/{id}")
+    @GetMapping(USER_QUESTION_PREFIX + "/detail/{id}")
     public ResponseEntity<Map<String, Object>> selectUserQuestionDetail(@PathVariable("id") Long id) {
         log.info("1:1 문의 조회: {}", id);
-        return createResponseEntity(true, questionService.findDetail(id));
+        return createResponseEntity(true, questionService.findOneByDto(id));
     }
 
     /**
      * 1:1 문의 등록(사용자)
      */
-    @PostMapping("/question/new")
+    @PostMapping(USER_QUESTION_PREFIX + "/question/new")
     public ResponseEntity<Map<String, Object>> insertQuestion(@ModelAttribute QuestionDto dto) {
         log.info("1:1 문의 등록: {}", dto);
 
@@ -124,10 +121,8 @@ public class QuestionController extends BaseController {
             log.error(e.getMessage());
         }
 
-        Long id = questionService.save(dto);
-
         Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
+        result.put("id", questionService.save(dto));
         return createResponseEntity(true, result);
     }
 
@@ -136,7 +131,7 @@ public class QuestionController extends BaseController {
      */
     @PutMapping("/question/update/{id}")
     public ResponseEntity<Map<String, Object>> updateQuestion(
-            @PathVariable("id") Long id, @ModelAttribute QuestionDto dto) {
+            @PathVariable("id") Long id, @RequestBody QuestionDto dto) {
         log.info("미션 수정 id: {}, dto: {}", id, dto);
 
         Question question = questionService.findOne(id);
@@ -204,22 +199,22 @@ public class QuestionController extends BaseController {
             flag = dto.getContents().equals(findQuestion.getContents()) ? true : false;
         }
         if (dto.getImgPath1() != null) {
-            flag = dto.getImgPath1().equals(findQuestion.getImgPath1());
+            flag = dto.getImgPath1().equals(findQuestion.getImgPath1()) ? true : false;
         }
         if (dto.getImgName1() != null) {
-            flag = dto.getImgName1().equals(findQuestion.getImgName1());
+            flag = dto.getImgName1().equals(findQuestion.getImgName1()) ? true : false;
         }
         if (dto.getImgPath2() != null) {
-            flag = dto.getImgPath2().equals(findQuestion.getImgPath2());
+            flag = dto.getImgPath2().equals(findQuestion.getImgPath2()) ? true : false;
         }
         if (dto.getImgName2() != null) {
-            flag = dto.getImgName2().equals(findQuestion.getImgName2());
+            flag = dto.getImgName2().equals(findQuestion.getImgName2()) ? true : false;
         }
         if (dto.getImgPath3() != null) {
-            flag = dto.getImgPath3().equals(findQuestion.getImgPath3());
+            flag = dto.getImgPath3().equals(findQuestion.getImgPath3()) ? true : false;
         }
         if (dto.getImgName3() != null) {
-            flag = dto.getImgName3().equals(findQuestion.getImgName3());
+            flag = dto.getImgName3().equals(findQuestion.getImgName3()) ? true : false;
         }
 
         Map<String, Object> result = new HashMap<>();
@@ -231,7 +226,7 @@ public class QuestionController extends BaseController {
      * 1:1 문의 삭제(사용자)
      * 상세 페이지에서만 삭제 가능
      */
-    @DeleteMapping("/user/question/delete/{id}")
+    @DeleteMapping(USER_QUESTION_PREFIX + "/delete/{id}")
     public ResponseEntity<History> deleteQuestion(@PathVariable("id") Long id) {
         log.info("1:1 문의 삭제: {}", id);
 
@@ -245,8 +240,8 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 댓글 등록(관리자)
      */
-    @PostMapping("/question/newReply/{id}")
-    public ResponseEntity<History> insertQuestionReply(
+    @PostMapping(ADMIN_QUESTION_PREFIX + "/newReply/{id}")
+    public ResponseEntity<QuestionComment> insertQuestionReply(
             @PathVariable("id") Long id, @RequestBody QuestionCommentDto dto) {
         log.info("1:1 문의 댓글 등록: {}", dto);
 
@@ -258,7 +253,7 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 댓글 수정(관리자)
      */
-    @PutMapping("/question/updateReply/{id}")
+    @PutMapping(ADMIN_QUESTION_PREFIX + "/updateReply/{id}")
     public ResponseEntity<History> updateQuestionReply(
             @PathVariable("id") Long id, @RequestBody QuestionCommentDto dto) {
         log.info("1:1 문의 댓글 수정 id: {}, dto: {}", id, dto);
@@ -279,7 +274,7 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 댓글 삭제(관리자)
      */
-    @DeleteMapping("/question/deleteReply/{id}")
+    @DeleteMapping(ADMIN_QUESTION_PREFIX + "/deleteReply/{id}")
     public ResponseEntity<List<QuestionComment>> deleteQuestionReply(@PathVariable("id") Long id) {
         log.info("1:1 문의 댓글 삭제: {}", id);
 

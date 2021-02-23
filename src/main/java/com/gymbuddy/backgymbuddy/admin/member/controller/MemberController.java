@@ -20,8 +20,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.MEMBER_PREFIX;
 @RestController
 @RequiredArgsConstructor
 public class MemberController extends BaseController {
-
-    private final String URI_PREFIX = MEMBER_PREFIX;
     private String memberPath = "/resources/static/img/member";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + memberPath;
     private File saveFile = new File(rootPath);
@@ -31,7 +29,7 @@ public class MemberController extends BaseController {
     /**
      * 멤버소개 조회
      */
-    @GetMapping(URI_PREFIX + "/all")
+    @GetMapping(MEMBER_PREFIX + "/all")
     public ResponseEntity<List<Member>> selectMemberList() {
         return createResponseEntity(true, memberService.findAll());
     }
@@ -39,7 +37,7 @@ public class MemberController extends BaseController {
     /**
      * 웹 멤버소개 등록
      */
-    @PostMapping(URI_PREFIX + "/newWeb")
+    @PostMapping("/member/newWeb")
     public ResponseEntity<Map<String, Object>> insertWebMember(@ModelAttribute MemberDto member) {
         log.info("웹 멤버소개 등록: {}", member);
 
@@ -53,7 +51,7 @@ public class MemberController extends BaseController {
     /**
      * 모바일 멤버소개 등록
      */
-    @PostMapping(URI_PREFIX + "/newMobile")
+    @PostMapping("/member/newMobile")
     public ResponseEntity<Map<String, Object>> insertMobileMember(@ModelAttribute MemberDto member) {
         log.info("모바일 멤버소개 등록: {}", member);
 
@@ -82,7 +80,7 @@ public class MemberController extends BaseController {
     /**
      * 멤버소개 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
+    @PutMapping("/member/update/{id}")
     public ResponseEntity<Map<String, Object>> updateMember(
             @PathVariable("id") Long id, @ModelAttribute MemberDto dto) {
         log.info("멤버소개 수정 id: {}, dto: {}", id, dto);
@@ -115,13 +113,13 @@ public class MemberController extends BaseController {
 
         boolean flag = true;
         if (dto.getImgPath() != null) {
-            flag = dto.getImgPath().equals(findBi.getImgPath());
+            flag = dto.getImgPath().equals(findBi.getImgPath()) ? true : false;
         }
         if (dto.getImgName() != null) {
-            flag = dto.getImgName().equals(findBi.getImgName());
+            flag = dto.getImgName().equals(findBi.getImgName()) ? true : false;
         }
-        if (dto.getWebMobile() != null) {
-            flag = dto.getWebMobile().equals(findBi.getWebOrMobile());
+        if (dto.getWebOrMobile() != null) {
+            flag = dto.getWebOrMobile().equals(findBi.getWebOrMobile()) ? true : false;
         }
 
         Map<String, Object> result = new HashMap<>();

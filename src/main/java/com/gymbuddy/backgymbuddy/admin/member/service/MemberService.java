@@ -1,8 +1,5 @@
 package com.gymbuddy.backgymbuddy.admin.member.service;
 
-import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BiDto;
-import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BusinessIdentity;
-import com.gymbuddy.backgymbuddy.admin.enums.status.WebMobileStatus;
 import com.gymbuddy.backgymbuddy.admin.member.domain.Member;
 import com.gymbuddy.backgymbuddy.admin.member.domain.MemberDto;
 import com.gymbuddy.backgymbuddy.admin.member.repository.MemberRepository;
@@ -11,11 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -36,11 +29,15 @@ public class MemberService {
     @Transactional
     public Long save(MemberDto dto) {
         Member member = new Member();
-        member.setImgName(dto.getImgName());
-        member.setImgPath(dto.getImgPath());
-        member.setWebOrMobile(dto.getWebMobile());
-        member.setCreateDate(LocalDateTime.now());
-        member.setUpdateDate(LocalDateTime.now());
+        if (dto.getImgPath() != null) {
+            member.setImgPath(dto.getImgPath());
+        }
+        if (dto.getImgName() != null) {
+            member.setImgName(dto.getImgName());
+        }
+        if (dto.getWebOrMobile() != null) {
+            member.setWebOrMobile(dto.getWebOrMobile());
+        }
 
         memberRepository.save(member);
         return member.getId();
@@ -49,15 +46,14 @@ public class MemberService {
     @Transactional
     public void update(Long id, MemberDto dto) {
         Member member = findOne(id);
-        if (dto.getImgPath() != null) {
+        if (!member.getImgPath().equals(dto.getImgPath())) {
             member.setImgPath(dto.getImgPath());
         }
-        if (dto.getImgName() != null) {
+        if (!member.getImgName().equals(dto.getImgName())) {
             member.setImgName(dto.getImgName());
         }
-        if (dto.getWebMobile() != null) {
-            member.setWebOrMobile(dto.getWebMobile());
+        if (!member.getWebOrMobile().equals(dto.getWebOrMobile())) {
+            member.setWebOrMobile(dto.getWebOrMobile());
         }
-        member.setUpdateDate(LocalDateTime.now());
     }
 }

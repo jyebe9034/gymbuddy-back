@@ -1,6 +1,5 @@
 package com.gymbuddy.backgymbuddy.admin.program.service;
 
-import ch.qos.logback.core.util.TimeUtil;
 import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramDto;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramOption;
@@ -9,7 +8,6 @@ import com.gymbuddy.backgymbuddy.admin.program.repository.ProgramOptionRepositor
 import com.gymbuddy.backgymbuddy.admin.program.repository.ProgramRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.PortableInterceptor.ORBIdHelper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
