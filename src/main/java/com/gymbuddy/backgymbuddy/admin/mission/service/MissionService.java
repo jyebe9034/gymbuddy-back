@@ -9,14 +9,12 @@ import com.gymbuddy.backgymbuddy.admin.mission.domain.MissionDto;
 import com.gymbuddy.backgymbuddy.admin.mission.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -51,15 +49,27 @@ public class MissionService {
     @Transactional
     public Long save(MissionDto dto) {
         Mission mission = new Mission();
-        mission.setContents(dto.getContents());
-        mission.setImgName1(dto.getImgName1());
-        mission.setImgPath1(dto.getImgPath1());
-        mission.setImgName2(dto.getImgName2());
-        mission.setImgPath2(dto.getImgPath2());
-        mission.setImgName3(dto.getImgName3());
-        mission.setImgPath3(dto.getImgPath3());
-        mission.setCreateDate(LocalDateTime.now());
-        mission.setUpdateDate(LocalDateTime.now());
+        if (dto.getContents() != null) {
+            mission.setContents(dto.getContents());
+        }
+        if (dto.getImgName1() != null) {
+            mission.setImgName1(dto.getImgName1());
+        }
+        if (dto.getImgPath1() != null) {
+            mission.setImgPath1(dto.getImgPath1());
+        }
+        if (dto.getImgName2() != null) {
+            mission.setImgName2(dto.getImgName2());
+        }
+        if (dto.getImgPath2() != null) {
+            mission.setImgPath2(dto.getImgPath2());
+        }
+        if (dto.getImgName3() != null) {
+            mission.setImgName3(dto.getImgName3());
+        }
+        if (dto.getImgPath3() != null) {
+            mission.setImgPath3(dto.getImgPath3());
+        }
 
         missionRepository.save(mission);
         return mission.getId();
@@ -89,7 +99,6 @@ public class MissionService {
         if (dto.getImgName3() != null) {
             mission.setImgName3(dto.getImgName3());
         }
-        mission.setUpdateDate(LocalDateTime.now());
     }
 
     @Transactional

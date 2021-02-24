@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_HISTORY_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.BI_PREFIX;
 
 @Slf4j
@@ -20,7 +21,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.BI_PREFIX;
 @RequiredArgsConstructor
 public class BiController extends BaseController {
 
-    private final String URI_PREFIX = BI_PREFIX;
     private String biPath = "/resources/static/img/bi";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + biPath;
     private File saveFile = new File(rootPath);
@@ -30,7 +30,7 @@ public class BiController extends BaseController {
     /**
      * 웹 BI 등록
      */
-    @PostMapping(URI_PREFIX + "/newWeb")
+    @PostMapping(BI_PREFIX + "/newWeb")
     public ResponseEntity<Map<String, Object>> insertWebBi(@ModelAttribute BiDto bi) {
         log.info("웹 BI 등록: {}", bi);
 
@@ -55,7 +55,7 @@ public class BiController extends BaseController {
     /**
      * 모바일 BI 등록
      */
-    @PostMapping(URI_PREFIX + "/newMobile")
+    @PostMapping(BI_PREFIX + "/newMobile")
     public ResponseEntity<Map<String, Object>> insertMobileBi(@ModelAttribute BiDto bi) {
         log.info("모바일 BI 등록: {}", bi);
 
@@ -80,7 +80,7 @@ public class BiController extends BaseController {
     /**
      * BI 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_HISTORY_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateBi(
             @PathVariable("id") Long id, @ModelAttribute BiDto dto) {
         log.info("BI 수정 id: {}, bi: {}", id, dto);
@@ -115,9 +115,6 @@ public class BiController extends BaseController {
         }
         if (dto.getImgName() != null) {
             flag = dto.getImgName().equals(findBi.getImgName()) ? true : false;
-        }
-        if (dto.getWebMobile() != null) {
-            flag = dto.getWebMobile().equals(findBi.getWebMobile()) ? true : false;
         }
 
         Map<String, Object> result = new HashMap<>();

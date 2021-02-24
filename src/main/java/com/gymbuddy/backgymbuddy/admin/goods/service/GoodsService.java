@@ -9,6 +9,7 @@ import com.gymbuddy.backgymbuddy.admin.goods.repository.GoodsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public class GoodsService {
     private final GoodsOptionRepository optionRepository;
 
     public List<Goods> findAll(int page) {
-        return goodsRepository.findAll(PageRequest.of(page, 10)).getContent();
+        return goodsRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
     public List<GoodsDto> findAllByDto(int page) {
@@ -52,18 +53,18 @@ public class GoodsService {
         if (goods.getMainYn() != null) {
             dto.setMainYn(goods.getMainYn());
         }
-//        if (goods.getThumbnailImgName() != null) {
-//            dto.setThumbnailImgName(goods.getThumbnailImgName());
-//        }
-//        if (goods.getThumbnailImgPath() != null) {
-//            dto.setThumbnailImgPath(goods.getThumbnailImgPath());
-//        }
-//        if (goods.getDetailImgName() != null) {
-//            dto.setDetailImgName(goods.getDetailImgName());
-//        }
-//        if (goods.getThumbnailImgPath() != null) {
-//            dto.setDetailImgPath(goods.getThumbnailImgPath());
-//        }
+        if (goods.getThumbnailImgName() != null) {
+            dto.setThumbnailImgName(goods.getThumbnailImgName());
+        }
+        if (goods.getThumbnailImgPath() != null) {
+            dto.setThumbnailImgPath(goods.getThumbnailImgPath());
+        }
+        if (goods.getDetailImgName() != null) {
+            dto.setDetailImgName(goods.getDetailImgName());
+        }
+        if (goods.getThumbnailImgPath() != null) {
+            dto.setDetailImgPath(goods.getThumbnailImgPath());
+        }
         if (!goods.getGoodsOptions().isEmpty()) {
             List<GoodsOptionDto> optionDtoList = new ArrayList<>();
             for (GoodsOption option : goods.getGoodsOptions()) {
@@ -115,18 +116,18 @@ public class GoodsService {
         if (dto.getMainYn() != null) {
             goods.setMainYn(dto.getMainYn());
         }
-//        if (dto.getThumbnailImgName() != null) {
-//            goods.setThumbnailImgName(dto.getThumbnailImgName());
-//        }
-//        if (dto.getThumbnailImgPath() != null) {
-//            goods.setThumbnailImgPath(dto.getThumbnailImgPath());
-//        }
-//        if (dto.getDetailImgName() != null) {
-//            goods.setDetailImgName(dto.getDetailImgName());
-//        }
-//        if (dto.getDetailImgPath() != null) {
-//            goods.setDetailImgPath(dto.getDetailImgPath());
-//        }
+        if (dto.getThumbnailImgName() != null) {
+            goods.setThumbnailImgName(dto.getThumbnailImgName());
+        }
+        if (dto.getThumbnailImgPath() != null) {
+            goods.setThumbnailImgPath(dto.getThumbnailImgPath());
+        }
+        if (dto.getDetailImgName() != null) {
+            goods.setDetailImgName(dto.getDetailImgName());
+        }
+        if (dto.getDetailImgPath() != null) {
+            goods.setDetailImgPath(dto.getDetailImgPath());
+        }
         goodsRepository.save(goods);
 
         List<GoodsOptionDto> optionList = dto.getOptionList();
@@ -160,7 +161,7 @@ public class GoodsService {
         if (dto.getMainYn() != null) {
             goods.setMainYn(dto.getMainYn());
         }
-        /*if (dto.getThumbnailImgName() != null) {
+        if (dto.getThumbnailImgName() != null) {
             goods.setThumbnailImgName(dto.getThumbnailImgName());
         }
         if (dto.getThumbnailImgPath() != null) {
@@ -171,7 +172,7 @@ public class GoodsService {
         }
         if (dto.getDetailImgPath() != null) {
             goods.setDetailImgPath(dto.getDetailImgPath());
-        }*/
+        }
 
         List<GoodsOptionDto> optionList = dto.getOptionList();
         if (!optionList.isEmpty()) {
@@ -193,5 +194,31 @@ public class GoodsService {
     @Transactional
     public void delete(Long id) {
         goodsRepository.deleteById(id);
+    }
+
+    public List<GoodsDto> findAllForMain() {
+        List<Goods> list = goodsRepository.findAllByMainYn("Y");
+        List<GoodsDto> dtoList = new ArrayList<>();
+        list.stream().forEach(goods -> {
+            GoodsDto dto = new GoodsDto();
+            dto.setId(goods.getId());
+            dto.setName(goods.getName());
+            dto.setPrice(goods.getPrice());
+            dto.setMainYn(goods.getMainYn());
+            if (goods.getThumbnailImgPath() != null) {
+                dto.setThumbnailImgPath(goods.getThumbnailImgPath());
+            }
+            if (goods.getThumbnailImgName() != null) {
+                dto.setThumbnailImgName(goods.getThumbnailImgName());
+            }
+            if (goods.getDetailImgPath() != null) {
+                dto.setDetailImgPath(goods.getDetailImgPath());
+            }
+            if (goods.getDetailImgName() != null) {
+                dto.setDetailImgName(goods.getDetailImgName());
+            }
+            dtoList.add(dto);
+        });
+        return dtoList;
     }
 }

@@ -3,8 +3,6 @@ package com.gymbuddy.backgymbuddy.admin.goods.domain;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gymbuddy.backgymbuddy.admin.base.Product;
-import com.gymbuddy.backgymbuddy.admin.cart.domain.CartGoods;
-import com.gymbuddy.backgymbuddy.admin.order.domain.OrderGoods;
 import lombok.Data;
 import lombok.ToString;
 
@@ -15,9 +13,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "goods")
-@Data
 @ToString(exclude = "goods")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+@Data
 public class Goods extends Product {
 
     @Id
@@ -44,11 +42,11 @@ public class Goods extends Product {
     private String mainYn;
 
     @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
-    private List<OrderGoods> orderGoods = new ArrayList<>();
-
-    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
-    private List<CartGoods> cartGoods = new ArrayList<>();
-
-    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
     private List<GoodsOption> goodsOptions = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
+//    private List<OrderGoods> orderGoods = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
+//    private List<CartGoods> cartGoods = new ArrayList<>();
 }

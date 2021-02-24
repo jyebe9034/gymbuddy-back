@@ -1,6 +1,6 @@
 # Goods API
 
-### 전체 프로그램 조회(관리자)
+### 전체 굿즈 조회
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: GET
@@ -114,7 +114,7 @@ PATH : /api/goods/all/{page}
 ]
 ```
 
-### 프로그램 상세
+### 굿즈 상세
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: GET
@@ -175,12 +175,12 @@ PATH : /api/goods/detail/{id}
     }
 ```
 
-### 프로그램 등록
+### 굿즈 등록
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: POST
 METHOD NAME: insertGoods
-PATH : /api/goods/new
+PATH : /api/admin/goods/new
 === PARAM 설명 ===
 {
         "id": 아이디(JPA생성),
@@ -236,14 +236,15 @@ PATH : /api/goods/new
 }
 ```
 
-### 프로그램 수정
+### 굿즈 수정
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: PUT
 METHOD NAME: updateGoods
-PATH : /api/goods/update/{id}
+PATH : /api/admin/goods/update/{id}
 === PARAM 설명 ===
 {
+        "id": 굿즈 아이디(JPA 생성)
         "name": 굿즈 이름
         "price": 가격,
         "mainYn": 메인 노출 여부,
@@ -261,6 +262,7 @@ PATH : /api/goods/update/{id}
 * 파라미터 예시
 ```
 {
+    "id": 1,
     "name": "반팔티",
     "price": "25000",
     "mainYn": "N",
@@ -299,13 +301,13 @@ PATH : /api/goods/update/{id}
 }
 ```
 
-### 프로그램 삭제
+### 굿즈 삭제
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: DELETE
 METHOD NAME: deleteGoods
-PATH : /api/goods/delete
-PARAM : List<nteger>
+PATH : /api/admin/goods/delete
+PARAM : List<Integer>
 === PARAM 설명 ===
 * 아이디 배열을 넘긴다.
 ```

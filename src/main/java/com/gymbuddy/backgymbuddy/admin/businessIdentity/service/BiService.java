@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -30,11 +29,15 @@ public class BiService {
     @Transactional
     public Long save(BiDto dto) {
         BusinessIdentity bi = new BusinessIdentity();
-        bi.setImgPath(dto.getImgPath());
-        bi.setImgName(dto.getImgName());
-        bi.setWebMobile(dto.getWebMobile());
-        bi.setCreateDate(LocalDateTime.now());
-        bi.setUpdateDate(LocalDateTime.now());
+        if (dto.getImgName() != null) {
+            bi.setImgName(dto.getImgName());
+        }
+        if (dto.getImgPath() != null) {
+            bi.setImgPath(dto.getImgPath());
+        }
+        if (dto.getWebMobile() != null) {
+            bi.setWebMobile(dto.getWebMobile());
+        }
 
         biRepository.save(bi);
         return bi.getId();
@@ -43,15 +46,14 @@ public class BiService {
     @Transactional
     public void update(Long id, BiDto dto) {
         BusinessIdentity bi = findOne(id);
-        if (dto.getImgPath() != null) {
+        if (!bi.getImgPath().equals(dto.getImgPath())) {
             bi.setImgPath(dto.getImgPath());
         }
-        if (dto.getImgName() != null) {
+        if (!bi.getImgName().equals(dto.getImgName())) {
             bi.setImgName(dto.getImgName());
         }
         if (dto.getWebMobile() != null) {
             bi.setWebMobile(dto.getWebMobile());
         }
-        bi.setUpdateDate(LocalDateTime.now());
     }
 }

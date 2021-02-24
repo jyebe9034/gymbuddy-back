@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_MEMBER_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.MEMBER_PREFIX;
 
 @Slf4j
@@ -38,7 +39,7 @@ public class MemberController extends BaseController {
     /**
      * 웹 멤버소개 등록
      */
-    @PostMapping("/member/newWeb")
+    @PostMapping(MEMBER_PREFIX + "/newWeb")
     public ResponseEntity<Map<String, Object>> insertWebMember(@ModelAttribute MemberDto member) {
         log.info("웹 멤버소개 등록: {}", member);
 
@@ -52,7 +53,7 @@ public class MemberController extends BaseController {
     /**
      * 모바일 멤버소개 등록
      */
-    @PostMapping("/member/newMobile")
+    @PostMapping(MEMBER_PREFIX + "/newMobile")
     public ResponseEntity<Map<String, Object>> insertMobileMember(@ModelAttribute MemberDto member) {
         log.info("모바일 멤버소개 등록: {}", member);
 
@@ -81,7 +82,7 @@ public class MemberController extends BaseController {
     /**
      * 멤버소개 수정
      */
-    @PutMapping("/member/update/{id}")
+    @PutMapping(ADMIN_MEMBER_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateMember(
             @PathVariable("id") Long id, @ModelAttribute MemberDto dto) {
         log.info("멤버소개 수정 id: {}, dto: {}", id, dto);
@@ -92,13 +93,11 @@ public class MemberController extends BaseController {
             String imgName = dto.getFile().getOriginalFilename();
             if (!member.getImgName().equals(imgName)) {
                 try {
-                    // 이미지 업로드
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                     dto.getFile().transferTo(realFile);
                     dto.setImgName(imgName);
                     dto.setImgPath(memberPath + realFile.getName());
 
-                    // 기존 이미지를 파일 서버에서 삭제
                     File originFile = new File(saveFile + "/" + member.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
@@ -118,9 +117,6 @@ public class MemberController extends BaseController {
         }
         if (dto.getImgName() != null) {
             flag = dto.getImgName().equals(findMember.getImgName()) ? true : false;
-        }
-        if (dto.getWebMobile() != null) {
-            flag = dto.getWebMobile().equals(findMember.getWebMobile()) ? true : false;
         }
 
         Map<String, Object> result = new HashMap<>();
