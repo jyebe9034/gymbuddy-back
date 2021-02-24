@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_MISSION_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.MISSION_PREFIX;
 
 @Slf4j
@@ -20,7 +21,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.MISSION_PREFIX;
 @RequiredArgsConstructor
 public class MissionController extends BaseController {
 
-    private final String URI_PREFIX = MISSION_PREFIX;
     private String missionPath = "/resources/static/img/mission";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + missionPath;
     private File saveFile = new File(rootPath);
@@ -30,7 +30,7 @@ public class MissionController extends BaseController {
     /**
      * 미션과 비전 조회
      */
-    @GetMapping(URI_PREFIX + "/allByMap")
+    @GetMapping(MISSION_PREFIX + "/allByMap")
     public ResponseEntity<Map<String, Object>> selectMission() {
         return createResponseEntity(true, missionService.findAllByMap());
     }
@@ -38,7 +38,7 @@ public class MissionController extends BaseController {
     /**
      * 미션 등록
      */
-    @PostMapping(URI_PREFIX + "/new")
+    @PostMapping(MISSION_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertMission(@ModelAttribute MissionDto dto) {
         log.info("공지사항 등록: {}", dto);
 
@@ -70,17 +70,15 @@ public class MissionController extends BaseController {
             log.error(e.getMessage());
         }
 
-        Long id = missionService.save(dto);
-
         Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
+        result.put("id", missionService.save(dto));
         return createResponseEntity(true, result);
     }
 
     /**
      * 미션 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_MISSION_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateMission(
             @PathVariable("id") Long id, @ModelAttribute MissionDto dto) {
         log.info("미션 수정 id: {}, dto: {}", id, dto);

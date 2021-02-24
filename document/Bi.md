@@ -14,12 +14,11 @@
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateMember
-PATH : /api/bi/update/{id}
+PATH : /api/admin/bi/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 id: 1 - 웹, 2 - 모바일
 file: 이미지 파일
-webMobile: 웹/모바일 여부 (이 파라미터는 수정하지 않는 것을 권장)
 *** 수정 시에는 모든 값을 넘길 필요는 없음. 수정할 값만 넘겨도 수정 가능함.
 ```
 * 결과 구조

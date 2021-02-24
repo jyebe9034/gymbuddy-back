@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_GOODS_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.GOODS_PREFIX;
 
 @Slf4j
@@ -49,34 +50,34 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 등록
      */
-    @PostMapping(GOODS_PREFIX + "/new")
+    @PostMapping(ADMIN_GOODS_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertGoods(@RequestBody GoodsDto dto) {
         log.info("굿즈 등록: {}", dto);
 
-//        try {
-//            if (!saveFile.exists()) {
-//                saveFile.mkdir();
-//            }
-//            // 썸네일 이미지
-//            if(dto.getThumbnailFile() != null) {
-//                String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
-//                File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
-//                dto.getThumbnailFile().transferTo(thumbnail);
-//                dto.setThumbnailImgName(thumbnailName);
-//                dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
-//            }
-//
-//            // 상세 이미지
-//            if(dto.getDetailFile() != null) {
-//                String detailName = dto.getThumbnailFile().getOriginalFilename();
-//                File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
-//                dto.getDetailFile().transferTo(detail);
-//                dto.setDetailImgName(detailName);
-//                dto.setDetailImgPath(goodsPath + "/" + detail.getName());
-//            }
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//        }
+        try {
+            if (!saveFile.exists()) {
+                saveFile.mkdir();
+            }
+            // 썸네일 이미지
+            if(dto.getThumbnailFile() != null) {
+                String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
+                File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
+                dto.getThumbnailFile().transferTo(thumbnail);
+                dto.setThumbnailImgName(thumbnailName);
+                dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
+            }
+
+            // 상세 이미지
+            if(dto.getDetailFile() != null) {
+                String detailName = dto.getThumbnailFile().getOriginalFilename();
+                File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
+                dto.getDetailFile().transferTo(detail);
+                dto.setDetailImgName(detailName);
+                dto.setDetailImgPath(goodsPath + "/" + detail.getName());
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", goodsService.save(dto));
@@ -86,48 +87,48 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 수정
      */
-    @PutMapping(GOODS_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_GOODS_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateGoods(
             @PathVariable("id") Long id, @RequestBody GoodsDto dto) {
         log.info("굿즈 수정 id: {}, dto: {}", id, dto);
 
         Goods goods = goodsService.findOne(id);
-//
-//        // 썸네일 이미지 수정
-//        if (dto.getThumbnailFile() != null && !dto.getThumbnailImgName().equals(goods.getThumbnailImgName())) {
-//            try {
-//                String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
-//                File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
-//                dto.getThumbnailFile().transferTo(thumbnail);
-//                dto.setThumbnailImgName(thumbnailName);
-//                dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
-//
-//                File originThumbnail = new File(saveFile + "/" + dto.getThumbnailImgPath());
-//                if (originThumbnail.exists()) {
-//                    originThumbnail.delete();
-//                }
-//            } catch (Exception e) {
-//                log.error(e.getMessage());
-//            }
-//        }
-//
-//        // 상세 이미지 수정
-//        if (dto.getDetailFile() != null && !dto.getDetailImgName().equals(goods.getDetailImgName())) {
-//            try {
-//                String detailName = dto.getThumbnailFile().getOriginalFilename();
-//                File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
-//                dto.getDetailFile().transferTo(detail);
-//                dto.setDetailImgName(detailName);
-//                dto.setDetailImgPath(goodsPath + "/" + detail.getName());
-//
-//                File originDetail = new File(saveFile + "/" + dto.getDetailImgPath());
-//                if (originDetail.exists()) {
-//                    originDetail.delete();
-//                }
-//            } catch (Exception e) {
-//                log.error(e.getMessage());
-//            }
-//        }
+
+        // 썸네일 이미지 수정
+        if (dto.getThumbnailFile() != null && !dto.getThumbnailImgName().equals(goods.getThumbnailImgName())) {
+            try {
+                String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
+                File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
+                dto.getThumbnailFile().transferTo(thumbnail);
+                dto.setThumbnailImgName(thumbnailName);
+                dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
+
+                File originThumbnail = new File(saveFile + "/" + dto.getThumbnailImgPath());
+                if (originThumbnail.exists()) {
+                    originThumbnail.delete();
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+
+        // 상세 이미지 수정
+        if (dto.getDetailFile() != null && !dto.getDetailImgName().equals(goods.getDetailImgName())) {
+            try {
+                String detailName = dto.getThumbnailFile().getOriginalFilename();
+                File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
+                dto.getDetailFile().transferTo(detail);
+                dto.setDetailImgName(detailName);
+                dto.setDetailImgPath(goodsPath + "/" + detail.getName());
+
+                File originDetail = new File(saveFile + "/" + dto.getDetailImgPath());
+                if (originDetail.exists()) {
+                    originDetail.delete();
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
 
         goodsService.update(id, dto);
         Goods findGoods = goodsService.findOne(id);
@@ -142,18 +143,18 @@ public class GoodsController extends BaseController {
         if (dto.getMainYn() != null) {
             flag = dto.getMainYn().equals(findGoods.getMainYn()) ? true : false;
         }
-//        if (dto.getThumbnailImgName() != null) {
-//            flag = dto.getThumbnailImgName().equals(findGoods.getThumbnailImgName()) ? true : false;
-//        }
-//        if (dto.getThumbnailImgPath() != null) {
-//            flag = dto.getThumbnailImgPath().equals(findGoods.getThumbnailImgPath()) ? true : false;
-//        }
-//        if (dto.getDetailImgName() != null) {
-//            flag = dto.getDetailImgName().equals(findGoods.getDetailImgName()) ? true : false;
-//        }
-//        if (dto.getDetailImgPath() != null) {
-//            flag = dto.getDetailImgPath().equals(findGoods.getDetailImgPath()) ? true : false;
-//        }
+        if (dto.getThumbnailImgName() != null) {
+            flag = dto.getThumbnailImgName().equals(findGoods.getThumbnailImgName()) ? true : false;
+        }
+        if (dto.getThumbnailImgPath() != null) {
+            flag = dto.getThumbnailImgPath().equals(findGoods.getThumbnailImgPath()) ? true : false;
+        }
+        if (dto.getDetailImgName() != null) {
+            flag = dto.getDetailImgName().equals(findGoods.getDetailImgName()) ? true : false;
+        }
+        if (dto.getDetailImgPath() != null) {
+            flag = dto.getDetailImgPath().equals(findGoods.getDetailImgPath()) ? true : false;
+        }
 
         List<GoodsOptionDto> optionList = dto.getOptionList();
         for (GoodsOptionDto optionDto : optionList) {
@@ -162,10 +163,10 @@ public class GoodsController extends BaseController {
                 flag = optionDto.getColorAndSize().equals(option.getColorAndSize()) ? true : false;
             }
             if (optionDto.getInventory() != 0) {
-                flag = optionDto.getInventory() == (option.getInventory()) ? true : false;
+                flag = optionDto.getInventory() == option.getInventory() ? true : false;
             }
             if (optionDto.getExtraPrice() != null) {
-                flag = optionDto.getExtraPrice().equals(option.getExtraPrice()) ? true : false;
+                flag = optionDto.getExtraPrice().compareTo(option.getExtraPrice()) == 0 ? true : false;
             }
         }
 
@@ -177,7 +178,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 삭제
      */
-    @DeleteMapping(GOODS_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_GOODS_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteGoods(@RequestBody List<Integer> ids) {
         log.info("굿즈 삭제: {}", ids);
 

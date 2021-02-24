@@ -36,7 +36,7 @@ public class QuestionController extends BaseController {
     /**
      * 전체 1:1 문의글 조회(관리자)
      */
-    @GetMapping("/question/all/{page}")
+    @GetMapping(ADMIN_QUESTION_PREFIX + "/all/{page}")
     public ResponseEntity<Map<String, Object>> selectAdminQuestionList(@PathVariable int page) {
         return createResponseEntity(true, questionService.findAll(page));
     }
@@ -129,7 +129,7 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 수정(사용자)
      */
-    @PutMapping("/question/update/{id}")
+    @PutMapping(USER_QUESTION_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateQuestion(
             @PathVariable("id") Long id, @ModelAttribute QuestionDto dto) {
         log.info("미션 수정 id: {}, dto: {}", id, dto);
@@ -253,7 +253,7 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 댓글 수정(관리자)
      */
-    @PutMapping("/updateReply/{id}")
+    @PutMapping(ADMIN_QUESTION_PREFIX + "/updateReply/{id}")
     public ResponseEntity<History> updateQuestionReply(
             @PathVariable("id") Long id, @RequestBody QuestionCommentDto dto) {
         log.info("1:1 문의 댓글 수정 id: {}, dto: {}", id, dto);
