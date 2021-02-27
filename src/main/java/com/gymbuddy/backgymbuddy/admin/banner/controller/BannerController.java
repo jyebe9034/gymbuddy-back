@@ -29,6 +29,16 @@ public class BannerController extends BaseController {
     private final BannerService bannerService;
 
     /**
+     * 전체 배너 갯수 조회
+     */
+    @GetMapping(BANNER_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectBannerTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", bannerService.findAll().size());
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 메인 배너 조회
      */
     @GetMapping(BANNER_PREFIX + "/all")

@@ -32,6 +32,16 @@ public class ColumnController extends BaseController {
     private final ColumnService columnService;
 
     /**
+     * 전체 컬럼 갯수 조회
+     */
+    @GetMapping(COLUMN_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectColumnTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", columnService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 전체 칼럼 조회 (관리자 화면 목록, 10개씩)
      */
     @GetMapping(COLUMN_PREFIX + "/all/{page}")

@@ -29,6 +29,10 @@ public class ColumnService {
     private final ColumnRepository columnRepository;
     private final CWRepository cwRepository;
 
+    public int selectTotalCount() {
+        return columnRepository.findAll().size();
+    }
+
     public List<Columns> findAllForMain() {
         return columnRepository.findAll(PageRequest.of(0, 9, Sort.by("id").descending())).getContent();
     }
