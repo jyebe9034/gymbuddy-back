@@ -1,6 +1,8 @@
 package com.gymbuddy.backgymbuddy.admin.user.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.user.domain.Auth;
+import com.gymbuddy.backgymbuddy.admin.user.domain.AuthDto;
 import com.gymbuddy.backgymbuddy.admin.user.domain.User;
 import com.gymbuddy.backgymbuddy.admin.user.domain.UserDto;
 import com.gymbuddy.backgymbuddy.admin.user.service.UserLogicService;
@@ -18,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.USER_API;
 
@@ -30,14 +31,24 @@ public class UserController extends BaseController {
     private final UserLogicService logicService;
     private final PasswordEncoder passwordEncoder;
 
+    // 메일발송을 위함 운동친구 메일 계정
+    private static String HOSTMAIL = "jyebe9034@gmail.com";
+    private static String HOSTPW = "7pGA9034!";
+
     /**
      * 인증번호 메일 발송
      */
     @PostMapping(USER_API + "/sendAuthNumber")
     public ResponseEntity<Map<String, Object>> sendAuthNumber(@RequestBody UserDto user) {
         log.info("인증번호 발송을 위한 메일번호: {}", user);
-        String hostmail = "gymbuddy261@gmail.com";
-        String password = "wlaqjel79^!";
+        Map<String, Object> result = new HashMap<>();
+
+        // 이미 가입된 이메일인지 확인
+        if (logicService.checkDuplicateEmail(user.getEmail())) {
+            result.put("successYn", "N");
+            result.put("msg", "이미 가입된 이메일입니다.");
+            return createResponseEntity(true, result);
+        }
 
         // SMTP 서버 정보를 설정한다.
         Properties prop = new Properties();
@@ -49,26 +60,30 @@ public class UserController extends BaseController {
 
         Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(hostmail, password);
+                return new PasswordAuthentication(HOSTMAIL, HOSTPW);
             }
         });
 
         // 인증번호 생성
-        int num = ThreadLocalRandom.current().nextInt(100000, 1000000);
-        log.info("인증번호: {}", num);
+        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+        String authNum = "";
+        for (int i = 0; i < 6; i++) {
+            int idx = (int) (charSet.length * Math.random());
+            authNum += charSet[idx];
+        }
+        result.put("authNum", authNum);
 
         // 이메일 내용
         String content = "<div style='background-color: #00AD84; border:4px solid #231815; text-align: center;'>" +
                 "<div><img src='gymbuddy.co.kr/resources/static/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
                 "<div style='font: 700 16pt sans-serif; line-height: 140%;'>" +
-                "안녕하세요, " + user.getName() + " 님!<br>" + "회원님의 인증번호는" + num + "입니다.</div>";
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("authNum", num);
+                "안녕하세요, " + user.getName() + " 님!<br>" + "회원님의 인증번호는" + authNum + "입니다.</div>";
 
         try {
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(hostmail));
+            message.setFrom(new InternetAddress(HOSTMAIL));
 
             //수신자메일주소
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
@@ -79,7 +94,12 @@ public class UserController extends BaseController {
             message.setText(content, "UTF-8", "html");
             // 메일 전송
             Transport.send(message);
-            log.info("Success Message Send");
+
+            // 이메일과 인증번호 DB에 저장
+            logicService.saveAuthNum(user.getEmail(), authNum);
+            Auth oneAuth = logicService.findOneAuth(user.getEmail());
+            result.put("authId", oneAuth.getId());
+            result.put("successYn", "Y");
         } catch (AddressException e) {
             log.error(e.getMessage());
         } catch (MessagingException e) {
@@ -90,13 +110,37 @@ public class UserController extends BaseController {
     }
 
     /**
+     * 인증번호 일치 확인
+     */
+    @PostMapping(USER_API + "/checkAuthNum")
+    public ResponseEntity<Map<String, Object>> checkAuthNum(@RequestBody AuthDto auth) {
+        log.info("인증번호 일치 확인: {}", auth);
+        Auth origin = logicService.findOneAuth(auth.getEmail());
+
+        Map<String, Object> result = new HashMap<>();
+        // 인증번호 비교
+        if (origin.getAuthNum().equals(auth.getAuthNum()) && origin.getId().equals(auth.getId())) {
+            result.put("result", "Y");
+        } else {
+            result.put("result", "N");
+        }
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 임시 비밀번호 메일 발송
      */
     @PostMapping(USER_API + "/onetimePw")
     public ResponseEntity<Map<String, Object>> sendOnetimePassword(@RequestBody UserDto user) {
         log.info("임시 비밀번호 발송을 위한 정보: {}", user);
-        String hostmail = "jyebe9034@gmail.com";
-        String password = "7pGA9034!";
+        Map<String, Object> result = new HashMap<>();
+
+        // 가입 여부 확인
+        if (!logicService.checkDuplicateEmail(user.getEmail())) {
+            result.put("successYn", "N");
+            result.put("msg", "가입된 회원정보가 없습니다. \n 다시 시도해주세요");
+            return createResponseEntity(true, result);
+        }
 
         // SMTP 서버 정보를 설정한다.
         Properties prop = new Properties();
@@ -108,31 +152,35 @@ public class UserController extends BaseController {
 
         Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(hostmail, password);
+                return new PasswordAuthentication(HOSTMAIL, HOSTPW);
             }
         });
 
         // 인증번호 생성
-        int num = ThreadLocalRandom.current().nextInt(100000, 1000000);
-        log.info("임시 비밀번호: {}", num);
+        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+        String authNum = "";
+        for (int i = 0; i < 10; i++) {
+            int idx = (int) (charSet.length * Math.random());
+            authNum += charSet[idx];
+        }
 
         // 이메일 내용
         String content = "<div style='background-color: #00AD84; border:4px solid #231815; text-align: center;'>" +
                 "<div><img src='gymbuddy.co.kr/resources/static/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
                 "<div style='font: 700 16pt sans-serif; line-height: 140%;'>" +
                 "안녕하세요, " + user.getName() + " 님!<br>" + "임시 비밀번호가 발급되었습니다.</div>" +
-                "임시로 발급해드린 비밀번호는 <span style='color: yellow;'>" + num + "<span>입니다.<br>" +
+                "임시로 발급해드린 비밀번호는 <span style='color: yellow;'>" + authNum + "<span>입니다.<br>" +
                 "로그인 후 마이페이지에서 비밀번호를 변경해주세요." +
                 "<a href='gymbuddy.co.kr" + "/join/login'>"+
                 "<div style='text-decoration:none; width: 300px; padding:10px 0; background-color: white; border: 4px solid #231815; margin:50px auto 60px; font: 700 10pt sans-serif; color: #231815;'>인증하기</div></a></div>";
 
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("onetimePw", num);
+        result.put("onetimePw", authNum);
 
         try {
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(hostmail));
+            message.setFrom(new InternetAddress(HOSTMAIL));
 
             //수신자메일주소
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
@@ -146,7 +194,8 @@ public class UserController extends BaseController {
             log.info("Success Message Send");
 
             // 사용자의 비밀번호 변경
-            logicService.updatePassword(user, num);
+            logicService.updatePassword(user, authNum);
+            result.put("successYn", "Y");
         } catch (AddressException e) {
             log.error(e.getMessage());
         } catch (MessagingException e) {
@@ -174,11 +223,22 @@ public class UserController extends BaseController {
         return createResponseEntity(true, logicService.login(user));
     }
 
+
+    /**
+     * 전체 회원수 조회
+     */
+    @GetMapping(USER_API + "/totalCount")
+    public  ResponseEntity<Map<String, Object>> selectUserTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", logicService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
     /**
      * 전체 회원 정보 조회(관리자)
      */
-    @GetMapping(USER_API + "/all/{page}")
-    public ResponseEntity<List<UserDto>> selectUserList(@PathVariable("page") int page) {
+    @GetMapping(USER_API + "/all/{page}/{grade}")
+    public ResponseEntity<List<UserDto>> selectUserList(@PathVariable("page") int page, @PathVariable("grade") String grade) {
         return createResponseEntity(true, logicService.findAll(page));
     }
 

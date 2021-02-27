@@ -1,9 +1,11 @@
 package com.gymbuddy.backgymbuddy.admin.user.service;
 
 import com.gymbuddy.backgymbuddy.admin.base.Address;
+import com.gymbuddy.backgymbuddy.admin.user.domain.Auth;
 import com.gymbuddy.backgymbuddy.admin.user.domain.Grade;
 import com.gymbuddy.backgymbuddy.admin.user.domain.User;
 import com.gymbuddy.backgymbuddy.admin.user.domain.UserDto;
+import com.gymbuddy.backgymbuddy.admin.user.repository.AuthRepository;
 import com.gymbuddy.backgymbuddy.admin.user.repository.UserRepository;
 import com.gymbuddy.backgymbuddy.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,27 @@ public class UserLogicService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final AuthRepository authRepository;
     private final JwtTokenProvider jwtTokenProvider;
+
+    /**
+     * 인증번호 저장
+     * @param email 이메일
+     * @param authNum 인증번호
+     */
+    public void saveAuthNum(String email, String authNum) {
+        Auth auth = new Auth();
+        auth.setEmail(email);
+        auth.setAuthNum(authNum);
+        authRepository.save(auth);
+    }
+
+    /**
+     * 인증을 위한 엔티티 조회
+     */
+    public Auth findOneAuth(String email) {
+        return authRepository.findByEmail(email).get();
+    }
 
     /**
      * 회원가입
@@ -40,8 +62,7 @@ public class UserLogicService {
             return result;
         }
         // 이메일 중복 확인
-        Optional<User> byEmail = userRepository.findByEmail(user.getEmail());
-        if (byEmail.isPresent()) {
+        if (checkDuplicateEmail(user.getEmail())) {
             result.put("successYn", "N");
             result.put("msg", "이미 가입된 이메일입니다.");
             return result;
@@ -80,6 +101,18 @@ public class UserLogicService {
     }
 
     /**
+     * 이메일 중복 확인
+     */
+    public boolean checkDuplicateEmail(String email) {
+        Optional<User> byEmail = userRepository.findByEmail(email);
+        // 이메일 중복 확인
+        if (byEmail.isPresent()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 로그인
      */
     public Map<String, Object> login(UserDto user) {
@@ -94,6 +127,10 @@ public class UserLogicService {
         result.put("adminYn", member.getGrade().equals(Grade.ADMIN) ? "Y" : "N");
         result.put("jwt-token", jwtTokenProvider.createToken(member.getUsername(), member.getRoles()));
         return result;
+    }
+
+    public int selectTotalCount() {
+        return userRepository.findAll().size();
     }
 
     /**
@@ -145,6 +182,13 @@ public class UserLogicService {
     }
 
     /**
+     * 이메일로 회원정보 조회
+     */
+    public User findOneByEmail(String email) {
+        return userRepository.findByEmail(email).get();
+    }
+
+    /**
      * 정보수정
      */
     @Transactional
@@ -183,12 +227,12 @@ public class UserLogicService {
     /**
      * 비밀번호 변경
      * @param user 회원정보
-     * @param num 임시비밀번호
+     * @param authNum 임시비밀번호
      */
     @Transactional
-    public void updatePassword(UserDto user, int num) {
+    public void updatePassword(UserDto user, String authNum) {
         User origin = findOne(user.getId());
-        String password = passwordEncoder.encode(Objects.toString(num));
+        String password = passwordEncoder.encode(authNum);
         origin.setPassword(password);
     }
 }
