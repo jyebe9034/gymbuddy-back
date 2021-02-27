@@ -31,6 +31,17 @@ public class ProgramController extends BaseController {
     private final ProgramService programService;
 
     /**
+     * 전체 프로그램 갯수 조회
+     * @return
+     */
+    @GetMapping(PROGRAM_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectProgramTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", programService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 전체 프로그램 조회(관리자)
      */
     @GetMapping(PROGRAM_PREFIX + "/all/{page}")

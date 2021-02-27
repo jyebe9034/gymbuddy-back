@@ -1,5 +1,26 @@
 # News API
 
+### 전체 대외뉴스 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectNewsTotalCount
+PATH: /api/news/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 대외뉴스 갯수
+}
+```
+* 결과 에시
+```
+{
+    "totalCount": 15
+}
+```
+
 ### 전체 대외뉴스 목록 조회
 * 기본 정보 및 파라미터 설명
 ```

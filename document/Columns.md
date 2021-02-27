@@ -11,7 +11,7 @@ PARAM: 없음
 * 결과구조
 ```
 {
-    "totalCount": 전체 컬 갯수
+    "totalCount": 전체 컬럼 갯수
 }럼
 ```
 * 결과 에시

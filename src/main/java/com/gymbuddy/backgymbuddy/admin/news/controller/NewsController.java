@@ -28,6 +28,13 @@ public class NewsController extends BaseController {
 
     private final NewsService newsService;
 
+    @GetMapping(NEWS_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectNewsTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", newsService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
     /**
      * 전체 대외뉴스 조회(관리자)
      */

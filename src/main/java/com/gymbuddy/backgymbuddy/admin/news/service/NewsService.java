@@ -29,6 +29,10 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
 
+    public int selectTotalCount() {
+        return newsRepository.findAll().size();
+    }
+
     public List<News> findAll(int page) {
         return newsRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }

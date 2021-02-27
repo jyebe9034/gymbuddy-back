@@ -24,6 +24,16 @@ public class CWController extends BaseController {
     private final CWService cwService;
 
     /**
+     * 전체 칼럼 작성자 갯수 조회
+     */
+    @GetMapping(COLUMN_WRITER_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectColumnWriterTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", cwService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 전체 칼럼 작성자 조회
      */
     @GetMapping(COLUMN_WRITER_PREFIX + "/all/{page}")
