@@ -1,5 +1,26 @@
 # Program API
 
+### 전체 프로그램 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectProgramTotalCount
+PATH: /api/program/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 프로그램 갯수
+}
+```
+* 결과 에시
+```
+{
+    "totalCount": 1
+}
+```
+
 ### 전체 프로그램 조회(관리자)
 * 기본 정보 및 파라미터 설명
 ```

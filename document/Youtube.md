@@ -1,5 +1,26 @@
 # Youtube API
 
+### 전체 유튜브 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectYoutubeTotalCount
+PATH: /api/youtube/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 유튜브 갯수
+}
+```
+* 결과 에시
+```
+{
+    "totalCount": 15
+}
+```
+
 ### 전체 유튜브 목록조회
 * 기본 정보 및 파라미터 설명
 ```

@@ -30,6 +30,16 @@ public class YoutubeController extends BaseController {
     private final YoutubeService youtubeService;
 
     /**
+     * 전체 유튜브 갯수 조회
+     */
+    @GetMapping(YOUTUBE_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectYoutubeTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", youtubeService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 전체 유튜브 조회 (관리자 화면 목록, 10개씩)
      */
     @GetMapping(YOUTUBE_PREFIX + "/all/{page}")

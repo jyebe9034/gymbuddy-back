@@ -26,6 +26,10 @@ public class ProgramService {
     private final ProgramRepository programRepository;
     private final ProgramOptionRepository optionRepository;
 
+    public int selectTotalCount() {
+        return programRepository.findAll().size();
+    }
+
     public List<ProgramDto> findAllForMain() {
         List<Program> list = programRepository.findAllByMainYn("Y");
         List<ProgramDto> dtoList = new ArrayList<>();

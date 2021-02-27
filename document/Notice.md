@@ -1,5 +1,26 @@
 # Notice API
 
+### 전체 공지사항 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectNoticeTotalCount
+PATH: /api/notice/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 공지사항 갯수
+}
+```
+* 결과 에시
+```
+{
+    "totalCount": 15
+}
+```
+
 ### 전체 공지사항 목록 조회
 * 기본 정보 및 파라미터 설명
 ```

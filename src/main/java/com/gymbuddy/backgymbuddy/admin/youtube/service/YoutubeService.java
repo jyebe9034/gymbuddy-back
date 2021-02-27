@@ -25,6 +25,10 @@ public class YoutubeService {
 
     private final YoutubeRepository youtubeRepository;
 
+    public int selectTotalCount() {
+        return youtubeRepository.findAll().size();
+    }
+
     public List<Youtube> findAllForMain() {
         return youtubeRepository.findAll(PageRequest.of(0, 9, Sort.by("id").descending())).getContent();
     }

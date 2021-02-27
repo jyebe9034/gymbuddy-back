@@ -24,6 +24,11 @@ public class CWService {
 
     private final CWRepository cwRepository;
 
+    public int selectTotalCount() {
+        List<ColumnWriter> all = cwRepository.findAll();
+        return all.size();
+    }
+
     public List<ColumnWriter> findAll(int page) {
         return cwRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }

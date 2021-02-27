@@ -1,5 +1,26 @@
 # ColumnWriter API
 
+### 전체 컬럼 작성자 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectColumnWriterTotalCount
+PATH: /api/columnWriter/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 컬럼 작성자수
+}
+```
+* 결과 에시
+```
+{
+    "totalCount": 3
+}
+```
+
 ### 전체 칼럼 작성자 목록 조회
 * 기본 정보 및 파라미터 설명
 ```

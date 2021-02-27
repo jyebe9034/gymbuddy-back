@@ -27,6 +27,16 @@ public class NoticeController extends BaseController {
     private final NoticeService noticeService;
 
     /**
+     * 전체 공지사항 갯수 조회
+     */
+    @GetMapping(NOTICE_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectNoticeTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", noticeService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 전체 공지사항 조회(관리자)
      */
     @GetMapping(NOTICE_PREFIX + "/all/{page}")

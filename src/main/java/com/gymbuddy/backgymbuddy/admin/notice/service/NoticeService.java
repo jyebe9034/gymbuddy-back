@@ -28,6 +28,10 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
 
+    public int selectTotalCount() {
+        return noticeRepository.findAll().size();
+    }
+
     public List<Notice> findAll(int page) {
         return noticeRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
@@ -94,4 +98,5 @@ public class NoticeService {
     public void delete(Long id) {
         noticeRepository.deleteById(id);
     }
+
 }
