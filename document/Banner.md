@@ -1,5 +1,26 @@
 # Banner API
 
+### 전체 메인 배너 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectBannerTotalCount
+PATH: /api/banner/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 메인 배너 갯수
+}
+```
+* 결과 에시
+```
+{
+    "totalCount": 6
+}
+```
+
 ### 전체 메인 베너 목록조회(최대 5개)
 * 기본 정보 및 파라미터 설명
 ```

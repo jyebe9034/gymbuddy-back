@@ -1,5 +1,26 @@
 # Columns API
 
+### 전체 컬럼 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectColumnTotalCount
+PATH: /api/column/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 컬 갯수
+}럼
+```
+* 결과 에시
+```
+{
+    "totalCount": 15
+}
+```
+
 ### 전체 컬럼 목록조회 (관리자)
 * 기본 정보 및 파라미터 설명
 ```
