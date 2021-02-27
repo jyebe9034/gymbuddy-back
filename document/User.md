@@ -14,13 +14,49 @@ email : 이메일
 * 결과구조
 ```
 {
-    "authNum": 인증번호
+    authNum: 인증번호
+    successYn": 성공여부
+    authId: 아이디(JPA 생성)
 }
 ```
 * 결과 예시
 ```
 {
-    "authNum": 493804
+    "authNum": "Z2XB1Y",
+    "successYn": "Y",
+    "authId": 1
+}
+{
+    "msg": "이미 가입된 이메일입니다.",
+    "successYn": "N"
+}
+```
+
+### 인증번호 일치 확인
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: POST
+METHOD NAME: checkAuthNum
+PATH : /api/userApi/checkAuthNum
+PARAM : Map<String, Object>
+=== PARAM 설명 ===
+id : 아이디(JPA생성)
+email : 이메일
+authNum: 인증번호 6자리(대문자, 숫자 조합 6자리)
+```
+* 결과구조
+```
+{
+    "result": 일치 여부(Y OR N)
+}
+```
+* 결과 예시
+```
+{
+    "result": "Y"
+}
+{
+    "result": "N"
 }
 ```
 
@@ -39,13 +75,19 @@ email : 이메일
 * 결과구조
 ```
 {
-    "onetimePw": 임시 비밀번호
+    "onetimePw": 임시 비밀번호(대문자, 숫자 조합 10자리)
+    "successYn": 임시 비밀번호 발급 여부(Y OR N)
 }
 ```
 * 결과 예시
 ```
 {
-    "onetimePw": 549024
+    "onetimePw": "QOTQ307GL2",
+    "successYn": "Y"
+}
+{
+    "msg": "가입된 회원정보가 없습니다. \n 다시 시도해주세요",
+    "successYn": "N"
 }
 ```
 
@@ -130,6 +172,23 @@ password : 비밀번호
 HTTP METHOD: POST(POST로 보내면 될 것 같긴 한데..만약 안되면 알려주세요!)
 PATH : /api/userApi/logout
 ** 로그아웃 시 추가적으로 필요한 파라미터는 없음. 다만 header에 jwt-token이 있어야 할 것 같음..
+```
+
+### 전체 회원정보 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectUserTotalCount
+PATH: /api/userApi/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+
+```
+* 결과 에시
+```
+
 ```
 
 ### 전체 회원정보 조회(관리자)
