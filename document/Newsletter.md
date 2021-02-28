@@ -13,11 +13,13 @@ PARAM: 없음
 [
     {
         "id": 아이디(JPA 생성),
-        "email": 이메일 주소
+        "email": 이메일 주소,
+        "create_date": 등록일자
     },
     {
         "id": 아이디(JPA 생성),
-        "email": 이메일 주소
+        "email": 이메일 주소,
+        "create_date": 등록일자
     },
     ...
 ]
@@ -27,15 +29,18 @@ PARAM: 없음
 [
     {
         "id": 1,
-        "email": "test@gmail.com"
+        "email": "test@gmail.com",
+        "createDate": "2021-02-24T20:08:45"
     },
     {
         "id": 2,
-        "email": "test2@gmail.com"
+        "email": "test2@gmail.com",
+        "createDate": "2021-02-24T20:08:56"
     },
     {
         "id": 3,
-        "email": "test3@gmail.com"
+        "email": "test3@gmail.com",
+        "createDate": "2021-02-24T20:08:57"
     },
     ...
 ]
@@ -86,4 +91,61 @@ PARAM : 없음
     "result": "success"
     *** 현재 모든 결과값을 성공으로 보내고 있음.
 }
+```
+```
+### 뉴스레터 구독일자 검색 (관리자)
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: searchCreateDate
+PATH: /api/newsLetter/search
+=== PARAM 설명 ===
+{
+    "start": 시작 구독일자,
+    "end": 마지막 구독일자
+}
+```
+* 파라미터 예시
+```
+{
+    "start": "2020-02-23 00:00:00",
+    "end": "2020-02-23 00:00:00"
+}
+*** 초단위까지 기재해야 합니다.
+```
+* 결과 구조
+```
+[
+    {
+        "id": 아이디(JPA 생성),
+        "email": 이메일 주소,
+        "create_date": 등록일자
+    },
+    {
+        "id": 아이디(JPA 생성),
+        "email": 이메일 주소,
+        "create_date": 등록일자
+    },
+    ...
+]
+```
+* 결과 예시
+```
+[
+    {
+        "id": 1,
+        "email": "test@gmail.com",
+        "createDate": "2020-02-23T00:00:00"
+    },
+    {
+        "id": 2,
+        "email": "test2@gmail.com",
+        "createDate": "2020-02-23T00:00:00"
+    },
+    {
+        "id": 3,
+        "email": "test3@gmail.com",
+        "createDate": "2020-02-23T00:00:00"
+    }
+]
 ```
