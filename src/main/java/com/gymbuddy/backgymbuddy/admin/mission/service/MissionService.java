@@ -37,7 +37,7 @@ public class MissionService {
     public Map<String, Object> findAllByMap() {
         List<History> histories = historyRepository.findAll();
         List<BusinessIdentity> biList = biRepository.findAll();
-        List<Mission> mission = missionRepository.findAll();
+        List<Mission> mission = findAll();
 
         Map<String, Object> result = new HashMap<>();
         result.put("historyList", histories);

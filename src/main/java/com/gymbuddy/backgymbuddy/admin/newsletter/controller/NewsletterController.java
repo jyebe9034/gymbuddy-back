@@ -3,6 +3,7 @@ package com.gymbuddy.backgymbuddy.admin.newsletter.controller;
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.newsletter.domain.Newsletter;
 import com.gymbuddy.backgymbuddy.admin.newsletter.domain.NewsletterDto;
+import com.gymbuddy.backgymbuddy.admin.newsletter.domain.NewsletterSearch;
 import com.gymbuddy.backgymbuddy.admin.newsletter.service.NewsletterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,5 +55,15 @@ public class NewsletterController extends BaseController {
         Map<String, Object> result = new HashMap<>();
         result.put("result", "success");
         return createResponseEntity(true, result);
+    }
+
+    /**
+     * 뉴스레터 구독일자 검색
+     */
+    @GetMapping(NEWSLETTER_PREFIX + "/search")
+    public ResponseEntity<List<Newsletter>> searchCreateDate(
+            @RequestBody NewsletterSearch search) {
+        log.info("뉴스레터 구독일자 검색 search: {}", search);
+        return createResponseEntity(true, newsletterService.search(search));
     }
 }

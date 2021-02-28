@@ -13,8 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_FQ_PREFIX;
-import static com.gymbuddy.backgymbuddy.admin.base.Constants.FQ_PREFIX;
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.*;
 
 @Slf4j
 @RestController
@@ -24,11 +23,29 @@ public class FQController extends BaseController {
     private final FQService fqService;
 
     /**
-     * 전체 자주묻는질문 조회
+     * 전체 자주묻는질문 조회 (관리자)
      */
-    @GetMapping(FQ_PREFIX + "/all/{page}")
-    public ResponseEntity<List<FrequencyQuestion>> selectFqList(@PathVariable("page") int page) {
+    @GetMapping("/api/faq/all/{page}")
+    public ResponseEntity<List<FrequencyQuestion>> selectAdminFqList(@PathVariable("page") int page) {
         return createResponseEntity(true, fqService.findAll(page));
+    }
+
+    /**
+     * 전체 자주묻는질문 조회 (사용자)
+     */
+    @GetMapping(FQ_PREFIX + "/all")
+    public ResponseEntity<Map<String, Object>> selectAllFqList() {
+        return createResponseEntity(true, fqService.findAllByMap());
+    }
+
+    /**
+     * 전체 굿즈 갯수 조회
+     */
+    @GetMapping(FQ_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectFaqTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", fqService.selectTotalCount());
+        return createResponseEntity(true, result);
     }
 
     /**
@@ -43,7 +60,7 @@ public class FQController extends BaseController {
     /**
      * 자주묻는질문 등록
      */
-    @PostMapping(ADMIN_FQ_PREFIX + "/new")
+    @PostMapping(FQ_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertFq(@RequestBody FQDto dto) {
         log.info("자주묻는질문 등록: {}", dto);
 
