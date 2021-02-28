@@ -198,7 +198,10 @@ PARAM: 없음
 ```
 HTTP METHOD: GET
 METHOD NAME: selectUserList
-PATH : /api/userApi/all/{page}
+PATH : /api/userApi/all/{page}/{grade}
+=== PARAM 설명 ===
+page: 페이지 번호
+grade: 회원 등급 [전체: all, 관리자: admin, 일반회원: normal]
 ```
 * 결과구조
 ```
@@ -222,12 +225,12 @@ PATH : /api/userApi/all/{page}
 ```
 [
     {
-        "id": 1,
+        "id": 5,
         "grade": "NORMAL",
         "identity": "test",
-        "email": "jyebe9034@gmail.com",
+        "email": "test123@gmail.com",
         "password": null,
-        "name": "김운동",
+        "name": "테스트",
         "phone": "010-1234-1234",
         "zipcode": null,
         "street1": null,
@@ -235,12 +238,12 @@ PATH : /api/userApi/all/{page}
         "agreeYn": "Y"
     },
     {
-        "id": 2,
+        "id": 4,
         "grade": "NORMAL",
-        "identity": "test2",
-        "email": "jihye.t0221@gmail.com",
+        "identity": "gymbuddy",
+        "email": "jyebe9034@gmail.com",
         "password": null,
-        "name": "김운동",
+        "name": "김버디",
         "phone": "010-1234-1234",
         "zipcode": null,
         "street1": null,
@@ -287,6 +290,31 @@ PATH : /api/userApi/detail/{id}
     "street1": "서울시 광화문로 123",
     "street2": "201호",
     "agreeYn": "Y"
+}
+```
+
+### 회원 등급 수정
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: PUT
+METHOD NAME: updateGrade
+PATH : /api/userApi/updateGrade
+PARAM : Map<String, Object>
+=== PARAM 설명 ===
+grade: 회원 등급 [전체: all, 관리자: admin, 일반회원: normal]
+idList: [아이디, 아이디, ...]
+```
+* 결과구조
+```
+{
+    "result": 결과여부
+}
+```
+* 결과 예시
+```
+{
+    "result": "success"
+    *** 현재 모든 결과값을 성공으로 보내고 있음.
 }
 ```
 

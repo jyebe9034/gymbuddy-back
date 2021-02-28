@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_USER_API;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.USER_API;
 
 @Slf4j
@@ -240,7 +241,8 @@ public class UserController extends BaseController {
      */
     @GetMapping(USER_API + "/all/{page}/{grade}")
     public ResponseEntity<List<UserDto>> selectUserList(@PathVariable("page") int page, @PathVariable("grade") String grade) {
-        return createResponseEntity(true, logicService.findAll(page));
+        log.info("전체 회원정보 조회 - page: {}, grade: {}", page, grade);
+        return createResponseEntity(true, logicService.findAll(page, grade));
     }
 
     /**
@@ -250,6 +252,19 @@ public class UserController extends BaseController {
     public ResponseEntity<UserDto> selectUserDetail(@PathVariable("id") Long id) {
         log.info("회원 정보 조회: {}", id);
         return createResponseEntity(true, logicService.findUserDto(id));
+    }
+
+    /**
+     * 회원등급 수정
+     */
+    @PutMapping(USER_API + "/updateGrade")
+    public ResponseEntity<Map<String, Object>> updateGrade(@RequestBody Map<String, Object> param) {
+        log.info("회원 등급 수정: {}", param);
+        logicService.updateGrade(param);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", "success");
+        return createResponseEntity(true, result);
     }
 
     /**

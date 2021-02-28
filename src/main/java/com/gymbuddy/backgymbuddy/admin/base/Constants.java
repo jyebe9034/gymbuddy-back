@@ -12,7 +12,7 @@ public final class Constants {
     public static final String USER_AUTH = "/api/user";
 
     /** 회원가입 및 로그인과 같은 회원 관리를 위한 API 경로 PREFIX */
-    public static final String ADMIN_USER_API = "/api/admin/userApi";
+    public static final String ADMIN_USER_API = ADMIN_AUTH + "/userApi";
 
     /** 회원가입 및 로그인과 같은 회원 관리를 위한 API 경로 PREFIX */
     public static final String USER_API = "/api/userApi";
