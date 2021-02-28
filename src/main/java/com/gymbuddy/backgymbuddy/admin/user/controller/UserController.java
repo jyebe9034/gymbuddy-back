@@ -97,7 +97,7 @@ public class UserController extends BaseController {
 
             // 이메일과 인증번호 DB에 저장
             logicService.saveAuthNum(user.getEmail(), authNum);
-            Auth oneAuth = logicService.findOneAuth(user.getEmail());
+            Auth oneAuth = logicService.findOneAuthByEmail(user.getEmail());
             result.put("authId", oneAuth.getId());
             result.put("successYn", "Y");
         } catch (AddressException e) {
@@ -115,11 +115,12 @@ public class UserController extends BaseController {
     @PostMapping(USER_API + "/checkAuthNum")
     public ResponseEntity<Map<String, Object>> checkAuthNum(@RequestBody AuthDto auth) {
         log.info("인증번호 일치 확인: {}", auth);
-        Auth origin = logicService.findOneAuth(auth.getEmail());
+        Auth origin = logicService.findOneAuthById(auth.getId());
+
 
         Map<String, Object> result = new HashMap<>();
         // 인증번호 비교
-        if (origin.getAuthNum().equals(auth.getAuthNum()) && origin.getId().equals(auth.getId())) {
+        if (origin.getAuthNum().equals(auth.getAuthNum())) {
             result.put("result", "Y");
         } else {
             result.put("result", "N");
