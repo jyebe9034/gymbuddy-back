@@ -43,10 +43,18 @@ public class UserLogicService {
     }
 
     /**
-     * 인증을 위한 엔티티 조회
+     * 이메일로 인증 엔티티 조회
      */
-    public Auth findOneAuth(String email) {
-        return authRepository.findByEmail(email).get();
+    public Auth findOneAuthByEmail(String email) {
+        List<Auth> authList = authRepository.findByEmailOrderByIdDesc(email);
+        return authList.get(0);
+    }
+
+    /**
+     * 아이디로 인증 엔티티 조회
+     */
+    public Auth findOneAuthById(Long id) {
+        return authRepository.findById(id).get();
     }
 
     /**
