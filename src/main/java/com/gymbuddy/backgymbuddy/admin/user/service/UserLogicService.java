@@ -130,6 +130,7 @@ public class UserLogicService {
             throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
         }
         Map<String, Object> result = new HashMap<>();
+        result.put("id", member.getId());
         result.put("identity", member.getIdentity());
         result.put("name", member.getName());
         result.put("adminYn", member.getGrade().equals(Grade.ADMIN) ? "Y" : "N");
