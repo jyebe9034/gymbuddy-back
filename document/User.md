@@ -274,12 +274,12 @@ PATH : /api/userApi/detail/{id}
 * 결과 예시
 ```
 {
-    "id": null,
+    "id": 4,
     "grade": null,
-    "identity": "test",
+    "identity": "gymbuddy",
     "email": "jyebe9034@gmail.com",
     "password": null,
-    "name": "김운동",
+    "name": "김버디",
     "phone": "010-1234-1234",
     "zipcode": "12345",
     "street1": "서울시 광화문로 123",
