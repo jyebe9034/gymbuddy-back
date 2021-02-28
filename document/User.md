@@ -154,15 +154,17 @@ password : 비밀번호
     "jwt-token": 발행된 토큰
     "adminYn": 관리자 여부(Y or N)
     "name": 이름
+    "id": 아이디(JPA 생성)
 }
 ```
 * 결과 예시
 ```
 {
-    "identity": "왜이래", (이건 가데이터가 잘못 들어가 있는거에요ㅎㅎ아이디는 영문과 숫자 조합만 가능합니다!)
-    "jwt-token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaWh5ZS50MDIyMUBnbWFpbC5jb20iLCJyb2xlcyI6W10sImlhdCI6MTYxNDA4NDc0NCwiZXhwIjoxNjE0MDg2NTQ0fQ.Uf5luhR_fixgkMFI9rIw8eeXREbixX-aHn6AymXzylI",
-    "adminYn": "Y",
-    "name": "김운동"
+    "identity": "gymbuddy",
+    "adminYn": "N",
+    "jwt-token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqeWViZTkwMzRAZ21haWwuY29tIiwicm9sZXMiOltdLCJpYXQiOjE2MTQ0ODMyMDAsImV4cCI6MTYxNDQ4NTAwMH0.SCYDOyCZBRZEF7rbNdKIdCvA48dyBtLrvJwFoooP9Pw",
+    "name": "김버디",
+    "id": 4
 }
 ```
 
