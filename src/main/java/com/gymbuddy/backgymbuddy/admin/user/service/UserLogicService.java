@@ -145,8 +145,13 @@ public class UserLogicService {
     /**
      * 전체 회원 조회
      */
-    public List<UserDto> findAll(int page) {
-        List<User> entities = userRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+    public List<UserDto> findAll(int page, String grade) {
+        List<User> entities;
+        if ("all".equals(grade)) {
+            entities = userRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        } else {
+            entities = userRepository.findAllByGrade(grade.toUpperCase(), PageRequest.of(page, 10, Sort.by("id").descending()));
+        }
 
         List<UserDto> list = new ArrayList<>();
         for (User user : entities) {
@@ -192,10 +197,17 @@ public class UserLogicService {
     }
 
     /**
-     * 이메일로 회원정보 조회
+     * 회원등급 수정
      */
-    public User findOneByEmail(String email) {
-        return userRepository.findByEmail(email).get();
+    @Transactional
+    public void updateGrade(Map<String, Object> param) {
+        String grade = Objects.toString(param.get("grade")).toUpperCase();
+        List<Integer> idList = (List<Integer>) param.get("idList");
+        for (int id : idList) {
+            long idL = new Long(id);
+            User user = userRepository.findById(idL).get();
+            user.setGrade(grade);
+        }
     }
 
     /**
