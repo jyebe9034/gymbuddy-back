@@ -176,6 +176,7 @@ public class UserLogicService {
         User user = findOne(id);
 
         UserDto dto = new UserDto();
+        dto.setId(user.getId());
         dto.setIdentity(user.getIdentity());
         dto.setName(user.getName());
         dto.setPhone(user.getPhone());
