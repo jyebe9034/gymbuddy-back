@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "newsletter")
@@ -21,11 +21,11 @@ public class Newsletter {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createDate;
+    private LocalDate createDate;
 
     @PrePersist
     private void prePersist() {
-        createDate = LocalDateTime.now();
+        createDate = LocalDate.now();
     }
 
 }
