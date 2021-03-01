@@ -51,6 +51,7 @@ public class ColumnService {
         return columnRepository.findById(id).get();
     }
 
+    @Transactional
     public Long save(ColumnsDto columns) {
         // 현재 로그인한 아이디 정보 조회
 //        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -83,6 +84,7 @@ public class ColumnService {
         return entity.getId();
     }
 
+    @Transactional
     public void update(Long id, ColumnsDto column) {
         // 현재 로그인한 아이디 정보 조회
 //        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -109,6 +111,7 @@ public class ColumnService {
 //        origin.setUpdateId(loginId);
     }
 
+    @Transactional
     public void delete(Long id) {
         columnRepository.deleteById(id);
     }

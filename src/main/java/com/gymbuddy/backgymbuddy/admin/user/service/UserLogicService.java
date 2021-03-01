@@ -99,7 +99,7 @@ public class UserLogicService {
             entity.setAgreeYn(user.getAgreeYn());
         }
         entity.setGrade(Grade.NORMAL.toString());
-        entity.setRoles(Collections.emptyList());
+//        entity.setRoles(Collections.emptyList());
 
         userRepository.save(entity);
 
@@ -133,8 +133,8 @@ public class UserLogicService {
         result.put("id", member.getId());
         result.put("identity", member.getIdentity());
         result.put("name", member.getName());
-        result.put("adminYn", member.getGrade().equals(Grade.ADMIN) ? "Y" : "N");
-        result.put("jwt-token", jwtTokenProvider.createToken(member.getUsername(), member.getRoles()));
+        result.put("adminYn", "ADMIN".equals(member.getGrade()) ? "Y" : "N");
+        result.put("jwt-token", jwtTokenProvider.createToken(member.getUsername()));
         return result;
     }
 
@@ -192,6 +192,7 @@ public class UserLogicService {
         dto.setStreet1(address.getStreet1());
         dto.setStreet2(address.getStreet2());
         dto.setAgreeYn(user.getAgreeYn());
+        dto.setGrade(user.getGrade());
 
         return dto;
     }
@@ -253,8 +254,13 @@ public class UserLogicService {
      */
     @Transactional
     public void updatePassword(UserDto user, String authNum) {
-        User origin = findOne(user.getId());
+        User origin = userRepository.findByEmail(user.getEmail()).get();
         String password = passwordEncoder.encode(authNum);
         origin.setPassword(password);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 }

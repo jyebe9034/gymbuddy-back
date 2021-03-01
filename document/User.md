@@ -40,7 +40,7 @@ METHOD NAME: checkAuthNum
 PATH : /api/userApi/checkAuthNum
 PARAM : Map<String, Object>
 === PARAM 설명 ===
-id : 아이디(JPA생성)
+id : 아이디(JPA생성) -> 인증번호 발급시 리턴된 authId값을 넘겨주면 됌
 email : 이메일
 authNum: 인증번호 6자리(대문자, 숫자 조합 6자리)
 ```
@@ -68,7 +68,6 @@ METHOD NAME: sendOnetimePassword
 PATH : /api/userApi/onetimePw
 PARAM : Map<String, Object>
 === PARAM 설명 ===
-id : 아이디
 name : 이름
 email : 이메일
 ```
@@ -140,7 +139,7 @@ agreeYn : 광고 동의 여부
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: POST
-METHOD NAME: sendAuthNumber
+METHOD NAME: login
 PATH : /api/userApi/login
 PARAM : Map<String, Object>
 === PARAM 설명 ===
@@ -172,7 +171,7 @@ password : 비밀번호
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: POST(POST로 보내면 될 것 같긴 한데..만약 안되면 알려주세요!)
-PATH : /api/userApi/logout
+PATH : /api/user/logout
 ** 로그아웃 시 추가적으로 필요한 파라미터는 없음. 다만 header에 jwt-token이 있어야 할 것 같음..
 ```
 
@@ -279,12 +278,12 @@ PATH : /api/userApi/detail/{id}
 * 결과 예시
 ```
 {
-    "id": 4,
-    "grade": null,
-    "identity": "gymbuddy",
-    "email": "jyebe9034@gmail.com",
+    "id": 5,
+    "grade": "NORMAL",
+    "identity": "test",
+    "email": "test123@gmail.com",
     "password": null,
-    "name": "김버디",
+    "name": "테스트",
     "phone": "010-1234-1234",
     "zipcode": "12345",
     "street1": "서울시 광화문로 123",
@@ -353,6 +352,27 @@ agreeYn : 광고 동의 여부
 HTTP METHOD: DELETE
 METHOD NAME: signOut
 PATH : /api/userApi/delete/{id}
+```
+* 결과구조
+```
+{
+    "result": 결과값
+}
+```
+* 결과 예시
+```
+{
+    "result": "success"
+    *** 현재 모든 결과값을 성공으로 보내고 있음.
+}
+```
+
+### 회원 삭제
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: DELETE
+METHOD NAME: deleteUser
+PATH : /api/admin/userApi/delete
 ```
 * 결과구조
 ```
