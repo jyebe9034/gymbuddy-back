@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.frequencyQuestion.service;
 
+import com.gymbuddy.backgymbuddy.admin.enums.category.FaqEnum;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain.FQDto;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.domain.FrequencyQuestion;
 import com.gymbuddy.backgymbuddy.admin.frequencyQuestion.repository.FQRepository;
@@ -10,7 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -22,6 +25,28 @@ public class FQService {
 
     public List<FrequencyQuestion> findAll(int page) {
         return fqRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+    }
+
+    public int selectTotalCount() {
+        return fqRepository.findAll().size();
+    }
+
+    public Map<String, Object> findAllByMap() {
+        List<FrequencyQuestion> account = fqRepository.findFrequencyQuestionByCategoryId(FaqEnum.AC);
+        List<FrequencyQuestion> payment = fqRepository.findFrequencyQuestionByCategoryId(FaqEnum.PY);
+        List<FrequencyQuestion> shipment = fqRepository.findFrequencyQuestionByCategoryId(FaqEnum.SH);
+        List<FrequencyQuestion> programAndGoods = fqRepository.findFrequencyQuestionByCategoryId(FaqEnum.PD);
+        List<FrequencyQuestion> homepage = fqRepository.findFrequencyQuestionByCategoryId(FaqEnum.HP);
+        List<FrequencyQuestion> etc = fqRepository.findFrequencyQuestionByCategoryId(FaqEnum.ETC);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("programAndGoods", programAndGoods);
+        result.put("account", account);
+        result.put("payment", payment);
+        result.put("shipment", shipment);
+        result.put("homepage", homepage);
+        result.put("etc", etc);
+        return result;
     }
 
     public FrequencyQuestion findOne(Long id) {

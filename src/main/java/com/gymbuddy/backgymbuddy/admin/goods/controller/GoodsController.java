@@ -39,6 +39,16 @@ public class GoodsController extends BaseController {
     }
 
     /**
+     * 전체 굿즈 갯수 조회
+     */
+    @GetMapping(GOODS_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectGoodsTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", goodsService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 굿즈 상세
      */
     @GetMapping(GOODS_PREFIX + "/detail/{id}")
@@ -87,7 +97,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 수정
      */
-    @PutMapping(ADMIN_GOODS_PREFIX + "/update/{id}")
+    @PutMapping(GOODS_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateGoods(
             @PathVariable("id") Long id, @RequestBody GoodsDto dto) {
         log.info("굿즈 수정 id: {}, dto: {}", id, dto);

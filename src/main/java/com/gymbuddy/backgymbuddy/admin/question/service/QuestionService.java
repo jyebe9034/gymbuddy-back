@@ -1,9 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.question.service;
 
-import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionComment;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionCommentDto;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionDto;
+import com.gymbuddy.backgymbuddy.admin.question.domain.*;
 import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,12 +88,16 @@ public class QuestionService {
         return dto;
     }
 
+    public int selectTotalCount() {
+        return questionRepository.findAll().size();
+    }
+
     /**
      * 회원 id로 작성한 문의글 전체 가져오기
      * id = 회원 id
      */
-    public List<Question> findAllByUser(String create_id, int page) {
-        return questionRepository.findQuestionListByCreateId(create_id, PageRequest.of(page, 10)).getContent();
+    public List<Question> findAllByUser(String createId, int page) {
+        return questionRepository.findQuestionListByCreateId(createId, PageRequest.of(page, 10)).getContent();
     }
 
     @Transactional
@@ -169,5 +170,15 @@ public class QuestionService {
     @Transactional
     public void delete(Long id) {
         questionRepository.deleteById(id);
+    }
+
+    public List<Question> search(QuestionSearch search, int page) {
+        List<Question> result = new ArrayList<>();
+        if (search.getTitle() != null) {
+            result = questionRepository.findAllByCategoryIdAndTitleContaining(search.getCategoryId(), search.getTitle(), PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        } else if (search.getCategoryId() != null) {
+            result = questionRepository.findAllByCategoryIdAndCreateIdContaining(search.getCategoryId(), search.getCreateId(), PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        }
+        return result;
     }
 }

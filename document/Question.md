@@ -85,6 +85,27 @@ PARAM: 없음
 ]
 ```
 
+### 전체 문의글 갯수 조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectQuestionTotalCount
+PATH: /api/user/question/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 문의글 갯수
+}럼
+```
+* 결과 에시
+```
+{
+    "totalCount": 2
+}
+```
+
 ### 1:1 문의 상세 조회(관리자)
 * 기본 정보 및 파라미터 설명
 ```
@@ -181,10 +202,10 @@ PARAM : List<Integer>
 ```
 HTTP METHOD: GET
 METHOD NAME: selectUserQuestionList
-PATH: /api/user/question/all/{create_id}/{page}
-PARAM: id, page
+PATH: /api/user/question/all/{createId}/{page}
+PARAM: createId, page
 == PARAM 설명 ===
-create_id: 사용자 아이디(String 타입)
+createId: 사용자 아이디(String 타입)
 *** page는 몇번째 페이지인지의 값으로 첫번째 페이지는 0, 두번째 페이지는 1 이런식으로 증가
 ```
 * 결과 구조
@@ -227,7 +248,41 @@ create_id: 사용자 아이디(String 타입)
 ```
 * 결과 예시
 ```
-
+[
+    {
+        "createDate": "2021-02-21T17:52:36.09132",
+        "createId": test,
+        "updateDate": "2021-02-21T17:52:36.09132",
+        "updateId": test,
+        "id": 1,
+        "categoryId": "AC",
+        "title": "제목",
+        "contents": "내용",
+        "imgPath1": "/resources/static/img/question/1613897556016_cat3.jpg",
+        "imgName1": "cat3.jpg",
+        "imgPath2": "/resources/static/img/question/1613897556064_cat2.jpg",
+        "imgName2": "cat2.jpg",
+        "imgPath3": "/resources/static/img/question/1613897556066_cat.jpg",
+        "imgName3": "cat.jpg"
+    },
+    {
+        "createDate": "2021-02-21T17:52:37.750297",
+        "createId": test,
+        "updateDate": "2021-02-21T17:53:29.140459",
+        "updateId": test,
+        "id": 2,
+        "categoryId": "AC",
+        "title": "제목2",
+        "contents": "내용2",
+        "imgPath1": "/resources/static/img/question/1613897557721_cat3.jpg",
+        "imgName1": "cat3.jpg",
+        "imgPath2": "/resources/static/img/question/1613897557729_cat2.jpg",
+        "imgName2": "cat2.jpg",
+        "imgPath3": "/resources/static/img/question/1613897557740_cat.jpg",
+        "imgName3": "cat.jpg"
+    },
+    ...
+]
 ```
 
 ### 1:1 문의 상세 조회(사용자)
@@ -440,4 +495,100 @@ PARAM : 없음
     "result": "success"
     *** 현재 모든 결과값을 성공으로 보내고 있음.
 }
+```
+### 문의글 검색 (관리자)
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: searchQuestion
+PATH: api/admin/question/search/{page}
+*** page는 몇번째 페이지인지의 값으로 첫번째 페이지는 0, 두번째 페이지는 1 이런식으로 증가
+=== PARAM 설명 ===
+{
+    "categoryId": 카테고리 아이디(AC[계정], PY[결제], SH[배송], PR[프로그램], GD[굿즈], ER[교환 및 환불], ETC[기타])(필수),
+    "title"/"createId": 제목/작성자
+}
+```
+* 파라미터 예시
+```
+{
+    "categoryId": "AC",
+    "title": "제목"
+}
+```
+* 결과 구조
+```
+[
+    {
+        "createDate": 생성일
+        "createId": 생성자,
+        "updateDate": 수정일,
+        "updateId": 수정자,
+        "id": 아이디(JPA 생성),
+        "categoryId": 카테고리 아이디,
+        "title": 제목,
+        "contents": 내용,
+        "imgPath1": 이미지 경로1,
+        "imgName1": 이미지 명1,
+        "imgPath2": 이미지 경로2,
+        "imgName2": 이미지 명2,
+        "imgPath3": 이미지 경로3,
+        "imgName3": 이미지 명3
+    },
+    {
+        "createDate": 생성일
+        "createId": 생성자,
+        "updateDate": 수정일,
+        "updateId": 수정자,
+        "id": 아이디(JPA 생성),
+        "categoryId": 카테고리 아이디,
+        "title": 제목,
+        "contents": 내용,
+        "imgPath1": 이미지 경로1,
+        "imgName1": 이미지 명1,
+        "imgPath2": 이미지 경로2,
+        "imgName2": 이미지 명2,
+        "imgPath3": 이미지 경로3,
+        "imgName3": 이미지 명3
+    },
+    ...
+]
+```
+* 결과 예시
+```
+[
+    {
+        "createDate": "2021-02-21T17:52:36.09132",
+        "createId": test,
+        "updateDate": "2021-02-21T17:52:36.09132",
+        "updateId": test,
+        "id": 1,
+        "categoryId": "AC",
+        "title": "제목",
+        "contents": "내용",
+        "imgPath1": "/resources/static/img/question/1613897556016_cat3.jpg",
+        "imgName1": "cat3.jpg",
+        "imgPath2": "/resources/static/img/question/1613897556064_cat2.jpg",
+        "imgName2": "cat2.jpg",
+        "imgPath3": "/resources/static/img/question/1613897556066_cat.jpg",
+        "imgName3": "cat.jpg"
+    },
+    {
+        "createDate": "2021-02-21T17:52:37.750297",
+        "createId": test,
+        "updateDate": "2021-02-21T17:53:29.140459",
+        "updateId": test,
+        "id": 2,
+        "categoryId": "AC",
+        "title": "제목2",
+        "contents": "내용2",
+        "imgPath1": "/resources/static/img/question/1613897557721_cat3.jpg",
+        "imgName1": "cat3.jpg",
+        "imgPath2": "/resources/static/img/question/1613897557729_cat2.jpg",
+        "imgName2": "cat2.jpg",
+        "imgPath3": "/resources/static/img/question/1613897557740_cat.jpg",
+        "imgName3": "cat.jpg"
+    },
+    ...
+]
 ```

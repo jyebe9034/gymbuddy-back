@@ -2,10 +2,7 @@ package com.gymbuddy.backgymbuddy.admin.question.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
-import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionComment;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionCommentDto;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionDto;
+import com.gymbuddy.backgymbuddy.admin.question.domain.*;
 import com.gymbuddy.backgymbuddy.admin.question.service.QuestionCommentService;
 import com.gymbuddy.backgymbuddy.admin.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +39,16 @@ public class QuestionController extends BaseController {
     }
 
     /**
+     * 전체 문의글 갯수 조회
+     */
+    @GetMapping(USER_QUESTION_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectQuestionTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", questionService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 1:1 문의 상세 조회(관리자)
      */
     @GetMapping(ADMIN_QUESTION_PREFIX + "/detail/{id}")
@@ -71,10 +78,10 @@ public class QuestionController extends BaseController {
      * 전체 1:1 문의 조회(사용자)
      * 사용자가 쓴 문의 전체 조회
      */
-    @GetMapping(USER_QUESTION_PREFIX + "/all/{create_id}/{page}")
+    @GetMapping(USER_QUESTION_PREFIX + "/all/{createId}/{page}")
     public ResponseEntity<Map<String, Object>> selectUserQuestionList(
-            @PathVariable("create_id") String create_id, @PathVariable("page") int page) {
-        return createResponseEntity(true, questionService.findAllByUser(create_id, page));
+            @PathVariable("createId") String createId, @PathVariable("page") int page) {
+        return createResponseEntity(true, questionService.findAllByUser(createId, page));
     }
 
     /**
@@ -283,5 +290,15 @@ public class QuestionController extends BaseController {
         Map<String, Object> result = new HashMap<>();
         result.put("result", "success");
         return createResponseEntity(true, result);
+    }
+
+    /**
+     * 문의글 검색(관리자)
+     */
+    @GetMapping(ADMIN_QUESTION_PREFIX + "/search/{page}")
+    public ResponseEntity<List<Question>> searchQuestion(
+            @RequestBody QuestionSearch search, @PathVariable("page") int page) {
+        log.info("문의글 검색: {}", search);
+        return createResponseEntity(true, questionService.search(search, page));
     }
 }

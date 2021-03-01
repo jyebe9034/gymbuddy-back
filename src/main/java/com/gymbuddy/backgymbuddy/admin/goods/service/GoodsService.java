@@ -29,6 +29,10 @@ public class GoodsService {
         return goodsRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
+    public int selectTotalCount() {
+        return goodsRepository.findAll().size();
+    }
+
     public List<GoodsDto> findAllByDto(int page) {
         List<Goods> goodsList = findAll(page);
         List<GoodsDto> dtoList = new ArrayList<>();
