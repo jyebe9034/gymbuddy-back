@@ -202,10 +202,10 @@ PARAM : List<Integer>
 ```
 HTTP METHOD: GET
 METHOD NAME: selectUserQuestionList
-PATH: /api/user/question/all/{create_id}/{page}
-PARAM: id, page
+PATH: /api/user/question/all/{createId}/{page}
+PARAM: createId, page
 == PARAM 설명 ===
-create_id: 사용자 아이디(String 타입)
+createId: 사용자 아이디(String 타입)
 *** page는 몇번째 페이지인지의 값으로 첫번째 페이지는 0, 두번째 페이지는 1 이런식으로 증가
 ```
 * 결과 구조
@@ -248,7 +248,41 @@ create_id: 사용자 아이디(String 타입)
 ```
 * 결과 예시
 ```
-
+[
+    {
+        "createDate": "2021-02-21T17:52:36.09132",
+        "createId": test,
+        "updateDate": "2021-02-21T17:52:36.09132",
+        "updateId": test,
+        "id": 1,
+        "categoryId": "AC",
+        "title": "제목",
+        "contents": "내용",
+        "imgPath1": "/resources/static/img/question/1613897556016_cat3.jpg",
+        "imgName1": "cat3.jpg",
+        "imgPath2": "/resources/static/img/question/1613897556064_cat2.jpg",
+        "imgName2": "cat2.jpg",
+        "imgPath3": "/resources/static/img/question/1613897556066_cat.jpg",
+        "imgName3": "cat.jpg"
+    },
+    {
+        "createDate": "2021-02-21T17:52:37.750297",
+        "createId": test,
+        "updateDate": "2021-02-21T17:53:29.140459",
+        "updateId": test,
+        "id": 2,
+        "categoryId": "AC",
+        "title": "제목2",
+        "contents": "내용2",
+        "imgPath1": "/resources/static/img/question/1613897557721_cat3.jpg",
+        "imgName1": "cat3.jpg",
+        "imgPath2": "/resources/static/img/question/1613897557729_cat2.jpg",
+        "imgName2": "cat2.jpg",
+        "imgPath3": "/resources/static/img/question/1613897557740_cat.jpg",
+        "imgName3": "cat.jpg"
+    },
+    ...
+]
 ```
 
 ### 1:1 문의 상세 조회(사용자)

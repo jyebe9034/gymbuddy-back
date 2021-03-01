@@ -34,8 +34,8 @@ public class GoodsController extends BaseController {
      * 전체 굿즈 조회
      */
     @GetMapping(GOODS_PREFIX + "/all/{page}")
-    public ResponseEntity<List<Goods>> selectGoodsList(@PathVariable("page") int page) {
-        return createResponseEntity(true, goodsService.findAll(page));
+    public ResponseEntity<List<GoodsDto>> selectGoodsList(@PathVariable("page") int page) {
+        return createResponseEntity(true, goodsService.findAllByDto(page));
     }
 
     /**
