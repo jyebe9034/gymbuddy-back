@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_USER_API;
-import static com.gymbuddy.backgymbuddy.admin.base.Constants.USER_API;
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.*;
 
 @Slf4j
 @RestController
@@ -117,7 +116,6 @@ public class UserController extends BaseController {
     public ResponseEntity<Map<String, Object>> checkAuthNum(@RequestBody AuthDto auth) {
         log.info("인증번호 일치 확인: {}", auth);
         Auth origin = logicService.findOneAuthById(auth.getId());
-
 
         Map<String, Object> result = new HashMap<>();
         // 인증번호 비교
@@ -312,6 +310,23 @@ public class UserController extends BaseController {
     public ResponseEntity<Map<String, Object>> signOut(@PathVariable("id") Long id) {
         log.info("회원 탈퇴: {}", id);
         logicService.signOut(id);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", "success");
+        return createResponseEntity(true, result);
+    }
+
+    /**
+     * 회원 삭제
+     */
+    @DeleteMapping(ADMIN_USER_API + "/delete")
+    public ResponseEntity<Map<String, Object>> deleteUser(@RequestBody List<Integer> ids) {
+        log.info("회원 삭제: {}", ids);
+
+        for (int id : ids) {
+            long idL = new Long(id);
+            logicService.delete(idL);
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("result", "success");
