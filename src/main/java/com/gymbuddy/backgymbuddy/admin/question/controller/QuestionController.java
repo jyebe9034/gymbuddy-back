@@ -78,10 +78,10 @@ public class QuestionController extends BaseController {
      * 전체 1:1 문의 조회(사용자)
      * 사용자가 쓴 문의 전체 조회
      */
-    @GetMapping(USER_QUESTION_PREFIX + "/all/{create_id}/{page}")
+    @GetMapping(USER_QUESTION_PREFIX + "/all/{createId}/{page}")
     public ResponseEntity<Map<String, Object>> selectUserQuestionList(
-            @PathVariable("create_id") String create_id, @PathVariable("page") int page) {
-        return createResponseEntity(true, questionService.findAllByUser(create_id, page));
+            @PathVariable("createId") String createId, @PathVariable("page") int page) {
+        return createResponseEntity(true, questionService.findAllByUser(createId, page));
     }
 
     /**

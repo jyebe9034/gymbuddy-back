@@ -96,8 +96,8 @@ public class QuestionService {
      * 회원 id로 작성한 문의글 전체 가져오기
      * id = 회원 id
      */
-    public List<Question> findAllByUser(String create_id, int page) {
-        return questionRepository.findQuestionListByCreateId(create_id, PageRequest.of(page, 10)).getContent();
+    public List<Question> findAllByUser(String createId, int page) {
+        return questionRepository.findQuestionListByCreateId(createId, PageRequest.of(page, 10)).getContent();
     }
 
     @Transactional
