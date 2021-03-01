@@ -3,6 +3,7 @@ package com.gymbuddy.backgymbuddy.admin.program.domain;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gymbuddy.backgymbuddy.admin.base.Product;
+import com.gymbuddy.backgymbuddy.admin.enums.status.ProgramStatus;
 import lombok.Data;
 import lombok.ToString;
 
@@ -64,6 +65,13 @@ public class Program extends Product {
      */
     @Column(nullable = false)
     private String mainYn;
+
+    /**
+     * 프로그램 상태
+     */
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProgramStatus status;
 
 //    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
 //    private List<OrderProgram> orderProduct = new ArrayList<>();
