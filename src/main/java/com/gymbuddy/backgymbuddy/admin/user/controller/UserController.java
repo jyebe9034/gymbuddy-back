@@ -210,7 +210,8 @@ public class UserController extends BaseController {
         Map<String, Object> result = new HashMap<>();
 
         // 가입 여부 확인
-        if (!logicService.checkDuplicateEmail(user.getEmail())) {
+        Optional<User> origin = logicService.findOneByEmail(user.getEmail());
+        if (!origin.isPresent()) {
             result.put("successYn", "N");
             result.put("msg", "가입된 회원정보가 없습니다. \n 다시 시도해주세요");
             return createResponseEntity(true, result);
@@ -244,7 +245,7 @@ public class UserController extends BaseController {
         String content = "<div style='background-color: #00AD84; border:4px solid #231815; text-align: center;'>" +
                 "<div><img src='gymbuddy.co.kr/resources/static/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
                 "<div style='font: 700 16pt sans-serif; line-height: 140%;'>" +
-                "안녕하세요, " + user.getName() + " 님!<br>" + "임시 비밀번호가 발급되었습니다.</div>" +
+                "안녕하세요, " + origin.get().getName() + " 님!<br>" + "임시 비밀번호가 발급되었습니다.</div>" +
                 "임시로 발급해드린 비밀번호는 <span style='color: yellow;'>" + authNum + "<span>입니다.<br>" +
                 "로그인 후 마이페이지에서 비밀번호를 변경해주세요." +
                 "<a href='gymbuddy.co.kr" + "/join/login'>"+
