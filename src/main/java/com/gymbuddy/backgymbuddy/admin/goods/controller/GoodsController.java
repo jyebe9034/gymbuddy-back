@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.goods.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.enums.status.GoodsStatus;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.Goods;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsDto;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsOption;
@@ -60,7 +61,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 등록
      */
-    @PostMapping(ADMIN_GOODS_PREFIX + "/new")
+    @PostMapping(GOODS_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertGoods(@RequestBody GoodsDto dto) {
         log.info("굿즈 등록: {}", dto);
 
@@ -76,7 +77,6 @@ public class GoodsController extends BaseController {
                 dto.setThumbnailImgName(thumbnailName);
                 dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
             }
-
             // 상세 이미지
             if(dto.getDetailFile() != null) {
                 String detailName = dto.getThumbnailFile().getOriginalFilename();
@@ -210,6 +210,33 @@ public class GoodsController extends BaseController {
 
         Map<String, Object> result = new HashMap<>();
         result.put("result", "success");
+        return createResponseEntity(true, result);
+    }
+
+    /**
+     * 굿즈 상태 변경
+     */
+    @PutMapping("/goods/updateStatus/{status}")
+    public ResponseEntity<Map<String, Object>> updateStatus(
+            @RequestBody List<Integer> ids, @PathVariable GoodsStatus status) {
+        log.info("굿즈 상태 변경: {}", ids);
+
+        boolean flag = true;
+
+        if(ids != null) {
+            for(int id : ids) {
+                long idL = new Long(id);
+                goodsService.updateStatus(idL, status);
+
+                Goods findGoods = goodsService.findOne(idL);
+                if (status != null) {
+                    flag = status.equals(findGoods.getStatus()) ? true : false;
+                }
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", flag);
         return createResponseEntity(true, result);
     }
 }

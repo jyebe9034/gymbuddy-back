@@ -98,20 +98,11 @@ PARAM : 없음
 ```
 HTTP METHOD: GET
 METHOD NAME: searchCreateDate
-PATH: /api/newsLetter/search
+PATH: /api/newsLetter/search/{start}/{end}
 === PARAM 설명 ===
-{
-    "start": 시작 구독일자,
-    "end": 마지막 구독일자
-}
-```
-* 파라미터 예시
-```
-{
-    "start": "2020-02-23 00:00:00",
-    "end": "2020-02-23 00:00:00"
-}
-*** 초단위까지 기재해야 합니다.
+start: 시작 구독일자 
+end: 마지막 구독일자
+(예시: 2021-02-23)
 ```
 * 결과 구조
 ```

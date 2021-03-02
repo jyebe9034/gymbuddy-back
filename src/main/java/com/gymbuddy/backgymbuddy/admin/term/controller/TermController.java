@@ -64,24 +64,26 @@ public class TermController extends BaseController {
      * 약관 등록
      */
     @PostMapping(TERM_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertTerm(@ModelAttribute TermDto term) {
-        log.info("약관 등록: {}", term);
+    public ResponseEntity<Map<String, Object>> insertTerm(@ModelAttribute TermDto dto) {
+        log.info("약관 등록: {}", dto);
 
-        String imgName = term.getFile().getOriginalFilename();
+        String imgName = dto.getFile().getOriginalFilename();
         try {
             if (!saveFile.exists()) {
                 saveFile.mkdir();
             }
-            File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
-            term.getFile().transferTo(realFile);
-            term.setImgName(imgName);
-            term.setImgPath(termPath + realFile.getName());
+            if (!dto.getFile().isEmpty()) {
+                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
+                dto.getFile().transferTo(realFile);
+                dto.setImgName(imgName);
+                dto.setImgPath(termPath + realFile.getName());
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("id", termService.save(term));
+        result.put("id", termService.save(dto));
         return createResponseEntity(true, result);
     }
 

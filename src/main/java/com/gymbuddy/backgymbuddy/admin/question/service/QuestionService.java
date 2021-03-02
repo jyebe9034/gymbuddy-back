@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.question.service;
 
+import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
 import com.gymbuddy.backgymbuddy.admin.question.domain.*;
 import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -21,8 +24,25 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionCommentService questionCommentService;
 
-    public List<Question> findAll(int page) {
-        return questionRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+    public Map<String, Object> findAll(int page) {
+        List<Question> questionList = questionRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        List<QuestionEnum> categoryList = categoryList();
+        Map<String, Object> result = new HashMap<>();
+        result.put("questionList", questionList);
+        result.put("categoryList", categoryList);
+        return result;
+    }
+
+    public List<QuestionEnum> categoryList() {
+        List<QuestionEnum> categoryList = new ArrayList<>();
+        categoryList.add(QuestionEnum.PY);
+        categoryList.add(QuestionEnum.AC);
+        categoryList.add(QuestionEnum.ER);
+        categoryList.add(QuestionEnum.GD);
+        categoryList.add(QuestionEnum.ETC);
+        categoryList.add(QuestionEnum.SH);
+        categoryList.add(QuestionEnum.PR);
+        return categoryList;
     }
 
     public Question findOne(Long id) {

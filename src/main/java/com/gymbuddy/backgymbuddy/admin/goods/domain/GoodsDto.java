@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.goods.domain;
 
+import com.gymbuddy.backgymbuddy.admin.enums.status.GoodsStatus;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +14,7 @@ public class GoodsDto {
     private String name;
     private BigDecimal price;
     private String mainYn;
+    private GoodsStatus status;
 
     private MultipartFile thumbnailFile;
     private String thumbnailImgPath;

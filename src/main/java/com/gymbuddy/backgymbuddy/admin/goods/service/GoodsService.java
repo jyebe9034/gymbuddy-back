@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.goods.service;
 
+import com.gymbuddy.backgymbuddy.admin.enums.status.GoodsStatus;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.Goods;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsDto;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsOption;
@@ -26,7 +27,7 @@ public class GoodsService {
     private final GoodsOptionRepository optionRepository;
 
     public List<Goods> findAll(int page) {
-        return goodsRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        return goodsRepository.findAllByMainYnAndCreateDate(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
     public int selectTotalCount() {
@@ -56,6 +57,9 @@ public class GoodsService {
         }
         if (goods.getMainYn() != null) {
             dto.setMainYn(goods.getMainYn());
+        }
+        if (goods.getStatus() != null) {
+            dto.setStatus(goods.getStatus());
         }
         if (goods.getThumbnailImgName() != null) {
             dto.setThumbnailImgName(goods.getThumbnailImgName());
@@ -120,6 +124,9 @@ public class GoodsService {
         if (dto.getMainYn() != null) {
             goods.setMainYn(dto.getMainYn());
         }
+        if (dto.getStatus() != null) {
+            goods.setStatus(dto.getStatus());
+        }
         if (dto.getThumbnailImgName() != null) {
             goods.setThumbnailImgName(dto.getThumbnailImgName());
         }
@@ -165,6 +172,9 @@ public class GoodsService {
         if (dto.getMainYn() != null) {
             goods.setMainYn(dto.getMainYn());
         }
+        if (dto.getStatus() != null) {
+            goods.setStatus(dto.getStatus());
+        }
         if (dto.getThumbnailImgName() != null) {
             goods.setThumbnailImgName(dto.getThumbnailImgName());
         }
@@ -209,6 +219,7 @@ public class GoodsService {
             dto.setName(goods.getName());
             dto.setPrice(goods.getPrice());
             dto.setMainYn(goods.getMainYn());
+            dto.setStatus(goods.getStatus());
             if (goods.getThumbnailImgPath() != null) {
                 dto.setThumbnailImgPath(goods.getThumbnailImgPath());
             }
@@ -224,5 +235,13 @@ public class GoodsService {
             dtoList.add(dto);
         });
         return dtoList;
+    }
+
+    @Transactional
+    public void updateStatus(Long id, GoodsStatus status) {
+        Goods goods = findOne(id);
+        if (status != null) {
+            goods.setStatus(status);
+        }
     }
 }

@@ -11,12 +11,4 @@ public class BackGymbuddyApplication {
     public static void main(String[] args) {
         SpringApplication.run(BackGymbuddyApplication.class, args);
     }
-
-    /*@Bean
-    public AuditorAware<String> auditorProvider() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = (UserDetails) principal;
-        String loginId = userDetails.getUsername();
-        return () -> Optional.of(loginId);
-    }*/
 }

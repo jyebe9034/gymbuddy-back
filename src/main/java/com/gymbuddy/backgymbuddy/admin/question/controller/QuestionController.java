@@ -33,7 +33,7 @@ public class QuestionController extends BaseController {
     /**
      * 전체 1:1 문의글 조회(관리자)
      */
-    @GetMapping(ADMIN_QUESTION_PREFIX + "/all/{page}")
+    @GetMapping(USER_QUESTION_PREFIX + "/all/{page}")
     public ResponseEntity<Map<String, Object>> selectAdminQuestionList(@PathVariable int page) {
         return createResponseEntity(true, questionService.findAll(page));
     }
@@ -96,7 +96,7 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 등록(사용자)
      */
-    @PostMapping(USER_QUESTION_PREFIX + "/question/new")
+    @PostMapping("/question/new")
     public ResponseEntity<Map<String, Object>> insertQuestion(@ModelAttribute QuestionDto dto) {
         log.info("1:1 문의 등록: {}", dto);
 
@@ -108,22 +108,28 @@ public class QuestionController extends BaseController {
                 saveFile.mkdir();
             }
             // 파일1
-            File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
-            dto.getFile1().transferTo(realFile1);
-            dto.setImgName1(imgName1);
-            dto.setImgPath1(questionPath + "/" + realFile1.getName());
+            r
+                File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
+                dto.getFile1().transferTo(realFile1);
+                dto.setImgName1(imgName1);
+                dto.setImgPath1(questionPath + "/" + realFile1.getName());
+            }
 
             // 파일2
-            File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
-            dto.getFile2().transferTo(realFile2);
-            dto.setImgName2(imgName2);
-            dto.setImgPath2(questionPath + "/" + realFile2.getName());
+            if (!dto.getFile2().isEmpty()) {
+                File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
+                dto.getFile2().transferTo(realFile2);
+                dto.setImgName2(imgName2);
+                dto.setImgPath2(questionPath + "/" + realFile2.getName());
+            }
 
             // 파일3
-            File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
-            dto.getFile3().transferTo(realFile3);
-            dto.setImgName3(imgName3);
-            dto.setImgPath3(questionPath + "/" + realFile3.getName());
+            if (!dto.getFile3().isEmpty()) {
+                File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
+                dto.getFile3().transferTo(realFile3);
+                dto.setImgName3(imgName3);
+                dto.setImgPath3(questionPath + "/" + realFile3.getName());
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -143,7 +149,7 @@ public class QuestionController extends BaseController {
 
         Question question = questionService.findOne(id);
 
-        if (dto.getFile1() != null) {
+        if (!dto.getFile1().isEmpty()) {
             String imgName1 = dto.getFile1().getOriginalFilename();
             if (!question.getImgName1().equals(imgName1)) {
                 try {
@@ -161,7 +167,7 @@ public class QuestionController extends BaseController {
                 }
             }
         }
-        if (dto.getFile2() != null) {
+        if (!dto.getFile2().isEmpty()) {
             String imgName2 = dto.getFile2().getOriginalFilename();
             if (!question.getImgName2().equals(imgName2)) {
                 try {
@@ -179,7 +185,7 @@ public class QuestionController extends BaseController {
                 }
             }
         }
-        if (dto.getFile3() != null) {
+        if (!dto.getFile3().isEmpty()) {
             String imgName3 = dto.getFile3().getOriginalFilename();
             if (!question.getImgName3().equals(imgName3)) {
                 try {
