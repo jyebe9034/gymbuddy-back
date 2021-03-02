@@ -53,9 +53,9 @@ email : 이메일
 * 결과 예시
 ```
 {
-    "authNum": "6G1W4Z",
+    "authNum": "ZTJ1MG",
     "successYn": "Y",
-    "authId": 28
+    "authId": 33
 }
 {
     ** 가입된 이메일이 아닌 경우
@@ -100,7 +100,6 @@ METHOD NAME: sendOnetimePassword
 PATH : /api/userApi/onetimePw
 PARAM : Map<String, Object>
 === PARAM 설명 ===
-name : 이름
 email : 이메일
 ```
 * 결과구조
