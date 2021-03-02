@@ -208,6 +208,7 @@ PATH : /api/admin/goods/new
         "name": 굿즈 이름
         "price": 가격,
         "mainYn": 메인 노출 여부,
+        "status": 굿즈 상태 (판매중: SALE, 품절: SOLDOUT),
         "optionList": [
             {
                 "id": 옵션 아이디(JPA생성),
@@ -225,6 +226,7 @@ PATH : /api/admin/goods/new
     "name": "반팔 티셔츠",
     "price": "25000",
     "mainYn": "N",
+    "status": "SALE",
     "optionList": [
         {
             "colorAndSize": "White S",
@@ -269,6 +271,7 @@ PATH : /api/admin/goods/update/{id}
         "name": 굿즈 이름
         "price": 가격,
         "mainYn": 메인 노출 여부,
+        "status": 굿즈 상태 (판매중: SALE, 품절: SOLDOUT),
         "optionList": [
             {
                 "id": 옵션 아이디(JPA생성),
@@ -287,6 +290,7 @@ PATH : /api/admin/goods/update/{id}
     "name": "반팔티",
     "price": "25000",
     "mainYn": "N",
+    "status": "SALE"
     "optionList": [
         {
             "id": 1,
@@ -328,6 +332,35 @@ PATH : /api/admin/goods/update/{id}
 HTTP METHOD: DELETE
 METHOD NAME: deleteGoods
 PATH : /api/admin/goods/delete
+PARAM : List<Integer>
+=== PARAM 설명 ===
+* 아이디 배열을 넘긴다.
+```
+* 파라미터 구조
+```
+[아이디, 아이디, 아이디] 
+```
+* 결과 구조
+```
+{
+    "result": 결과값
+}
+```
+* 결과 예시
+```
+{
+    "result": "success"
+    *** 현재 모든 결과값을 성공으로 보내고 있음.
+}
+```
+
+### 굿즈 상태 변경
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: PUT
+METHOD NAME: updateStatus
+PATH : /api/admin/goods/updateStatus/{status}
+*** 변경하는 status를 Path에 입력
 PARAM : List<Integer>
 === PARAM 설명 ===
 * 아이디 배열을 넘긴다.

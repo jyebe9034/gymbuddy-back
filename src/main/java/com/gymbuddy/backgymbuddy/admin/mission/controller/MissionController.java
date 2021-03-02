@@ -50,22 +50,26 @@ public class MissionController extends BaseController {
                 saveFile.mkdir();
             }
             // 파일1
-            File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
-            dto.getFile1().transferTo(realFile1);
-            dto.setImgName1(imgName1);
-            dto.setImgPath1(missionPath + "/" + realFile1.getName());
-
+            if (!dto.getFile1().isEmpty()) {
+                File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
+                dto.getFile1().transferTo(realFile1);
+                dto.setImgName1(imgName1);
+                dto.setImgPath1(missionPath + "/" + realFile1.getName());
+            }
             // 파일2
-            File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
-            dto.getFile2().transferTo(realFile2);
-            dto.setImgName2(imgName2);
-            dto.setImgPath2(missionPath + "/" + realFile2.getName());
-
+            if (!dto.getFile2().isEmpty()) {
+                File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
+                dto.getFile2().transferTo(realFile2);
+                dto.setImgName2(imgName2);
+                dto.setImgPath2(missionPath + "/" + realFile2.getName());
+            }
             // 파일3
-            File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
-            dto.getFile3().transferTo(realFile3);
-            dto.setImgName3(imgName3);
-            dto.setImgPath3(missionPath + "/" + realFile3.getName());
+            if (!dto.getFile3().isEmpty()) {
+                File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
+                dto.getFile3().transferTo(realFile3);
+                dto.setImgName3(imgName3);
+                dto.setImgPath3(missionPath + "/" + realFile3.getName());
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
         }

@@ -7,12 +7,23 @@ HTTP METHOD: GET
 METHOD NAME: selectAdminQuestionList
 PATH: /api/admin/question/{page}
 *** page는 몇번째 페이지인지의 값으로 첫번째 페이지는 0, 두번째 페이지는 1 이런식으로 증가
+*** categoryList는 한글순으로 배치함
 PARAM: 없음
 ```
 * 결과 구조
 ```
 [
     {
+        "categoryList": [
+        "PY",
+        "AC",
+        "ER",
+        "GD",
+        "ETC",
+        "SH",
+        "PR"
+    ],
+    "questionList": [
         "createDate": 생성일
         "createId": 생성자,
         "updateDate": 수정일,
@@ -45,6 +56,7 @@ PARAM: 없음
         "imgName3": 이미지 명3
     },
     ...
+    ]
 ]
 ```
 * 결과 예시
