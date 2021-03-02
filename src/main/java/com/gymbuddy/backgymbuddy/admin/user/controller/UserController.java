@@ -16,10 +16,7 @@ import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.*;
 
@@ -36,11 +33,11 @@ public class UserController extends BaseController {
     private static String HOSTPW = "7pGA9034!";
 
     /**
-     * 인증번호 메일 발송
+     * 회원가입 인증번호 메일 발송
      */
     @PostMapping(USER_API + "/sendAuthNumber")
     public ResponseEntity<Map<String, Object>> sendAuthNumber(@RequestBody UserDto user) {
-        log.info("인증번호 발송을 위한 메일번호: {}", user);
+        log.info("회원가입 인증번호 발송을 위한 메일번호: {}", user);
         Map<String, Object> result = new HashMap<>();
 
         // 이미 가입된 이메일인지 확인
@@ -97,6 +94,83 @@ public class UserController extends BaseController {
 
             // 이메일과 인증번호 DB에 저장
             logicService.saveAuthNum(user.getEmail(), authNum);
+            Auth oneAuth = logicService.findOneAuthByEmail(user.getEmail());
+            result.put("authId", oneAuth.getId());
+            result.put("successYn", "Y");
+        } catch (AddressException e) {
+            log.error(e.getMessage());
+        } catch (MessagingException e) {
+            log.error(e.getMessage());
+        }
+
+        return createResponseEntity(true, result);
+    }
+
+    /**
+     * 회원가입 인증번호 메일 발송
+     */
+    @PostMapping(USER_API + "/sendAuthNumberForPw")
+    public ResponseEntity<Map<String, Object>> sendAuthNumberForPw(@RequestBody UserDto user) {
+        log.info("비밀번호 찾기 인증번호 발송을 위한 메일번호: {}", user);
+        Map<String, Object> result = new HashMap<>();
+
+        // 회원정보가 있는지 확인
+        Optional<User> origin = logicService.findOneByEmail(user.getEmail());
+        if (!origin.isPresent()) {
+            result.put("successYn", "N");
+            result.put("msg", "회원정보가 없습니다.");
+            return createResponseEntity(true, result);
+        }
+
+        // SMTP 서버 정보를 설정한다.
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", 465);
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.ssl.enable", "true");
+        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+
+        Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(HOSTMAIL, HOSTPW);
+            }
+        });
+
+        // 인증번호 생성
+        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+        String authNum = "";
+        for (int i = 0; i < 6; i++) {
+            int idx = (int) (charSet.length * Math.random());
+            authNum += charSet[idx];
+        }
+        result.put("authNum", authNum);
+
+        // 이메일 내용
+        String content = "<div style='background-color: #00AD84; border:4px solid #231815; text-align: center;'>" +
+                "<div><img src='gymbuddy.co.kr/resources/static/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
+                "<div style='font: 700 16pt sans-serif; line-height: 140%;'>" +
+                "안녕하세요, " + origin.get().getName() + " 님!<br>" + "회원님의 인증번호는" + authNum + "입니다.</div>";
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(HOSTMAIL));
+
+            //수신자메일주소
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
+
+            // 메일 제목
+            message.setSubject("[운동친구] 본인인증을 위한 인증 메일입니다.");
+            // 메일 내용
+            message.setText(content, "UTF-8", "html");
+            // 메일 전송
+            Transport.send(message);
+
+            // 이메일과 인증번호 DB에 저장
+            logicService.saveAuthNum(user.getEmail(), authNum);
+
+            // 인증 id 조회
             Auth oneAuth = logicService.findOneAuthByEmail(user.getEmail());
             result.put("authId", oneAuth.getId());
             result.put("successYn", "Y");

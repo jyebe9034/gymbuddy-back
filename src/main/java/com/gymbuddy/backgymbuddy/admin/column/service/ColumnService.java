@@ -4,6 +4,7 @@ import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
 import com.gymbuddy.backgymbuddy.admin.column.domain.ColumnsDto;
 import com.gymbuddy.backgymbuddy.admin.column.repository.ColumnRepository;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
+import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriterDto;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.repository.CWRepository;
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
 import lombok.RequiredArgsConstructor;
@@ -51,12 +52,33 @@ public class ColumnService {
         return columnRepository.findById(id).get();
     }
 
+    public ColumnsDto findOneDto(Long id) {
+        Columns origin = columnRepository.findById(id).get();
+        ColumnWriter originCw = cwRepository.findById(origin.getColumnWriter().getId()).get();
+
+        ColumnWriterDto columnWriter = new ColumnWriterDto();
+        columnWriter.setId(originCw.getId());
+        columnWriter.setName(originCw.getName());
+        columnWriter.setJob(originCw.getJob());
+        columnWriter.setContents(originCw.getContents());
+
+        ColumnsDto column = new ColumnsDto();
+        column.setId(origin.getId());
+        column.setTitle(origin.getTitle());
+        column.setContents(origin.getContents());
+        column.setColumnWriter(columnWriter);
+        column.setImgName(origin.getImgName());
+        column.setImgPath(origin.getImgPath());
+
+        return column;
+    }
+
     @Transactional
     public Long save(ColumnsDto columns) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         // 컬럼 작성자 조회
         ColumnWriter columnWriter = cwRepository.findById(columns.getColumnWriterId()).get();
@@ -77,8 +99,8 @@ public class ColumnService {
         if (columns.getImgName() != null) {
             entity.setImgName(columns.getImgName());
         }
-//        entity.setCreateId(loginId);
-//        entity.setUpdateId(loginId);
+        entity.setCreateId(loginId);
+        entity.setUpdateId(loginId);
 
         columnRepository.save(entity);
         return entity.getId();
@@ -87,9 +109,9 @@ public class ColumnService {
     @Transactional
     public void update(Long id, ColumnsDto column) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         Columns origin = findOne(id);
         if (origin.getTitle() != null) {
@@ -108,7 +130,7 @@ public class ColumnService {
         if (origin.getImgName() != null) {
             origin.setImgName(column.getImgName());
         }
-//        origin.setUpdateId(loginId);
+        origin.setUpdateId(loginId);
     }
 
     @Transactional

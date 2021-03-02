@@ -133,7 +133,7 @@ PARAM: 없음
 ]
 ```
 
-### 메인 베너 상세 조회
+### 컬럼 상세 조회
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: GET
@@ -145,35 +145,41 @@ PARAM: 없음
 * 결과 구조
 ```
 {
-    "createDate": 생성일
-    "createId": 생성자,
-    "updateDate": 수정일,
-    "updateId": 수정자,
-    "id": 아이디(JPA 생성),
-    "title": 제목,
-    "contents": 내용,
-    "imgPath": 이미지 경로,
-    "imgName": 이미지 명,
-    "mainYn": 메인 노출 여부
+    "id": 컬럼아이디용(JPA 생성)
+    "title": 제목
+    "contents": 내용
+    "columnWriterId": 컬럼작성자아이디(null로 넘어옴)
+    "file": 파일((null로 넘어옴)
+    "imgPath": 이미지 경로
+    "imgName": 이미지 명
+    "columnWriter": {
+        "id": 컬럼 작성자 아이디(JPA 생성)
+        "name": 작성자 이름
+        "job": 작성자 직업
+        "contents": 작성자 관련 내
+    }
 }
 ```
 * 결과 예시
 ```
 {
-    "createDate": "2021-02-06T21:50:00.96",
-    "createId": test,
-    "updateDate": "2021-02-06T21:50:00.96",
-    "updateId": test,
-    "id": 2,
-    "title": "컬럼2",
-    "contents": "컬럼2 입니다.",
-    "imgPath": "/resources/static/img/columns/1612615800922_테스트.png",
-    "imgName": "테스트.png",
-    "mainYn": "Y"
+    "id": 6,
+    "title": "컬럼6",
+    "contents": "컬럼입니다.",
+    "columnWriterId": null,
+    "file": null,
+    "imgPath": "/resources/static/img/columns/1613951594255_테스트.png",
+    "imgName": "1613951594255_테스트.png",
+    "columnWriter": {
+        "id": 2,
+        "name": "김운동",
+        "job": "운동선수",
+        "contents": "운동친구의 코치입니다."
+    }
 }
 ```
 
-### 메인 베너 등록
+### 컬럼 등록
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD : POST
@@ -200,7 +206,7 @@ mainYn: 메인 노출 여부(Y or N)
 }
 ```
 
-### 메인 베너 수정
+### 컬럼 수정
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD : PUT
@@ -228,7 +234,7 @@ mainYn: 메인 노출 여부(Y or N)
 }
 ```
 
-### 메인 베너 삭제
+### 컬럼 삭제
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD : DELETE

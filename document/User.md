@@ -1,6 +1,6 @@
 # User API
 
-### 인증번호 메일 발송
+### 회원가입시 인증번호 메일 발송
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: POST
@@ -28,6 +28,38 @@ email : 이메일
 }
 {
     "msg": "이미 가입된 이메일입니다.",
+    "successYn": "N"
+}
+```
+
+### 비밀번호 찾기시 인증번호 메일 발송
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: POST
+METHOD NAME: sendAuthNumberForPw
+PATH : /api/userApi/sendAuthNumberForPw
+PARAM : Map<String, Object>
+=== PARAM 설명 ===
+email : 이메일
+```
+* 결과구조
+```
+{
+    authNum: 인증번호
+    successYn": 성공여부
+    authId: 아이디(JPA 생성)
+}
+```
+* 결과 예시
+```
+{
+    "authNum": "6G1W4Z",
+    "successYn": "Y",
+    "authId": 28
+}
+{
+    ** 가입된 이메일이 아닌 경우
+    "msg": "회원정보가 없습니다.",
     "successYn": "N"
 }
 ```

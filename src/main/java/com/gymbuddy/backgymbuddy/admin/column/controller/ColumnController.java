@@ -65,7 +65,7 @@ public class ColumnController extends BaseController {
     @GetMapping(COLUMN_PREFIX + "/detail/{id}")
     public ResponseEntity<Columns> selectColumnDetail(@PathVariable("id") Long id) {
         log.info("컬럼 아이디로 조회: {}", id);
-        return createResponseEntity(true, columnService.findOne(id));
+        return createResponseEntity(true, columnService.findOneDto(id));
     }
 
     /**
