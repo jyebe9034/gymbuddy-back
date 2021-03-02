@@ -184,13 +184,15 @@ METHOD NAME: insertProgram
 PATH : /api/program/new
 === PARAM 설명 ===
 {
+    "thumbnailFile" : 썸네일 파일
+    "detailFile" : 상세 파
     "title" : 제목
     "coach" : 강사이름
     "classAddress" : 클래스 장소
-    "classDate" : 클래스가 열리는 기간
+    "classDate" : 클래스가 열리는 기간(일자)
     "classTime" : 클래스가 열리는 시간
-    "price" : 금액
-    "mainYn" : 메인 노출 여부
+    "price" : 금액(가격)
+    "mainYn" : 메인 노출 여부(Y or N)
     "optionList" : [
         {
             "classDateTime" : 구체적인 일자와 시간
@@ -204,6 +206,8 @@ PATH : /api/program/new
 * 파라미터 예시
 ```
 {
+    "thumbnailFile" : "thumbnail.jpg",
+    "detailFile" : "detail.jpg",
     "title" : "원데이 클래스: 주짓수",
     "coach" : "김짓수",
     "classAddress" : "홍대역 9번출구 00빌딩 5층",
