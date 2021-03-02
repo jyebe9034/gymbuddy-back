@@ -43,6 +43,13 @@ public class UserLogicService {
     }
 
     /**
+     * 이메일로 회원 엔티티 조회
+     */
+    public Optional<User> findOneByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    /**
      * 이메일로 인증 엔티티 조회
      */
     public Auth findOneAuthByEmail(String email) {
@@ -259,6 +266,9 @@ public class UserLogicService {
         origin.setPassword(password);
     }
 
+    /**
+     * 회원 삭제
+     */
     @Transactional
     public void delete(Long id) {
         userRepository.deleteById(id);
