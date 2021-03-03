@@ -25,6 +25,8 @@ public class ProgramDto {
 
     private String mainYn;
 
+    private String status;
+
     private MultipartFile thumbnailFile;
 
     private String thumbnailImgPath;

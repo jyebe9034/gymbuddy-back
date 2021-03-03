@@ -104,12 +104,24 @@ public class ProgramController extends BaseController {
     }
 
     /**
+     * 프로그램 진행상태 변경
+     */
+    @PutMapping(PROGRAM_PREFIX + "/updateStatus")
+    public ResponseEntity<Map<String, Object>> updateProgramStatus(@RequestBody Map<String, Object> param) {
+        log.info("프로그램 진행상태 변경: {}", param);
+
+        programService.updateStatus(param);
+
+        return createResponseEntity(true, "");
+    }
+
+    /**
      * 프로그램 수정
      */
     @PutMapping(PROGRAM_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateProgram(@PathVariable("id") Long id, @RequestBody ProgramDto program) {
         // 프로그램 + 프로그램 옵션 수정을 같이 처리해야 함..
-        log.info("컬럼 수정 - id: {}, program: {}", id, program);
+        log.info("프로그램 수정 - id: {}, program: {}", id, program);
 
         Program origin = programService.findOne(id);
         // 썸네일 이미지 업로드

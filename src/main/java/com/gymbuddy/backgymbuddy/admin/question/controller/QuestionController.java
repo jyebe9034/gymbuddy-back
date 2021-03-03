@@ -108,12 +108,10 @@ public class QuestionController extends BaseController {
                 saveFile.mkdir();
             }
             // 파일1
-            r
-                File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
-                dto.getFile1().transferTo(realFile1);
-                dto.setImgName1(imgName1);
-                dto.setImgPath1(questionPath + "/" + realFile1.getName());
-            }
+            File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
+            dto.getFile1().transferTo(realFile1);
+            dto.setImgName1(imgName1);
+            dto.setImgPath1(questionPath + "/" + realFile1.getName());
 
             // 파일2
             if (!dto.getFile2().isEmpty()) {

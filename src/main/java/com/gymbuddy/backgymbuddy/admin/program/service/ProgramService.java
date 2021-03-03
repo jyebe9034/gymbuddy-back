@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.program.service;
 
+import com.gymbuddy.backgymbuddy.admin.enums.status.ProgramStatus;
 import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramDto;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramOption;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -192,6 +194,7 @@ public class ProgramService {
         if (program.getDetailImgPath() != null) {
         entity.setDetailImgPath(program.getDetailImgPath());
         }
+        entity.setStatus(ProgramStatus.INPROGRESS);
 //        entity.setCreateId(loginId);
 //        entity.setUpdateId(loginId);
 
@@ -217,6 +220,11 @@ public class ProgramService {
         }
 
         return entity.getId();
+    }
+
+    @Transactional
+    public void updateStatus(Map<String, Object> param) {
+
     }
 
     @Transactional
