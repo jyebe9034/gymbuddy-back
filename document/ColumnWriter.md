@@ -21,13 +21,12 @@ PARAM: 없음
 }
 ```
 
-### 전체 칼럼 작성자 목록 조회
+### 전체 칼럼 작성자 목록 조회(페이징 미포)
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD : GET
 METHOD NAME: selectColumnWriterList
-PATH : /api/columnWriter/all/{page}
-*** page는 몇번째 페이지인지의 값으로 첫번째 페이지는 0, 두번째 페이지는 1 이런식으로 증가
+PATH : /api/columnWriter/all
 PARAM : 없음
 ```
 * 결과 구조
@@ -72,7 +71,7 @@ PARAM : 없음
 ]
 ```
 
-### 전체 칼럼 작성자 목록 조회
+### 전체 칼럼 작성자 목록 조회함(페이징 포함)
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD : GET
