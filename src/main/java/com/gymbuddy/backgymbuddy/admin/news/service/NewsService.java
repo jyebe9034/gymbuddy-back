@@ -48,9 +48,9 @@ public class NewsService {
     @Transactional
     public Long save(NewsDto news) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         News entity = new News();
         if (news.getTitle() != null) {
@@ -65,8 +65,8 @@ public class NewsService {
         if (news.getImgName() != null) {
             entity.setImgName(news.getImgName());
         }
-//        entity.setCreateId(loginId);
-//        entity.setUpdateId(loginId);
+        entity.setCreateId(loginId);
+        entity.setUpdateId(loginId);
 
         newsRepository.save(entity);
         return entity.getId();
@@ -75,9 +75,9 @@ public class NewsService {
     @Transactional
     public void update(Long id, NewsDto news) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         News origin = findOne(id);
         if (origin.getTitle() != null) {
@@ -92,8 +92,7 @@ public class NewsService {
         if (origin.getImgName() != null && !origin.getImgName().equals(news.getImgName())) {
             origin.setImgName(news.getImgName());
         }
-        origin.setUpdateDate(LocalDateTime.now());
-//        origin.setUpdateId(loginId);
+        origin.setUpdateId(loginId);
     }
 
     @Transactional

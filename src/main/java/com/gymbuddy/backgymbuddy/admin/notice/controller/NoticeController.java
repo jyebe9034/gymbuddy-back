@@ -60,7 +60,7 @@ public class NoticeController extends BaseController {
     public ResponseEntity<Map<String, Object>> insertNotice(@ModelAttribute NoticeDto notice) {
         log.info("공지사항 등록: {}", notice);
 
-        // 이미지 업로드
+        // 이미지가 있는 경우에만 실행
         if (notice.getFile() != null) {
             String filename = notice.getFile().getOriginalFilename();
             try {
