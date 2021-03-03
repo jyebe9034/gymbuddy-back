@@ -269,7 +269,7 @@ public class UserController extends BaseController {
             log.info("Success Message Send");
 
             // 사용자의 비밀번호 변경
-            logicService.updatePassword(user, authNum);
+            logicService.updatePassword(origin.get(), authNum);
             result.put("successYn", "Y");
         } catch (AddressException e) {
             log.error(e.getMessage());
@@ -325,6 +325,15 @@ public class UserController extends BaseController {
     public ResponseEntity<UserDto> selectUserDetail(@PathVariable("id") Long id) {
         log.info("회원 정보 조회: {}", id);
         return createResponseEntity(true, logicService.findUserDto(id));
+    }
+
+    /**
+     * 비밀번호 재확인
+     */
+    @PostMapping(USER_API + "/checkPwAgain")
+    public ResponseEntity<Map<String, Object>> checkPasswordAgain(@RequestBody UserDto user) {
+        log.info("비밀번호 재확인: {}", user);
+        return createResponseEntity(true, logicService.checkPwAgain(user));
     }
 
     /**

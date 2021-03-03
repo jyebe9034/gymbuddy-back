@@ -87,23 +87,25 @@ public class NewsController extends BaseController {
     public ResponseEntity<Map<String, Object>> updateNews(@PathVariable("id") Long id, @ModelAttribute NewsDto news) {
         log.info("대외뉴스 수정 - id: {}, param: {}", id, news);
 
-        News origin = newsService.findOne(id);
-        String filename = news.getFile().getOriginalFilename();
-        if (!origin.getImgName().equals(filename)) {
-            // 이미지 업로드
-            try {
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
-                news.getFile().transferTo(realFile);
-                news.setImgName(filename);
-                news.setImgPath(newsPath + "/" + realFile.getName());
+        if (news.getFile() != null) {
+            News origin = newsService.findOne(id);
+            String filename = news.getFile().getOriginalFilename();
+            if (!origin.getImgName().equals(filename)) {
+                // 이미지 업로드
+                try {
+                    File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                    news.getFile().transferTo(realFile);
+                    news.setImgName(filename);
+                    news.setImgPath(newsPath + "/" + realFile.getName());
 
-                // 기존 이미지 파일 서버에서 삭제
-                File originFile = new File(newfile + "/" + origin.getImgPath());
-                if (originFile.exists()) {
-                    originFile.delete();
+                    // 기존 이미지 파일 서버에서 삭제
+                    File originFile = new File(newfile + "/" + origin.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
 

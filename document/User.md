@@ -196,6 +196,10 @@ password : 비밀번호
     "name": "김버디",
     "id": 4
 }
+{
+    "msg": "잘못된 비밀번호 입니다.",
+    "successYn": "N"
+}
 ```
 
 ### 로그아웃
@@ -320,6 +324,36 @@ PATH : /api/userApi/detail/{id}
     "street1": "서울시 광화문로 123",
     "street2": "201호",
     "agreeYn": "Y"
+}
+```
+
+### 비밀번호 재확인
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: POST
+METHOD NAME: checkPasswordAgain
+PATH : /api/userApi/checkPwAgain
+PARAM : Map<String, Object>
+=== PARAM 설명 ===
+identity: 회원아이디
+password: 회원이 입력한 비밀번호
+```
+* 결과구조
+```
+{
+    "msg": 메세지
+    "successYn": 일치 여부(Y or N)
+}
+```
+* 결과 예시
+```
+{
+    "msg": "비밀번호가 일치하지 않습니다.",
+    "successYn": "N"
+}
+{
+    "msg": "비밀번호가 일치합니다.",
+    "successYn": "Y"
 }
 ```
 

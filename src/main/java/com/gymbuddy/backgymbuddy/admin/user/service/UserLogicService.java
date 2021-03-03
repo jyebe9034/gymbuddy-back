@@ -35,6 +35,7 @@ public class UserLogicService {
      * @param email 이메일
      * @param authNum 인증번호
      */
+    @Transactional
     public void saveAuthNum(String email, String authNum) {
         Auth auth = new Auth();
         auth.setEmail(email);
@@ -67,6 +68,7 @@ public class UserLogicService {
     /**
      * 회원가입
      */
+    @Transactional
     public Map<String, Object> join(UserDto user) {
         Map<String, Object> result = new HashMap<>();
         // 이이디 중복 확인
@@ -131,12 +133,20 @@ public class UserLogicService {
      * 로그인
      */
     public Map<String, Object> login(UserDto user) {
-        User member = userRepository.findByIdentity(user.getIdentity())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
-        if (!passwordEncoder.matches(user.getPassword(), member.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
-        }
         Map<String, Object> result = new HashMap<>();
+        Optional<User> tmpMember = userRepository.findByIdentity(user.getIdentity());
+        if (!tmpMember.isPresent()) {
+            result.put("successYn", "N");
+            result.put("msg", "가입되지 않은 이메일입니다.");
+            return result;
+        }
+        User member = tmpMember.get();
+        if (!passwordEncoder.matches(user.getPassword(), member.getPassword())) {
+            result.put("successYn", "N");
+            result.put("msg", "잘못된 비밀번호 입니다.");
+            return result;
+        }
+
         result.put("id", member.getId());
         result.put("identity", member.getIdentity());
         result.put("name", member.getName());
@@ -145,6 +155,9 @@ public class UserLogicService {
         return result;
     }
 
+    /**
+     * 전체 회원수 조회
+     */
     public int selectTotalCount() {
         return userRepository.findAll().size();
     }
@@ -260,7 +273,7 @@ public class UserLogicService {
      * @param authNum 임시비밀번호
      */
     @Transactional
-    public void updatePassword(UserDto user, String authNum) {
+    public void updatePassword(User user, String authNum) {
         User origin = userRepository.findByEmail(user.getEmail()).get();
         String password = passwordEncoder.encode(authNum);
         origin.setPassword(password);
@@ -272,5 +285,23 @@ public class UserLogicService {
     @Transactional
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    /**
+     * 비밀번호 재확인
+     */
+    public Map<String, Object> checkPwAgain(UserDto user) {
+        Map<String, Object> result = new HashMap<>();
+        Optional<User> origin = userRepository.findByIdentity(user.getIdentity());
+        if (origin.isPresent()) {
+            if (passwordEncoder.matches(user.getPassword(), origin.get().getPassword())) {
+                result.put("successYn", "Y");
+                result.put("msg", "비밀번호가 일치합니다.");
+                return result;
+            }
+        }
+        result.put("successYn", "N");
+        result.put("msg", "비밀번호가 일치하지 않습니다.");
+        return result;
     }
 }

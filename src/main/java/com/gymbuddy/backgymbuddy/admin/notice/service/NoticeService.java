@@ -47,9 +47,9 @@ public class NoticeService {
     @Transactional
     public Long save(NoticeDto notice) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         Notice entity = new Notice();
         if (notice.getTitle() != null) {
@@ -64,8 +64,8 @@ public class NoticeService {
         if (notice.getImgName() != null) {
             entity.setImgName(notice.getImgName());
         }
-//        entity.setCreateId(loginId);
-//        entity.setUpdateId(loginId);
+        entity.setCreateId(loginId);
+        entity.setUpdateId(loginId);
 
         noticeRepository.save(entity);
         return entity.getId();
@@ -74,9 +74,9 @@ public class NoticeService {
     @Transactional
     public void update(Long id, NoticeDto notice) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         Notice origin = findOne(id);
         if (notice.getTitle() != null) {
@@ -91,7 +91,7 @@ public class NoticeService {
         if (notice.getImgName() != null && !origin.getImgName().equals(notice.getImgName())) {
             origin.setImgName(notice.getImgName());
         }
-//        origin.setUpdateId(loginId);
+        origin.setUpdateId(loginId);
     }
 
     @Transactional
