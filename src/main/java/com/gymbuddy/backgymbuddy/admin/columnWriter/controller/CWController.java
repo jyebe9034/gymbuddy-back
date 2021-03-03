@@ -36,6 +36,14 @@ public class CWController extends BaseController {
     /**
      * 전체 칼럼 작성자 조회
      */
+    @GetMapping(COLUMN_WRITER_PREFIX + "/all")
+    public ResponseEntity<List<ColumnWriter>> selectColumnWriterList() {
+        return createResponseEntity(true, cwService.findAll());
+    }
+
+    /**
+     * 전체 칼럼 작성자 조회(페이징 포함)
+     */
     @GetMapping(COLUMN_WRITER_PREFIX + "/all/{page}")
     public ResponseEntity<List<ColumnWriter>> selectColumnWriterList(@PathVariable("page") int page) {
         return createResponseEntity(true, cwService.findAll(page));

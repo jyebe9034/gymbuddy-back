@@ -29,6 +29,10 @@ public class CWService {
         return all.size();
     }
 
+    public List<ColumnWriter> findAll() {
+        return cwRepository.findAll();
+    }
+
     public List<ColumnWriter> findAll(int page) {
         return cwRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
