@@ -14,8 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,17 +63,23 @@ public class ProgramService {
     }
 
     public List<Program> findAll(int page) {
-        return programRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        return programRepository.findAllByMainYnAndCreateDate(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
-    public List<ProgramDto> findAllDto(int page) {
+    public Map<String, Object> findAllDto(int page) {
         List<Program> list = findAll(page);
         List<ProgramDto> dtoList = new ArrayList<>();
         for (Program one : list) {
             ProgramDto dto = entityToDto(one);
             dtoList.add(dto);
         }
-        return dtoList;
+
+        int count = programRepository.mainYnCount();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("programList", dtoList);
+        result.put("mainCounts", count);
+        return result;
     }
 
     public Program findOne(Long id) {
@@ -223,8 +229,19 @@ public class ProgramService {
     }
 
     @Transactional
-    public void updateStatus(Map<String, Object> param) {
+    public void updateStatus(Long id, ProgramStatus status) {
+        Program program = findOne(id);
+        if (status != null) {
+            program.setStatus(status);
+        }
+    }
 
+    @Transactional
+    public void setMainYn(Long id, String mainYn) {
+        Program program = findOne(id);
+        if (mainYn != null) {
+            program.setMainYn(mainYn);
+        }
     }
 
     @Transactional

@@ -14,4 +14,7 @@ public interface GoodsRepository extends JpaRepository<Goods, Long> {
 
     @Query("select g from Goods g order by g.mainYn desc, g.id desc")
     Page<Goods> findAllByMainYnAndCreateDate(Pageable pageable);
+
+    @Query("select count(g.mainYn) from Goods g")
+    int mainYnCount();
 }

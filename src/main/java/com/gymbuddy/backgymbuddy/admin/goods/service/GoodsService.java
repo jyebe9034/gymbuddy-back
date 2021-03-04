@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -34,14 +36,20 @@ public class GoodsService {
         return goodsRepository.findAll().size();
     }
 
-    public List<GoodsDto> findAllByDto(int page) {
+    public Map<String, Object> findAllByDto(int page) {
         List<Goods> goodsList = findAll(page);
         List<GoodsDto> dtoList = new ArrayList<>();
         for (Goods goods : goodsList) {
             GoodsDto dto = goodsToDto(goods);
             dtoList.add(dto);
         }
-        return dtoList;
+
+        int count = goodsRepository.mainYnCount();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("goodsList", dtoList);
+        result.put("mainCounts", count);
+        return result;
     }
 
     private GoodsDto goodsToDto(Goods goods) {
@@ -242,6 +250,14 @@ public class GoodsService {
         Goods goods = findOne(id);
         if (status != null) {
             goods.setStatus(status);
+        }
+    }
+
+    @Transactional
+    public void setMainYn(Long id, String mainYn) {
+        Goods goods = findOne(id);
+        if (mainYn != null) {
+            goods.setMainYn(mainYn);
         }
     }
 }

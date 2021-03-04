@@ -1,7 +1,10 @@
 package com.gymbuddy.backgymbuddy.admin.question.service;
 
 import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
-import com.gymbuddy.backgymbuddy.admin.question.domain.*;
+import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
+import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionComment;
+import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionCommentDto;
+import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionDto;
 import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,16 +93,42 @@ public class QuestionService {
         if (question.getImgPath3() != null) {
             dto.setImgPath3(question.getImgPath3());
         }
+        if (question.getCreateId() != null) {
+            dto.setCreateId(question.getCreateId());
+        }
+        if (question.getCreateDate() != null) {
+            dto.setCreateDate(question.getCreateDate());
+        }
+        if (question.getUpdateId() != null) {
+            dto.setUpdateId(question.getUpdateId());
+        }
+        if (question.getUpdateDate() != null) {
+            dto.setUpdateDate(question.getUpdateDate());
+        }
 
+        List<QuestionComment> commentList = questionCommentService.findAllByQuestionId(question.getId());
+        question.setQuestionCommentList(commentList);
         if (!question.getQuestionCommentList().isEmpty()) {
             List<QuestionCommentDto> commentDtoList = new ArrayList<>();
-            for (QuestionComment comment : question.getQuestionCommentList()) {
+            for (QuestionComment comment : commentList) {
                 QuestionCommentDto commentDto = new QuestionCommentDto();
                 if (comment.getId() != null) {
                     commentDto.setId(comment.getId());
                 }
                 if (comment.getContents() != null) {
                     commentDto.setContents(comment.getContents());
+                }
+                if (comment.getCreateId() != null) {
+                    commentDto.setCreateId(comment.getCreateId());
+                }
+                if (comment.getCreateDate() != null) {
+                    commentDto.setCreateDate(comment.getCreateDate());
+                }
+                if (comment.getUpdateId() != null) {
+                    commentDto.setUpdateId(comment.getUpdateId());
+                }
+                if (comment.getUpdateDate() != null) {
+                    commentDto.setUpdateDate(comment.getUpdateDate());
                 }
                 commentDtoList.add(commentDto);
             }
@@ -192,12 +221,13 @@ public class QuestionService {
         questionRepository.deleteById(id);
     }
 
-    public List<Question> search(QuestionSearch search, int page) {
+    @Transactional
+    public List<Question> search(QuestionEnum categoryId, String keyword, String type, int page) {
         List<Question> result = new ArrayList<>();
-        if (search.getTitle() != null) {
-            result = questionRepository.findAllByCategoryIdAndTitleContaining(search.getCategoryId(), search.getTitle(), PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
-        } else if (search.getCategoryId() != null) {
-            result = questionRepository.findAllByCategoryIdAndCreateIdContaining(search.getCategoryId(), search.getCreateId(), PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        if (type.equals("T")) {
+            result = questionRepository.findAllByCategoryIdAndTitleContaining(categoryId, keyword, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        } else if (type.equals("I")) {
+            result = questionRepository.findAllByCategoryIdAndCreateIdContaining(categoryId, keyword, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
         }
         return result;
     }

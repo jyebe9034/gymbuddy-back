@@ -5,6 +5,8 @@ import com.gymbuddy.backgymbuddy.admin.newsletter.domain.NewsletterDto;
 import com.gymbuddy.backgymbuddy.admin.newsletter.repository.NewsletterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +22,8 @@ public class NewsletterService {
 
     private final NewsletterRepository newsletterRepository;
 
-    public List<Newsletter> findAll() {
-        return newsletterRepository.findAll();
+    public List<Newsletter> findAll(int page) {
+        return newsletterRepository.findAll(PageRequest.of(page, 20, Sort.by("id").descending())).getContent();
     }
 
     @Transactional

@@ -25,7 +25,7 @@ public class FQController extends BaseController {
     /**
      * 전체 자주묻는질문 조회 (관리자)
      */
-    @GetMapping("/api/faq/all/{page}")
+    @GetMapping(ADMIN_FQ_PREFIX + "/all/{page}")
     public ResponseEntity<List<FrequencyQuestion>> selectAdminFqList(@PathVariable("page") int page) {
         return createResponseEntity(true, fqService.findAll(page));
     }

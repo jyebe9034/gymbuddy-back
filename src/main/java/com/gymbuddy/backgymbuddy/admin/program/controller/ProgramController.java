@@ -1,7 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.program.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
-import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
+import com.gymbuddy.backgymbuddy.admin.enums.status.ProgramStatus;
 import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramDto;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramOption;
@@ -31,6 +31,14 @@ public class ProgramController extends BaseController {
     private final ProgramService programService;
 
     /**
+     * 전체 프로그램 조회(관리자)
+     */
+    @GetMapping(PROGRAM_PREFIX + "/all/{page}")
+    public ResponseEntity<Map<String, Object>> selectProgramList(@PathVariable("page") int page) {
+        return createResponseEntity(true, programService.findAllDto(page));
+    }
+
+    /**
      * 전체 프로그램 갯수 조회
      * @return
      */
@@ -39,14 +47,6 @@ public class ProgramController extends BaseController {
         Map<String, Object> result = new HashMap<>();
         result.put("totalCount", programService.selectTotalCount());
         return createResponseEntity(true, result);
-    }
-
-    /**
-     * 전체 프로그램 조회(관리자)
-     */
-    @GetMapping(PROGRAM_PREFIX + "/all/{page}")
-    public ResponseEntity<List<ProgramDto>> selectProgramList(@PathVariable("page") int page) {
-        return createResponseEntity(true, programService.findAllDto(page));
     }
 
     /**
@@ -106,13 +106,49 @@ public class ProgramController extends BaseController {
     /**
      * 프로그램 진행상태 변경
      */
-    @PutMapping(PROGRAM_PREFIX + "/updateStatus")
-    public ResponseEntity<Map<String, Object>> updateProgramStatus(@RequestBody Map<String, Object> param) {
-        log.info("프로그램 진행상태 변경: {}", param);
+    @PutMapping(PROGRAM_PREFIX + "/updateStatus/{status}")
+    public ResponseEntity<Map<String, Object>> updateProgramStatus(
+            @RequestBody List<Integer> ids, @PathVariable ProgramStatus status) {
+        log.info("프로그램 진행상태 변경: {}", ids);
 
-        programService.updateStatus(param);
+        boolean flag = true;
 
-        return createResponseEntity(true, "");
+        if (ids != null) {
+            for (int id : ids) {
+                long idL = new Long(id);
+                programService.updateStatus(idL, status);
+
+                Program findProgram = programService.findOne(idL);
+                if(status != null) {
+                    flag = status.equals(findProgram.getStatus()) ? true : false;
+                }
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", flag);
+        return createResponseEntity(true, result);
+    }
+
+    /**
+     * 프로그램 메인 설정
+     */
+    @PutMapping(PROGRAM_PREFIX + "/setMainYn/{id}/{mainYn}")
+    public ResponseEntity<Map<String, Object>> setProgramMainYn(
+            @PathVariable Long id, @PathVariable String mainYn) {
+        log.info("프로그램 메인 설정: {}", id);
+
+        programService.setMainYn(id, mainYn);
+
+        Program findProgram = programService.findOne(id);
+        boolean flag = true;
+        if (mainYn != null) {
+            flag = mainYn.equals(findProgram.getMainYn()) ? true : false;
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", flag);
+        return createResponseEntity(true, result);
     }
 
     /**

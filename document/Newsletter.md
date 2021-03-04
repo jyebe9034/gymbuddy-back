@@ -5,7 +5,8 @@
 ```
 HTTP METHOD: GET
 METHOD NAME: selectSubscriberList
-PATH: /api/newsLetter/all
+PATH: /api/newsLetter/all/{page}
+*** page는 몇번째 페이지인지의 값으로 첫번째 페이지는 0, 두번째 페이지는 1 이런식으로 증가
 PARAM: 없음
 ```
 * 결과 구조

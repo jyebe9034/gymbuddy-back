@@ -1,8 +1,12 @@
 package com.gymbuddy.backgymbuddy.admin.question.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
-import com.gymbuddy.backgymbuddy.admin.question.domain.*;
+import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
+import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionComment;
+import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionCommentDto;
+import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionDto;
 import com.gymbuddy.backgymbuddy.admin.question.service.QuestionCommentService;
 import com.gymbuddy.backgymbuddy.admin.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -51,10 +55,10 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 상세 조회(관리자)
      */
-    @GetMapping(ADMIN_QUESTION_PREFIX + "/detail/{id}")
+    @GetMapping("/question/detail/{id}")
     public ResponseEntity<Map<String, Object>> selectAdminQuestionDetail(@PathVariable("id") Long id) {
         log.info("1:1 문의 조회: {}", id);
-        return createResponseEntity(true, questionService.findOneByDto(id));
+        return createResponseEntity(true, questionService.findOne(id));
     }
 
     /**
@@ -90,7 +94,7 @@ public class QuestionController extends BaseController {
     @GetMapping(USER_QUESTION_PREFIX + "/detail/{id}")
     public ResponseEntity<Map<String, Object>> selectUserQuestionDetail(@PathVariable("id") Long id) {
         log.info("1:1 문의 조회: {}", id);
-        return createResponseEntity(true, questionService.findOneByDto(id));
+        return createResponseEntity(true, questionService.findOne(id));
     }
 
     /**
@@ -108,10 +112,12 @@ public class QuestionController extends BaseController {
                 saveFile.mkdir();
             }
             // 파일1
-            File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
-            dto.getFile1().transferTo(realFile1);
-            dto.setImgName1(imgName1);
-            dto.setImgPath1(questionPath + "/" + realFile1.getName());
+            if (!dto.getFile1().isEmpty()) {
+                File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
+                dto.getFile1().transferTo(realFile1);
+                dto.setImgName1(imgName1);
+                dto.setImgPath1(questionPath + "/" + realFile1.getName());
+            }
 
             // 파일2
             if (!dto.getFile2().isEmpty()) {
@@ -299,10 +305,11 @@ public class QuestionController extends BaseController {
     /**
      * 문의글 검색(관리자)
      */
-    @GetMapping(ADMIN_QUESTION_PREFIX + "/search/{page}")
-    public ResponseEntity<List<Question>> searchQuestion(
-            @RequestBody QuestionSearch search, @PathVariable("page") int page) {
-        log.info("문의글 검색: {}", search);
-        return createResponseEntity(true, questionService.search(search, page));
+    @GetMapping("/search/{categoryId}/{keyword}/{type}/{page}")
+    public ResponseEntity<List<QuestionDto>> searchQuestion(
+            @PathVariable QuestionEnum categoryId, @PathVariable String keyword,
+            @PathVariable String type, @PathVariable("page") int page) {
+        log.info("문의글 검색 - categoryId: {}, keyword: {}, type: {}", categoryId, keyword, type);
+        return createResponseEntity(true, questionService.search(categoryId, keyword, type, page));
     }
 }
