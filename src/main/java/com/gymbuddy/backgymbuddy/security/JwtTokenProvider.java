@@ -23,8 +23,8 @@ public class JwtTokenProvider {
 
     private String secretKey = "gymbuddyDev";
 
-    // 토큰 유효시간 60분
-    private long tokenValidTime = 60 * 60 * 1000L;
+    // 토큰 유효시간 12시간
+    private long tokenValidTime = 12 * 60 * 60 * 1000L;
 
     private final UserDetailsService userDetailsService;
 
@@ -57,7 +57,7 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    // Request의 Header에서 token값을 가져온다. "X-AUTH-TOKEN" : "TOKEN"
+    // Request의 Header에서 token값을 가져온다. "jwt-token" : "TOKEN"
     public String resolveToken(HttpServletRequest request) {
         return request.getHeader("jwt-token");
     }

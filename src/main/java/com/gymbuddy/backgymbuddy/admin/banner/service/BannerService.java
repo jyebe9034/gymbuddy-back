@@ -5,6 +5,8 @@ import com.gymbuddy.backgymbuddy.admin.banner.domain.BannerDto;
 import com.gymbuddy.backgymbuddy.admin.banner.repository.BannerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +32,9 @@ public class BannerService {
     @Transactional
     public Long save(BannerDto banner) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         Banner entity = new Banner();
         if (banner.getTitle() != null) {
@@ -53,8 +55,8 @@ public class BannerService {
         if (banner.getImgName() != null) {
             entity.setImgName(banner.getImgName());
         }
-//        entity.setCreateId(loginId);
-//        entity.setUpdateId(loginId);
+        entity.setCreateId(loginId);
+        entity.setUpdateId(loginId);
 
         bannerRepository.save(entity);
         return entity.getId();
@@ -63,9 +65,9 @@ public class BannerService {
     @Transactional
     public void update(Long id, BannerDto banner) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         Banner origin = findOne(id);
         if (origin.getTitle() != null) {
@@ -86,7 +88,7 @@ public class BannerService {
         if (origin.getImgName() != null) {
             origin.setImgName(banner.getImgName());
         }
-//        origin.setUpdateId(loginId);
+        origin.setUpdateId(loginId);
     }
 
     @Transactional

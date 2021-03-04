@@ -43,15 +43,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt token으로 인증하므로 세션은 필요없으므로 생성안함.
                 .and()
                 .formLogin().disable() // 폼 기반 로그인 비활성화
+                .logout() // 로그아웃
+                .logoutUrl(USER_AUTH + "/logout")
+                .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
+                .logoutSuccessUrl("/login")
+                .and()
                 .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
                 .antMatchers("/api/admin/**").permitAll()
                 .antMatchers("/api/user/**").permitAll()
                 .antMatchers("/api/**").permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)// JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다.
-                .logout() // 로그아웃
-                .logoutUrl(USER_AUTH + "/logout")
-                .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
-                .logoutSuccessUrl("/login");
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);// JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다.
+
     }
 }
