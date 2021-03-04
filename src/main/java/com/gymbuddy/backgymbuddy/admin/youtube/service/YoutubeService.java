@@ -48,9 +48,9 @@ public class YoutubeService {
     @Transactional
     public Long save(YoutubeDto youtube) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         Youtube entity = new Youtube();
         if (youtube.getUploadDate() != null) {
@@ -71,10 +71,8 @@ public class YoutubeService {
         if (youtube.getImgName() != null) {
             entity.setImgName(youtube.getImgName());
         }
-        entity.setCreateDate(LocalDateTime.now());
-//        entity.setCreateId(loginId);
-        entity.setUpdateDate(LocalDateTime.now());
-//        entity.setUpdateId(loginId);
+        entity.setCreateId(loginId);
+        entity.setUpdateId(loginId);
 
         youtubeRepository.save(entity);
         return entity.getId();
@@ -83,9 +81,9 @@ public class YoutubeService {
     @Transactional
     public void update(Long id, YoutubeDto youtube) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         Youtube origin = findOne(id);
         if (origin.getUploadDate() != null && !origin.getUploadDate().equals(youtube.getUploadDate())) {
@@ -106,8 +104,7 @@ public class YoutubeService {
         if (origin.getImgName() != null) {
             origin.setImgName(youtube.getImgName());
         }
-        origin.setUpdateDate(LocalDateTime.now());
-//        origin.setUpdateId(loginId);
+        origin.setUpdateId(loginId);
     }
 
     @Transactional

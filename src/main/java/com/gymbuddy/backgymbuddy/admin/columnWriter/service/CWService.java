@@ -45,12 +45,12 @@ public class CWService {
     @Transactional
     public Long save(ColumnWriter columnWriter) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
-//        columnWriter.setCreateId(loginId);
-//        columnWriter.setUpdateId(loginId);
+        columnWriter.setCreateId(loginId);
+        columnWriter.setUpdateId(loginId);
 
         cwRepository.save(columnWriter);
         return columnWriter.getId();
@@ -59,9 +59,9 @@ public class CWService {
     @Transactional
     public void update(Long id, ColumnWriter columnWriter) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         ColumnWriter origin = cwRepository.findById(id).get();
         if (origin.getName() != null) {
@@ -73,7 +73,7 @@ public class CWService {
         if (origin.getContents() != null) {
             origin.setContents(columnWriter.getContents());
         }
-//        origin.setUpdateId(loginId);
+        origin.setUpdateId(loginId);
     }
 
     @Transactional
