@@ -90,7 +90,7 @@ public class TermController extends BaseController {
     /**
      * 약관 (이미지) 수정(삭제 & 등록)
      */
-    @PutMapping(ADMIN_TERM_PREFIX + "/update/{id}")
+    @PutMapping("/term/update/{id}")
     public ResponseEntity<Map<String, Object>> updateTerm(
             @PathVariable("id") Long id, @ModelAttribute TermDto dto) {
         log.info("약관 수정 id: {}, dto: {}", dto);

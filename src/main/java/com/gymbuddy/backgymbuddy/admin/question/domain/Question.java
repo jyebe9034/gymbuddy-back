@@ -1,8 +1,11 @@
 package com.gymbuddy.backgymbuddy.admin.question.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +14,8 @@ import java.util.List;
 @Entity
 @Table(name = "question")
 @Data
+@ToString(exclude = "question")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Question extends BaseDomain {
 
     @Id

@@ -30,10 +30,6 @@ public class QuestionDto {
     private String createId;
     @Column(nullable = true)
     private LocalDateTime createDate;
-    @Column(nullable = true)
-    private String updateId;
-    @Column(nullable = true)
-    private LocalDateTime updateDate;
 
     private List<QuestionCommentDto> commentList;
 }
