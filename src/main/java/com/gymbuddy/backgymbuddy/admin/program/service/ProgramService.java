@@ -45,6 +45,7 @@ public class ProgramService {
             dto.setClassTime(program.getClassTime());
             dto.setPrice(program.getPrice());
             dto.setMainYn(program.getMainYn());
+            dto.setStatus(program.getStatus());
             if (program.getThumbnailImgPath() != null) {
                 dto.setThumbnailImgPath(program.getThumbnailImgPath());
             }
@@ -120,6 +121,9 @@ public class ProgramService {
         if (one.getMainYn() != null) {
             dto.setMainYn(one.getMainYn());
         }
+        if (one.getStatus() != null) {
+            dto.setStatus(one.getStatus());
+        }
         if (one.getThumbnailImgPath() != null) {
             dto.setThumbnailImgPath(one.getThumbnailImgPath());
         }
@@ -187,6 +191,9 @@ public class ProgramService {
         }
         if (program.getMainYn() != null) {
             entity.setMainYn(program.getMainYn());
+        }
+        if (program.getStatus() != null) {
+            entity.setStatus(program.getStatus());
         }
         if (program.getThumbnailImgName() != null) {
         entity.setThumbnailImgName(program.getThumbnailImgName());
@@ -272,6 +279,9 @@ public class ProgramService {
         }
         if (program.getMainYn() != null) {
             origin.setMainYn(program.getMainYn());
+        }
+        if (program.getStatus() != null) {
+            origin.setStatus(program.getStatus());
         }
         if (origin.getThumbnailImgPath() != null && !origin.getThumbnailImgPath().equals(program.getThumbnailImgPath())) {
             origin.setThumbnailImgPath(program.getThumbnailImgPath());

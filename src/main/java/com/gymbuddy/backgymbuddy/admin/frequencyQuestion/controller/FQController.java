@@ -34,8 +34,8 @@ public class FQController extends BaseController {
      * 전체 자주묻는질문 조회 (사용자)
      */
     @GetMapping(FQ_PREFIX + "/all")
-    public ResponseEntity<Map<String, Object>> selectAllFqList() {
-        return createResponseEntity(true, fqService.findAllByMap());
+    public ResponseEntity<List<FrequencyQuestion>> selectAllFqList() {
+        return createResponseEntity(true, fqService.findAllByCategoryId());
     }
 
     /**

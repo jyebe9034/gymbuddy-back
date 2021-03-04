@@ -15,6 +15,6 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
     @Query("select p from Program p order by p.mainYn desc, p.id desc")
     Page<Program> findAllByMainYnAndCreateDate(Pageable pageable);
 
-    @Query("select count(p.mainYn) from Program p")
+    @Query("select count(p) from Program p where p.mainYn = 'Y'")
     int mainYnCount();
 }

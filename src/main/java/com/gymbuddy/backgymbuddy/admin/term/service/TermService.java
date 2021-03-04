@@ -73,10 +73,10 @@ public class TermService {
         if (dto.getTitle() != null) {
             term.setTitle(dto.getTitle());
         }
-        if (!term.getImgPath().equals(dto.getImgPath())) {
+        if (dto.getImgPath() != null) {
             term.setImgPath(dto.getImgPath());
         }
-        if (!term.getImgName().equals(dto.getImgName())) {
+        if (dto.getImgName() != null) {
             term.setImgName(dto.getImgName());
         }
         if (dto.getWebMobile() != null) {

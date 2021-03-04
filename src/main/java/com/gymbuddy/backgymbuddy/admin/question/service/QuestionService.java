@@ -5,6 +5,7 @@ import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
 import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionComment;
 import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionCommentDto;
 import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionDto;
+import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionCommentRepository;
 import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final QuestionCommentRepository qcRepository;
     private final QuestionCommentService questionCommentService;
 
     public Map<String, Object> findAll(int page) {
@@ -62,12 +64,8 @@ public class QuestionService {
 
     private QuestionDto questionToDto(Question question) {
         QuestionDto dto = new QuestionDto();
-
         if (question.getId() != null) {
             dto.setId(question.getId());
-        }
-        if (question.getCategoryId() != null) {
-            dto.setCategoryId(question.getCategoryId());
         }
         if (question.getTitle() != null) {
             dto.setTitle(question.getTitle());
@@ -75,23 +73,26 @@ public class QuestionService {
         if (question.getContents() != null) {
             dto.setContents(question.getContents());
         }
-        if (question.getImgName1() != null) {
-            dto.setImgName1(question.getImgName1());
+        if (question.getCategoryId() != null) {
+            dto.setCategoryId(question.getCategoryId());
         }
         if (question.getImgPath1() != null) {
             dto.setImgPath1(question.getImgPath1());
         }
-        if (question.getImgName2() != null) {
-            dto.setImgName2(question.getImgName2());
+        if (question.getImgName1() != null) {
+            dto.setImgName1(question.getImgName1());
         }
         if (question.getImgPath2() != null) {
             dto.setImgPath2(question.getImgPath2());
         }
-        if (question.getImgName3() != null) {
-            dto.setImgName3(question.getImgName3());
+        if (question.getImgName2() != null) {
+            dto.setImgName2(question.getImgName2());
         }
         if (question.getImgPath3() != null) {
             dto.setImgPath3(question.getImgPath3());
+        }
+        if (question.getImgName3() != null) {
+            dto.setImgName3(question.getImgName3());
         }
         if (question.getCreateId() != null) {
             dto.setCreateId(question.getCreateId());
@@ -99,18 +100,9 @@ public class QuestionService {
         if (question.getCreateDate() != null) {
             dto.setCreateDate(question.getCreateDate());
         }
-        if (question.getUpdateId() != null) {
-            dto.setUpdateId(question.getUpdateId());
-        }
-        if (question.getUpdateDate() != null) {
-            dto.setUpdateDate(question.getUpdateDate());
-        }
-
-        List<QuestionComment> commentList = questionCommentService.findAllByQuestionId(question.getId());
-        question.setQuestionCommentList(commentList);
         if (!question.getQuestionCommentList().isEmpty()) {
             List<QuestionCommentDto> commentDtoList = new ArrayList<>();
-            for (QuestionComment comment : commentList) {
+            for (QuestionComment comment : question.getQuestionCommentList()) {
                 QuestionCommentDto commentDto = new QuestionCommentDto();
                 if (comment.getId() != null) {
                     commentDto.setId(comment.getId());
@@ -118,17 +110,11 @@ public class QuestionService {
                 if (comment.getContents() != null) {
                     commentDto.setContents(comment.getContents());
                 }
-                if (comment.getCreateId() != null) {
-                    commentDto.setCreateId(comment.getCreateId());
-                }
                 if (comment.getCreateDate() != null) {
                     commentDto.setCreateDate(comment.getCreateDate());
                 }
-                if (comment.getUpdateId() != null) {
-                    commentDto.setUpdateId(comment.getUpdateId());
-                }
-                if (comment.getUpdateDate() != null) {
-                    commentDto.setUpdateDate(comment.getUpdateDate());
+                if (comment.getCreateId() != null) {
+                    commentDto.setCreateId(comment.getCreateId());
                 }
                 commentDtoList.add(commentDto);
             }
@@ -145,8 +131,20 @@ public class QuestionService {
      * 회원 id로 작성한 문의글 전체 가져오기
      * id = 회원 id
      */
-    public List<Question> findAllByUser(String createId, int page) {
-        return questionRepository.findQuestionListByCreateId(createId, PageRequest.of(page, 10)).getContent();
+    public Map<String, Object> findAllByUser(String createId, int page) {
+        List<Question> questionList = questionRepository.findQuestionListByCreateId(createId, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        List<QuestionDto> dtoList = new ArrayList<>();
+        for (Question question : questionList) {
+            QuestionDto dto = questionToDto(question);
+            dtoList.add(dto);
+        }
+
+        //int commentCount = qcRepository.commentCount();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("questionList", dtoList);
+        //result.put("commentCount", commentCount);
+        return result;
     }
 
     @Transactional
@@ -222,13 +220,21 @@ public class QuestionService {
     }
 
     @Transactional
-    public List<Question> search(QuestionEnum categoryId, String keyword, String type, int page) {
+    public List<QuestionDto> search(QuestionEnum categoryId, String keyword, String type, int page) {
         List<Question> result = new ArrayList<>();
+
         if (type.equals("T")) {
             result = questionRepository.findAllByCategoryIdAndTitleContaining(categoryId, keyword, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
         } else if (type.equals("I")) {
             result = questionRepository.findAllByCategoryIdAndCreateIdContaining(categoryId, keyword, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
         }
-        return result;
+
+        List<QuestionDto> dtoList = new ArrayList<>();
+        for (Question question : result) {
+            QuestionDto dto = questionToDto(question);
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 }

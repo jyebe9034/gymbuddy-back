@@ -55,10 +55,10 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 상세 조회(관리자)
      */
-    @GetMapping("/question/detail/{id}")
-    public ResponseEntity<Map<String, Object>> selectAdminQuestionDetail(@PathVariable("id") Long id) {
+    @GetMapping(ADMIN_QUESTION_PREFIX + "/question/detail/{id}")
+    public ResponseEntity<QuestionDto> selectAdminQuestionDetail(@PathVariable("id") Long id) {
         log.info("1:1 문의 조회: {}", id);
-        return createResponseEntity(true, questionService.findOne(id));
+        return createResponseEntity(true, questionService.findOneByDto(id));
     }
 
     /**
@@ -82,7 +82,7 @@ public class QuestionController extends BaseController {
      * 전체 1:1 문의 조회(사용자)
      * 사용자가 쓴 문의 전체 조회
      */
-    @GetMapping(USER_QUESTION_PREFIX + "/all/{createId}/{page}")
+    @GetMapping("/question/all/{createId}/{page}")
     public ResponseEntity<Map<String, Object>> selectUserQuestionList(
             @PathVariable("createId") String createId, @PathVariable("page") int page) {
         return createResponseEntity(true, questionService.findAllByUser(createId, page));
@@ -94,13 +94,13 @@ public class QuestionController extends BaseController {
     @GetMapping(USER_QUESTION_PREFIX + "/detail/{id}")
     public ResponseEntity<Map<String, Object>> selectUserQuestionDetail(@PathVariable("id") Long id) {
         log.info("1:1 문의 조회: {}", id);
-        return createResponseEntity(true, questionService.findOne(id));
+        return createResponseEntity(true, questionService.findOneByDto(id));
     }
 
     /**
      * 1:1 문의 등록(사용자)
      */
-    @PostMapping("/question/new")
+    @PostMapping(USER_QUESTION_PREFIX + "/question/new")
     public ResponseEntity<Map<String, Object>> insertQuestion(@ModelAttribute QuestionDto dto) {
         log.info("1:1 문의 등록: {}", dto);
 
@@ -305,7 +305,7 @@ public class QuestionController extends BaseController {
     /**
      * 문의글 검색(관리자)
      */
-    @GetMapping("/search/{categoryId}/{keyword}/{type}/{page}")
+    @GetMapping(ADMIN_QUESTION_PREFIX + "/search/{categoryId}/{keyword}/{type}/{page}")
     public ResponseEntity<List<QuestionDto>> searchQuestion(
             @PathVariable QuestionEnum categoryId, @PathVariable String keyword,
             @PathVariable String type, @PathVariable("page") int page) {

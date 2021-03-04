@@ -155,7 +155,7 @@ PARAM: 없음
 {
     "totalCount": 2
 }
-
+```
 
 ### 전체 FAQ(자주묻는질문) 목록 조회 (사용자)
 * 기본 정보 및 파라미터 설명
@@ -195,100 +195,85 @@ PARAM: 없음
 ```
 [
     {
-    "shipment": [
-        {
-            "createDate": "2021-02-23T23:19:18.13",
-            "createId": test,
-            "updateDate": "2021-02-23T23:20:30.628",
-            "updateId": test,
-            "id": 1,
-            "categoryId": "SH",
-            "title": "제목1",
-            "contents": "내용1"
-        },
-        {
-            "createDate": "2021-02-24T21:25:00.165",
-            "createId": test,
-            "updateDate": "2021-02-24T21:25:00.165",
-            "updateId": test,
-            "id": 5,
-            "categoryId": "SH",
-            "title": "dddd",
-            "contents": "ddd"
-        }
-    ],
-    "etc": [
-        {
-            "createDate": "2021-02-23T23:19:48.464",
-            "createId": test,
-            "updateDate": "2021-02-23T23:19:48.464",
-            "updateId": test,
-            "id": 2,
-            "categoryId": "ETC",
-            "title": "제목2",
-            "contents": "내용2"
-        }
-    ],
-    "programAndGoods": [
-        {
-            "createDate": "2021-02-27T19:21:52.645",
-            "createId": test,
-            "updateDate": "2021-02-27T19:21:52.645",
-            "updateId": test,
-            "id": 9,
-            "categoryId": "PD",
-            "title": "제목",
-            "contents": "내용"
-        }
-    ],
-    "payment": [
-        {
-            "createDate": "2021-02-24T21:26:47.357",
-            "createId": test,
-            "updateDate": "2021-02-24T21:26:47.357",
-            "updateId": test,
-            "id": 6,
-            "categoryId": "PY",
-            "title": "ddd",
-            "contents": "dddd"
-        },
-        {
-            "createDate": "2021-02-24T21:29:10.852",
-            "createId": test,
-            "updateDate": "2021-02-24T21:29:10.852",
-            "updateId": test,
-            "id": 7,
-            "categoryId": "PY",
-            "title": "dddd",
-            "contents": "dddd"
-        }
-    ],
-    "account": [
-        {
-            "createDate": "2021-02-24T21:18:00.815",
-            "createId": test,
-            "updateDate": "2021-02-24T21:18:00.815",
-            "updateId": test,
-            "id": 4,
-            "categoryId": "AC",
-            "title": "뽀레스트",
-            "contents": "ㅇㅇㅇ"
-        }
-    ],
-    "homepage": [
-        {
-            "createDate": "2021-02-24T21:32:45.335",
-            "createId": test,
-            "updateDate": "2021-02-24T21:32:45.335",
-            "updateId": test,
-            "id": 8,
-            "categoryId": "HP",
-            "title": "fewfewfew",
-            "contents": "weffwefwe"
-        }
-    ]
-},
-    ...
+        "createDate": "2021-02-24T21:18:00.815",
+        "createId": test,
+        "updateDate": "2021-02-24T21:18:00.815",
+        "updateId": test,
+        "id": 4,
+        "categoryId": "AC",
+        "title": "뽀레스트",
+        "contents": "ㅇㅇㅇ"
+    },
+    {
+        "createDate": "2021-02-23T23:19:48.464",
+        "createId": test,
+        "updateDate": "2021-02-23T23:19:48.464",
+        "updateId": test,
+        "id": 2,
+        "categoryId": "ETC",
+        "title": "제목2",
+        "contents": "내용2"
+    },
+    {
+        "createDate": "2021-02-24T21:32:45.335",
+        "createId": test,
+        "updateDate": "2021-02-24T21:32:45.335",
+        "updateId": test,
+        "id": 8,
+        "categoryId": "HP",
+        "title": "fewfewfew",
+        "contents": "weffwefwe"
+    },
+    {
+        "createDate": "2021-02-27T19:21:52.645",
+        "createId": test,
+        "updateDate": "2021-02-27T19:21:52.645",
+        "updateId": test,
+        "id": 9,
+        "categoryId": "PD",
+        "title": "제목",
+        "contents": "내용"
+    },
+    {
+        "createDate": "2021-02-24T21:26:47.357",
+        "createId": test,
+        "updateDate": "2021-02-24T21:26:47.357",
+        "updateId": test,
+        "id": 6,
+        "categoryId": "PY",
+        "title": "ddd",
+        "contents": "dddd"
+    },
+    {
+        "createDate": "2021-02-24T21:29:10.852",
+        "createId": test,
+        "updateDate": "2021-02-24T21:29:10.852",
+        "updateId": test,
+        "id": 7,
+        "categoryId": "PY",
+        "title": "dddd",
+        "contents": "dddd"
+    },
+    {
+        "createDate": "2021-02-23T23:19:18.13",
+        "createId": test,
+        "updateDate": "2021-02-23T23:20:30.628",
+        "updateId": test,
+        "id": 1,
+        "categoryId": "SH",
+        "title": "제목1",
+        "contents": "내용1"
+    },
+    {
+        "createDate": "2021-02-24T21:25:00.165",
+        "createId": test,
+        "updateDate": "2021-02-24T21:25:00.165",
+        "updateId": test,
+        "id": 5,
+        "categoryId": "SH",
+        "title": "dddd",
+        "contents": "ddd"
+    }
 ]
 ```
 
