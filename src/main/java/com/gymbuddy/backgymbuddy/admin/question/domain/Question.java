@@ -1,6 +1,5 @@
 package com.gymbuddy.backgymbuddy.admin.question.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
 import lombok.Data;
@@ -47,7 +46,6 @@ public class Question extends BaseDomain {
     @Column(length = 50)
     private String imgName3;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QuestionComment> questionCommentList = new ArrayList<>();
 }

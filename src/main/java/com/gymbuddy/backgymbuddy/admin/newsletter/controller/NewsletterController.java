@@ -25,9 +25,9 @@ public class NewsletterController extends BaseController {
     /**
      * 뉴스레터 구독 이메일 전체 조회
      */
-    @GetMapping(NEWSLETTER_PREFIX + "/all")
-    public ResponseEntity<List<Newsletter>> selectSubscriberList() {
-        return createResponseEntity(true, newsletterService.findAll());
+    @GetMapping(NEWSLETTER_PREFIX + "/all/{page}")
+    public ResponseEntity<List<Newsletter>> selectSubscriberList(@PathVariable int page) {
+        return createResponseEntity(true, newsletterService.findAll(page));
     }
 
     /**

@@ -11,106 +11,113 @@ PATH : /api/goods/all/{page}
 ```
 [
     {
-        "id": 아이디(JPA생성),
-        "name": 굿즈 이름
-        "price": 가격,
-        "mainYn": 메인 노출 여부,
-        "thumbnailFile": 썸네일 이미지(null로 넘어옴),
-        "thumbnailImgPath": 썸네일 이미지 경로,
-        "thumbnailImgName": 썸네일 이미지 이름,
-        "detailFile": 상세 이미지(null로 넘어옴),
-        "detailImgPath": 상세 이미지 경로,
-        "detailImgName": 상세 이미지 이름,
-        "optionList": [
-            {
-                "id": 옵션 아이디(JPA생성),
-                "colorAndSize": 색상 & 사이즈,
-                "inventory": 재고,
-                "extraPrice": 추가 금액
-            },
-            ...
-        ]
-    },
-    {
-        "id": 아이디(JPA생성),
-        "name": 굿즈 이름
-        "price": 가격,
-        "mainYn": 메인 노출 여부,
-        "thumbnailFile": 썸네일 이미지(null로 넘어옴),
-        "thumbnailImgPath": 썸네일 이미지 경로,
-        "thumbnailImgName": 썸네일 이미지 이름,
-        "detailFile": 상세 이미지(null로 넘어옴),
-        "detailImgPath": 상세 이미지 경로,
-        "detailImgName": 상세 이미지 이름,
-        "optionList": [
-            {
-                "id": 옵션 아이디(JPA생성),
-                "colorAndSize": 색상 & 사이즈,
-                "inventory": 재고,
-                "extraPrice": 추가 금액
-            },
-            ...
-        ]
-    },
-    ...
+        "goodsList": [
+            "id": 아이디(JPA생성),
+            "name": 굿즈 이름
+            "price": 가격,
+            "mainYn": 메인 노출 여부,
+            "thumbnailFile": 썸네일 이미지(null로 넘어옴),
+            "thumbnailImgPath": 썸네일 이미지 경로,
+            "thumbnailImgName": 썸네일 이미지 이름,
+            "detailFile": 상세 이미지(null로 넘어옴),
+            "detailImgPath": 상세 이미지 경로,
+            "detailImgName": 상세 이미지 이름,
+            "optionList": [
+                {
+                    "id": 옵션 아이디(JPA생성),
+                    "colorAndSize": 색상 & 사이즈,
+                    "inventory": 재고,
+                    "extraPrice": 추가 금액
+                },
+                ...
+            ]
+        },
+        {
+            "id": 아이디(JPA생성),
+            "name": 굿즈 이름
+            "price": 가격,
+            "mainYn": 메인 노출 여부,
+            "thumbnailFile": 썸네일 이미지(null로 넘어옴),
+            "thumbnailImgPath": 썸네일 이미지 경로,
+            "thumbnailImgName": 썸네일 이미지 이름,
+            "detailFile": 상세 이미지(null로 넘어옴),
+            "detailImgPath": 상세 이미지 경로,
+            "detailImgName": 상세 이미지 이름,
+            "optionList": [
+                {
+                    "id": 옵션 아이디(JPA생성),
+                    "colorAndSize": 색상 & 사이즈,
+                    "inventory": 재고,
+                    "extraPrice": 추가 금액
+                },
+                ...
+            ]
+        },
+        ...
+        ],
+    "mainCounts": 메인 갯수
 ]
 ```
 * 결과 예시
 ```
 [
     {
-        "id": 1,
-        "name": "반팔 티셔츠",
-        "price": 25000.00,
-        "mainYn": "N",
-        "optionList": [
-            {
-                "id": 1,
-                "colorAndSize": "White S",
-                "inventory": 10,
-                "extraPrice": 0.00
-            },
-            {
-                "id": 2,
-                "colorAndSize": "White M",
-                "inventory": 10,
-                "extraPrice": 0.00
-            },
-            {
-                "id": 3,
-                "colorAndSize": "White L",
-                "inventory": 10,
-                "extraPrice": 0.00
-            }
-        ]
-    },
-    {
-        "id": 2,
-        "name": "맨투맨",
-        "price": 40000.00,
-        "mainYn": "N",
-        "optionList": [
-            {
-                "id": 4,
-                "colorAndSize": "Black S",
-                "inventory": 10,
-                "extraPrice": 0.00
-            },
-            {
-                "id": 5,
-                "colorAndSize": "Black M",
-                "inventory": 10,
-                "extraPrice": 0.00
-            },
-            {
-                "id": 6,
-                "colorAndSize": "Black L",
-                "inventory": 10,
-                "extraPrice": 0.00
-            }
-        ]
-    },
-    ...
+        "goodsList": [
+        {
+            "id": 1,
+            "name": "반팔 티셔츠",
+            "price": 25000.00,
+            "mainYn": "N",
+            "optionList": [
+                {
+                    "id": 1,
+                    "colorAndSize": "White S",
+                    "inventory": 10,
+                    "extraPrice": 0.00
+                },
+                {
+                    "id": 2,
+                    "colorAndSize": "White M",
+                    "inventory": 10,
+                    "extraPrice": 0.00
+                },
+                {
+                    "id": 3,
+                    "colorAndSize": "White L",
+                    "inventory": 10,
+                    "extraPrice": 0.00
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "맨투맨",
+            "price": 40000.00,
+            "mainYn": "N",
+            "optionList": [
+                {
+                    "id": 4,
+                    "colorAndSize": "Black S",
+                    "inventory": 10,
+                    "extraPrice": 0.00
+                },
+                {
+                    "id": 5,
+                    "colorAndSize": "Black M",
+                    "inventory": 10,
+                    "extraPrice": 0.00
+                },
+                {
+                    "id": 6,
+                    "colorAndSize": "Black L",
+                    "inventory": 10,
+                    "extraPrice": 0.00
+                }
+            ]
+        },
+        ...
+    ],
+    "mainCounts": 4
 ]
 ```
 
@@ -358,9 +365,9 @@ PARAM : List<Integer>
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: PUT
-METHOD NAME: updateStatus
+METHOD NAME: updateGoodsStatus
 PATH : /api/admin/goods/updateStatus/{status}
-*** 변경하는 status를 Path에 입력
+*** 변경하는 상태값(SALE, SOLDOUT, TUMBLBUG)을 Path에 입력
 PARAM : List<Integer>
 === PARAM 설명 ===
 * 아이디 배열을 넘긴다.
@@ -368,6 +375,29 @@ PARAM : List<Integer>
 * 파라미터 구조
 ```
 [아이디, 아이디, 아이디] 
+```
+* 결과 구조
+```
+{
+    "result": 결과값
+}
+```
+* 결과 예시
+```
+{
+    "result": "success"
+    *** 현재 모든 결과값을 성공으로 보내고 있음.
+}
+```
+
+### 굿즈 메인 설정
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: PUT
+METHOD NAME: setGoodsMainYn
+PATH : /api/admin/goods/setMainYn/{id}/{mainYn}
+*** 변경하는 id와 메인 여부를 Path에 입력
+=== PARAM 설명 ===
 ```
 * 결과 구조
 ```

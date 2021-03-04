@@ -34,8 +34,8 @@ public class GoodsController extends BaseController {
     /**
      * 전체 굿즈 조회
      */
-    @GetMapping(GOODS_PREFIX + "/all/{page}")
-    public ResponseEntity<List<GoodsDto>> selectGoodsList(@PathVariable("page") int page) {
+    @GetMapping("/goods/all/{page}")
+    public ResponseEntity<Map<String, Object>> selectGoodsList(@PathVariable("page") int page) {
         return createResponseEntity(true, goodsService.findAllByDto(page));
     }
 
@@ -216,14 +216,14 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 상태 변경
      */
-    @PutMapping("/goods/updateStatus/{status}")
-    public ResponseEntity<Map<String, Object>> updateStatus(
+    @PutMapping(ADMIN_GOODS_PREFIX + "/updateStatus/{status}")
+    public ResponseEntity<Map<String, Object>> updateGoodsStatus(
             @RequestBody List<Integer> ids, @PathVariable GoodsStatus status) {
         log.info("굿즈 상태 변경: {}", ids);
 
         boolean flag = true;
 
-        if(ids != null) {
+        if (ids != null) {
             for(int id : ids) {
                 long idL = new Long(id);
                 goodsService.updateStatus(idL, status);
@@ -233,6 +233,27 @@ public class GoodsController extends BaseController {
                     flag = status.equals(findGoods.getStatus()) ? true : false;
                 }
             }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", flag);
+        return createResponseEntity(true, result);
+    }
+
+    /**
+     * 굿즈 메인 설정
+     */
+    @PutMapping(ADMIN_GOODS_PREFIX + "/setMainYn/{id}/{mainYn}")
+    public ResponseEntity<Map<String, Object>> setGoodsMainYn(
+            @PathVariable Long id, @PathVariable String mainYn) {
+        log.info("굿즈 메인 설정: {}", id);
+
+        goodsService.setMainYn(id, mainYn);
+
+        Goods findGoods = goodsService.findOne(id);
+        boolean flag = true;
+        if (mainYn != null) {
+            flag = mainYn.equals(findGoods.getMainYn()) ? true : false;
         }
 
         Map<String, Object> result = new HashMap<>();
