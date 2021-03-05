@@ -8,7 +8,7 @@ import javax.persistence.Column;
 @Data
 public class QuestionSearch {
 
-    private QuestionEnum categoryId;
+    private String categoryId;
 
     @Column(nullable = true)
     private String title;

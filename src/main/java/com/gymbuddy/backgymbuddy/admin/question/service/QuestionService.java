@@ -230,7 +230,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public List<QuestionDto> search(QuestionEnum categoryId, String keyword, String type, int page) {
+    public List<QuestionDto> search(String categoryId, String keyword, String type, int page) {
         List<Question> result = new ArrayList<>();
 
         if (type.equals("T")) {
