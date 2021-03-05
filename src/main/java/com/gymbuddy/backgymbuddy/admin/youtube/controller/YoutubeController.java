@@ -6,7 +6,6 @@ import com.gymbuddy.backgymbuddy.admin.youtube.domain.YoutubeDto;
 import com.gymbuddy.backgymbuddy.admin.youtube.service.YoutubeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,7 +79,7 @@ public class YoutubeController extends BaseController {
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             youtube.getFile().transferTo(realFile);
             youtube.setImgName(filename);
-            youtube.setImgPath(youtubePath + "/" + realFile.getName());
+            youtube.setImgPath(newFile + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -108,10 +107,10 @@ public class YoutubeController extends BaseController {
                     File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                     youtube.getFile().transferTo(realFile);
                     youtube.setImgName(filename);
-                    youtube.setImgPath(youtubePath + "/" + realFile.getName());
+                    youtube.setImgPath(newFile + "/" + realFile.getName());
 
                     // 기존 이미지 파일 서버에서 삭제
-                    File originFile = new File(newFile + "/" + origin.getImgPath());
+                    File originFile = new File(origin.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
@@ -160,7 +159,7 @@ public class YoutubeController extends BaseController {
             long idL = new Long(id);
             Youtube origin = youtubeService.findOne(idL);
             // 이미지 삭제
-            File originFile = new File(newFile + "/" + origin.getImgPath());
+            File originFile = new File(origin.getImgPath());
             if (originFile.exists()) {
                 originFile.delete();
             }

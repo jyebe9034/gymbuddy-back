@@ -46,10 +46,10 @@ public class MemberService {
     @Transactional
     public void update(Long id, MemberDto dto) {
         Member member = findOne(id);
-        if (dto.getImgPath() != null) {
+        if (dto.getImgPath().equals(member.getImgPath())) {
             member.setImgPath(dto.getImgPath());
         }
-        if (dto.getImgName() != null) {
+        if (dto.getImgName().equals(member.getImgName())) {
             member.setImgName(dto.getImgName());
         }
         if (dto.getWebMobile() != null) {

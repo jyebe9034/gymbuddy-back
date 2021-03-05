@@ -76,7 +76,7 @@ public class ProgramController extends BaseController {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 program.getThumbnailFile().transferTo(realFile);
                 program.setThumbnailImgName(realFile.getName());
-                program.setThumbnailImgPath(programPath + "/" + realFile.getName());
+                program.setThumbnailImgPath(newfile + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -92,7 +92,7 @@ public class ProgramController extends BaseController {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + detailName);
                 program.getDetailFile().transferTo(realFile);
                 program.setDetailImgName(realFile.getName());
-                program.setDetailImgPath(programPath + "/" + realFile.getName());
+                program.setDetailImgPath(newfile + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -167,10 +167,10 @@ public class ProgramController extends BaseController {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 program.getThumbnailFile().transferTo(realFile);
                 program.setThumbnailImgName(realFile.getName());
-                program.setThumbnailImgPath(programPath + "/" + realFile.getName());
+                program.setThumbnailImgPath(newfile + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
-                File originThumbFile = new File(newfile + "/" + origin.getThumbnailImgPath());
+                File originThumbFile = new File(origin.getThumbnailImgPath());
                 if (originThumbFile.exists()) {
                     originThumbFile.delete();
                 }
@@ -186,10 +186,10 @@ public class ProgramController extends BaseController {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + detailName);
                 program.getDetailFile().transferTo(realFile);
                 program.setDetailImgName(realFile.getName());
-                program.setDetailImgPath(programPath + "/" + realFile.getName());
+                program.setDetailImgPath(newfile + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
-                File originDetailFile = new File(newfile + "/" + origin.getDetailImgPath());
+                File originDetailFile = new File(origin.getDetailImgPath());
                 if (originDetailFile.exists()) {
                     originDetailFile.delete();
                 }
@@ -263,12 +263,12 @@ public class ProgramController extends BaseController {
             long idL = new Long(id);
             Program origin = programService.findOne(idL);
             // 썸네일 이미지 삭제
-            File originThumbFile = new File(newfile + "/" + origin.getThumbnailImgPath());
+            File originThumbFile = new File(origin.getThumbnailImgPath());
             if (originThumbFile.exists()) {
                 originThumbFile.delete();
             }
             // 상세 이미지 삭제
-            File originDetailFile = new File(newfile + "/" + origin.getDetailImgPath());
+            File originDetailFile = new File(origin.getDetailImgPath());
             if (originDetailFile.exists()) {
                 originDetailFile.delete();
             }

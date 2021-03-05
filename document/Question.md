@@ -508,16 +508,17 @@ PARAM : 없음
     *** 현재 모든 결과값을 성공으로 보내고 있음.
 }
 ```
+
 ### 문의글 검색 (관리자)
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: GET
 METHOD NAME: searchQuestion
 PATH: api/admin/question/search/{categoryId}/{keyword}/{type}/{page}
-*** page는 몇번째 페이지인지의 값으로 첫번째 페이지는 0, 두번째 페이지는 1 이런식으로 증가
 categoryId: 카테고리 아이디(AC[계정], PY[결제], SH[배송], PR[프로그램], GD[굿즈], ER[교환 및 환불], ETC[기타])(필수),
 keyword: 검색어
 type: "T" 제목, "I" 아이디
+page: 몇번째 페이지인지의 값으로 첫번째 페이지는 0, 두번째 페이지는 1 이런 식으로 증가
 ```
 * 결과 구조
 ```

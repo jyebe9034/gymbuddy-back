@@ -61,7 +61,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 등록
      */
-    @PostMapping(GOODS_PREFIX + "/new")
+    @PostMapping(ADMIN_GOODS_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertGoods(@RequestBody GoodsDto dto) {
         log.info("굿즈 등록: {}", dto);
 
@@ -75,7 +75,7 @@ public class GoodsController extends BaseController {
                 File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 dto.getThumbnailFile().transferTo(thumbnail);
                 dto.setThumbnailImgName(thumbnailName);
-                dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
+                dto.setThumbnailImgPath(saveFile + "/" + thumbnail.getName());
             }
             // 상세 이미지
             if(dto.getDetailFile() != null) {
@@ -83,7 +83,7 @@ public class GoodsController extends BaseController {
                 File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
                 dto.getDetailFile().transferTo(detail);
                 dto.setDetailImgName(detailName);
-                dto.setDetailImgPath(goodsPath + "/" + detail.getName());
+                dto.setDetailImgPath(saveFile + "/" + detail.getName());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -97,7 +97,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 수정
      */
-    @PutMapping("/goods/update/{id}")
+    @PutMapping(ADMIN_GOODS_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateGoods(
             @PathVariable("id") Long id, @RequestBody GoodsDto dto) {
         log.info("굿즈 수정 id: {}, dto: {}", id, dto);
@@ -111,9 +111,9 @@ public class GoodsController extends BaseController {
                 File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 dto.getThumbnailFile().transferTo(thumbnail);
                 dto.setThumbnailImgName(thumbnailName);
-                dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
+                dto.setThumbnailImgPath(saveFile + "/" + thumbnail.getName());
 
-                File originThumbnail = new File(saveFile + "/" + dto.getThumbnailImgPath());
+                File originThumbnail = new File(goods.getThumbnailImgPath());
                 if (originThumbnail.exists()) {
                     originThumbnail.delete();
                 }
@@ -129,9 +129,9 @@ public class GoodsController extends BaseController {
                 File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
                 dto.getDetailFile().transferTo(detail);
                 dto.setDetailImgName(detailName);
-                dto.setDetailImgPath(goodsPath + "/" + detail.getName());
+                dto.setDetailImgPath(saveFile + "/" + detail.getName());
 
-                File originDetail = new File(saveFile + "/" + dto.getDetailImgPath());
+                File originDetail = new File(goods.getDetailImgPath());
                 if (originDetail.exists()) {
                     originDetail.delete();
                 }
@@ -196,12 +196,12 @@ public class GoodsController extends BaseController {
             long idL = new Long(id);
             Goods goods = goodsService.findOne(idL);
             // 썸네일 이미지 삭제
-            File thumbnail = new File(saveFile + "/" + goods.getThumbnailImgPath());
+            File thumbnail = new File(goods.getThumbnailImgPath());
             if (thumbnail.exists()) {
                 thumbnail.delete();
             }
             // 상세 이미지 삭제
-            File detail = new File(saveFile + "/" + goods.getDetailImgPath());
+            File detail = new File(goods.getDetailImgPath());
             if (detail.exists()) {
                 detail.delete();
             }

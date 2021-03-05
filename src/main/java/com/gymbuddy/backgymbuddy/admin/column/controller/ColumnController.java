@@ -4,8 +4,6 @@ import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
 import com.gymbuddy.backgymbuddy.admin.column.domain.ColumnsDto;
 import com.gymbuddy.backgymbuddy.admin.column.service.ColumnService;
-import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
-import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_COLUMN_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.COLUMN_PREFIX;
@@ -84,7 +81,7 @@ public class ColumnController extends BaseController {
             File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
             columns.getFile().transferTo(realFile);
             columns.setImgName(realFile.getName());
-            columns.setImgPath(columnPath + "/" + realFile.getName());
+            columns.setImgPath(newfile + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -110,10 +107,10 @@ public class ColumnController extends BaseController {
                     File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
                     columns.getFile().transferTo(realFile);
                     columns.setImgName(filename);
-                    columns.setImgPath(columnPath + "/" + realFile.getName());
+                    columns.setImgPath(newfile + "/" + realFile.getName());
 
                     // 기존 이미지 파일 서버에서 삭제
-                    File originFile = new File(newfile + "/" + origin.getImgPath());
+                    File originFile = new File(origin.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
@@ -156,7 +153,7 @@ public class ColumnController extends BaseController {
             long idL = new Long(id);
             Columns origin = columnService.findOne(idL);
             // 이미지 삭제
-            File originFile = new File(newfile + "/" + origin.getImgPath());
+            File originFile = new File(origin.getImgPath());
             if (originFile.exists()) {
                 originFile.delete();
             }
