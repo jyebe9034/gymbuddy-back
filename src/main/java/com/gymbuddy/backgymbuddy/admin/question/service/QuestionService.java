@@ -31,9 +31,16 @@ public class QuestionService {
 
     public Map<String, Object> findAll(int page) {
         List<Question> questionList = questionRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        List<QuestionDto> dtoList = new ArrayList<>();
+        for (Question question : questionList) {
+            QuestionDto dto = questionToDto(question);
+            dtoList.add(dto);
+        }
+
         List<QuestionEnum> categoryList = categoryList();
+
         Map<String, Object> result = new HashMap<>();
-        result.put("questionList", questionList);
+        result.put("questionList", dtoList);
         result.put("categoryList", categoryList);
         return result;
     }
@@ -133,17 +140,20 @@ public class QuestionService {
      */
     public Map<String, Object> findAllByUser(String createId, int page) {
         List<Question> questionList = questionRepository.findQuestionListByCreateId(createId, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+
         List<QuestionDto> dtoList = new ArrayList<>();
+        List<Integer> countList = new ArrayList<>();
+
         for (Question question : questionList) {
             QuestionDto dto = questionToDto(question);
             dtoList.add(dto);
+            int commentCount = qcRepository.commentCount(dto.getId());
+            countList.add(commentCount);
         }
-
-        //int commentCount = qcRepository.commentCount();
 
         Map<String, Object> result = new HashMap<>();
         result.put("questionList", dtoList);
-        //result.put("commentCount", commentCount);
+        result.put("countList", countList);
         return result;
     }
 

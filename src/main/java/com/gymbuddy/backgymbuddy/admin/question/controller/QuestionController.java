@@ -37,7 +37,7 @@ public class QuestionController extends BaseController {
     /**
      * 전체 1:1 문의글 조회(관리자)
      */
-    @GetMapping(USER_QUESTION_PREFIX + "/all/{page}")
+    @GetMapping(ADMIN_QUESTION_PREFIX + "/all/{page}")
     public ResponseEntity<Map<String, Object>> selectAdminQuestionList(@PathVariable int page) {
         return createResponseEntity(true, questionService.findAll(page));
     }
@@ -199,7 +199,7 @@ public class QuestionController extends BaseController {
                     dto.setImgPath3(questionPath + "/" + realFile.getName());
 
                     File originFile = new File(saveFile + "/" + dto.getImgPath3());
-                    if (originFile.exists()) {
+                    if (originFile.exists() == true) {
                         originFile.delete();
                     }
                 } catch (Exception e) {
@@ -257,7 +257,7 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 댓글 등록(관리자)
      */
-    @PostMapping(ADMIN_QUESTION_PREFIX + "/newReply/{id}")
+    @PostMapping(ADMIN_QUESTION_PREFIX + "/newReply//{id}")
     public ResponseEntity<QuestionComment> insertQuestionReply(
             @PathVariable("id") Long id, @RequestBody QuestionCommentDto dto) {
         log.info("1:1 문의 댓글 등록: {}", dto);

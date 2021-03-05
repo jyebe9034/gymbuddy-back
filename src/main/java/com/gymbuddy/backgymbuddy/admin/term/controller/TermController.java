@@ -76,7 +76,7 @@ public class TermController extends BaseController {
                 File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                 dto.getFile().transferTo(realFile);
                 dto.setImgName(imgName);
-                dto.setImgPath(termPath + realFile.getName());
+                dto.setImgPath(termPath + "/" + realFile.getName());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -105,7 +105,7 @@ public class TermController extends BaseController {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                     dto.getFile().transferTo(realFile);
                     dto.setImgName(imgName);
-                    dto.setImgPath(termPath + realFile.getName());
+                    dto.setImgPath(termPath + "/" + realFile.getName());
 
                     // 기존 이미지를 파일 서버에서 삭제
                     File originFile = new File(saveFile + "/" + term.getImgPath());

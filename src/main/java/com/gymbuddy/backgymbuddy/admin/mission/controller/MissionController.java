@@ -13,7 +13,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_MISSION_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.MISSION_PREFIX;
 
 @Slf4j
@@ -82,7 +81,7 @@ public class MissionController extends BaseController {
     /**
      * 미션 수정
      */
-    @PutMapping(ADMIN_MISSION_PREFIX + "/update/{id}")
+    @PutMapping("/api/mission/update/{id}")
     public ResponseEntity<Map<String, Object>> updateMission(
             @PathVariable("id") Long id, @ModelAttribute MissionDto dto) {
         log.info("미션 수정 id: {}, dto: {}", id, dto);
@@ -134,7 +133,7 @@ public class MissionController extends BaseController {
                     dto.setImgName3(imgName3);
                     dto.setImgPath3(missionPath + "/" + realFile.getName());
 
-                    File originFile = new File(saveFile + "/" + dto.getImgPath3());
+                    File originFile = new File(saveFile + "/" + mission.getImgPath3());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
