@@ -168,15 +168,20 @@ public class GoodsController extends BaseController {
 
         List<GoodsOptionDto> optionList = dto.getOptionList();
         for (GoodsOptionDto optionDto : optionList) {
-            GoodsOption option = goodsService.findOption(dto.getId());
-            if (optionDto.getColorAndSize() != null) {
-                flag = optionDto.getColorAndSize().equals(option.getColorAndSize()) ? true : false;
-            }
-            if (optionDto.getInventory() != 0) {
-                flag = optionDto.getInventory() == option.getInventory() ? true : false;
-            }
-            if (optionDto.getExtraPrice() != null) {
-                flag = optionDto.getExtraPrice().compareTo(option.getExtraPrice()) == 0 ? true : false;
+            Long optionId = optionDto.getId();
+            if (optionId == null) {
+                goodsService.optionSave(goods, optionDto);
+            } else {
+                GoodsOption option = goodsService.findOption(dto.getId());
+                if (optionDto.getColorAndSize() != null) {
+                    flag = optionDto.getColorAndSize().equals(option.getColorAndSize()) ? true : false;
+                }
+                if (optionDto.getInventory() != 0) {
+                    flag = optionDto.getInventory() == option.getInventory() ? true : false;
+                }
+                if (optionDto.getExtraPrice() != null) {
+                    flag = optionDto.getExtraPrice().compareTo(option.getExtraPrice()) == 0 ? true : false;
+                }
             }
         }
 
@@ -212,6 +217,21 @@ public class GoodsController extends BaseController {
         result.put("result", "success");
         return createResponseEntity(true, result);
     }
+
+    /**
+     * 굿즈 옵션 삭제
+     */
+    @DeleteMapping(ADMIN_GOODS_PREFIX + "/deleteOption/{id}")
+    public ResponseEntity<Map<String, Object>> deleteGoodsOption(@PathVariable Long id) {
+        log.info("굿즈 옵션 삭제: {}", id);
+
+        goodsService.deleteOption(id);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", "success");
+        return createResponseEntity(true, result);
+    }
+
 
     /**
      * 굿즈 상태 변경

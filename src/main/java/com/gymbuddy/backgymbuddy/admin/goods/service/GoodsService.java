@@ -151,21 +151,38 @@ public class GoodsService {
 
         List<GoodsOptionDto> optionList = dto.getOptionList();
         for (GoodsOptionDto optionDto : optionList) {
-            GoodsOption option = new GoodsOption();
-            if (optionDto.getColorAndSize() != null) {
-                option.setColorAndSize(optionDto.getColorAndSize());
-            }
-            if (optionDto.getInventory() != 0) {
-                option.setInventory(optionDto.getInventory());
-            }
-            if (optionDto.getExtraPrice() != null) {
-                option.setExtraPrice(optionDto.getExtraPrice());
-            }
-            option.setGoods(goods);
-            optionRepository.save(option);
+            optionSave(goods, optionDto);
         }
 
         return goods.getId();
+    }
+
+    public void optionSave(Goods goods, GoodsOptionDto optionDto) {
+        GoodsOption option = new GoodsOption();
+        if (optionDto.getColorAndSize() != null) {
+            option.setColorAndSize(optionDto.getColorAndSize());
+        }
+        if (optionDto.getInventory() != 0) {
+            option.setInventory(optionDto.getInventory());
+        }
+        if (optionDto.getExtraPrice() != null) {
+            option.setExtraPrice(optionDto.getExtraPrice());
+        }
+        option.setGoods(goods);
+        optionRepository.save(option);
+    }
+
+    public void optionUpdate(GoodsOptionDto optionDto) {
+        GoodsOption option = new GoodsOption();
+        if (optionDto.getColorAndSize() != null) {
+            option.setColorAndSize(optionDto.getColorAndSize());
+        }
+        if (optionDto.getInventory() != 0) {
+            option.setInventory(optionDto.getInventory());
+        }
+        if (optionDto.getExtraPrice() != null) {
+            option.setExtraPrice(optionDto.getExtraPrice());
+        }
     }
 
     @Transactional
@@ -216,6 +233,11 @@ public class GoodsService {
     @Transactional
     public void delete(Long id) {
         goodsRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteOption(Long id) {
+        optionRepository.deleteById(id);
     }
 
     public List<GoodsDto> findAllForMain() {
