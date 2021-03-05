@@ -216,15 +216,20 @@ public class GoodsService {
         List<GoodsOptionDto> optionList = dto.getOptionList();
         if (!optionList.isEmpty()) {
             for (GoodsOptionDto optionDto : optionList) {
-                GoodsOption option = findOption(optionDto.getId());
-                if (optionDto.getColorAndSize() != null) {
-                    option.setColorAndSize(optionDto.getColorAndSize());
-                }
-                if (optionDto.getInventory() != 0) {
-                    option.setInventory(optionDto.getInventory());
-                }
-                if (optionDto.getExtraPrice() != null) {
-                    option.setExtraPrice(optionDto.getExtraPrice());
+                Long optionId = optionDto.getId();
+                if (optionId == null) {
+                    optionSave(goods, optionDto);
+                } else {
+                    GoodsOption option = findOption(optionDto.getId());
+                    if (optionDto.getColorAndSize() != null) {
+                        option.setColorAndSize(optionDto.getColorAndSize());
+                    }
+                    if (optionDto.getInventory() != 0) {
+                        option.setInventory(optionDto.getInventory());
+                    }
+                    if (optionDto.getExtraPrice() != null) {
+                        option.setExtraPrice(optionDto.getExtraPrice());
+                    }
                 }
             }
         }
