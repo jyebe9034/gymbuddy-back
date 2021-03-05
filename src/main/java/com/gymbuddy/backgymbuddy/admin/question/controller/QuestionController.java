@@ -305,11 +305,9 @@ public class QuestionController extends BaseController {
     /**
      * 문의글 검색(관리자)
      */
-    @GetMapping(ADMIN_QUESTION_PREFIX + "/search/{categoryId}/{keyword}/{type}/{page}")
-    public ResponseEntity<List<QuestionDto>> searchQuestion(
-            @PathVariable QuestionEnum categoryId, @PathVariable String keyword,
-            @PathVariable String type, @PathVariable("page") int page) {
-        log.info("문의글 검색 - categoryId: {}, keyword: {}, type: {}", categoryId, keyword, type);
-        return createResponseEntity(true, questionService.search(categoryId, keyword, type, page));
+    @GetMapping(ADMIN_QUESTION_PREFIX + "/search/{page}")
+    public ResponseEntity<List<QuestionDto>> searchQuestion(@PathVariable("page") int page, @RequestParam("param") Map<String, Object> param) {
+        log.info("문의글 검색: {}", param);
+        return createResponseEntity(true, questionService.search((QuestionEnum) param.get("categoryId"), param.get("keyword").toString(), param.get("type").toString(), page));
     }
 }
