@@ -13,6 +13,12 @@ public class QuestionSearch {
     @Column(nullable = true)
     private String title;
 
+    private String keyword;
+
+    private String type;
+
     @Column(nullable = true)
     private String createId;
+
+
 }

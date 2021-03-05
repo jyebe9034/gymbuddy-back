@@ -3,10 +3,7 @@ package com.gymbuddy.backgymbuddy.admin.question.controller;
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
-import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionComment;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionCommentDto;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionDto;
+import com.gymbuddy.backgymbuddy.admin.question.domain.*;
 import com.gymbuddy.backgymbuddy.admin.question.service.QuestionCommentService;
 import com.gymbuddy.backgymbuddy.admin.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -306,8 +303,8 @@ public class QuestionController extends BaseController {
      * 문의글 검색(관리자)
      */
     @GetMapping(ADMIN_QUESTION_PREFIX + "/search/{page}")
-    public ResponseEntity<List<QuestionDto>> searchQuestion(@PathVariable("page") int page, @RequestParam("param") Map<String, Object> param) {
-        log.info("문의글 검색: {}", param);
-        return createResponseEntity(true, questionService.search((QuestionEnum) param.get("categoryId"), param.get("keyword").toString(), param.get("type").toString(), page));
+    public ResponseEntity<List<QuestionDto>> searchQuestion(@PathVariable("page") int page, @RequestParam QuestionSearch search) {
+        log.info("문의글 검색: {}", search);
+        return createResponseEntity(true, questionService.search(search.getCategoryId(), search.getKeyword(), search.getType(), page));
     }
 }
