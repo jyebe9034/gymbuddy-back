@@ -40,8 +40,7 @@ PARAM: 없음
         "contents": 내용,
         "link": 유튜브 링크,
         "imgPath": 이미지 경로,
-        "imgName": 이미지 명,
-        "mainYn": 메인 노출 여부
+        "imgName": 이미지 명
     },
     {
         "id": 유튜브 아이디(JPA 생성),
@@ -50,8 +49,7 @@ PARAM: 없음
         "contents": 내용,
         "link": 유튜브 링크,
         "imgPath": 이미지 경로,
-        "imgName": 이미지 명,
-        "mainYn": 메인 노출 여부
+        "imgName": 이미지 명
     },
     ...
 ]
@@ -66,8 +64,7 @@ PARAM: 없음
         "contents": "첫번째 유튜브 입니다.",
         "link": "localhost:8080/youtube",
         "imgPath": "/resources/static/img/youtube/1612437700781_테스트.png",
-        "imgName": "테스트.png",
-        "mainYn": "Y"
+        "imgName": "테스트.png"
     },
     {
         "id": 2,
@@ -76,8 +73,7 @@ PARAM: 없음
         "contents": "두번째 유튜브 입니다.",
         "link": "localhost:8080/youtube",
         "imgPath": "/resources/static/img/youtube/1612437682220_테스트.png",
-        "imgName": "테스트.png",
-        "mainYn": "Y"
+        "imgName": "테스트.png"
     },
     ...
 ]
@@ -101,8 +97,7 @@ PARAM: 없음
     "contents": 내용,
     "link": 유튜브 링크,
     "imgPath": 이미지 경로,
-    "imgName": 이미지 명,
-    "mainYn": 메인 노출 여부
+    "imgName": 이미지 명
 }
 ```
 * 결과 예시
@@ -114,8 +109,7 @@ PARAM: 없음
     "contents": "여섯번째 유튜브 입니다",
     "link": "localhost:8080/youtube",
     "imgPath": "/resources/static/img/youtube/1612437647277_테스트.png",
-    "imgName": "테스트.png",
-    "mainYn": "Y"
+    "imgName": "테스트.png"
 }
 ```
 
@@ -135,28 +129,14 @@ file: 이미지 파일
 ```
 * 결과 구조
 ```
-** 성공시
 {
     "id": 생성된 아이디 값
-    "successYn": 성공여부
-}
-** 실패시
-{
-    "msg": 메세지
-    "successYn": 성공여부
 }
 ```
 * 결과 예시
 ```
-** 성공시
 {
     "id": 13  
-    "successYn": "Y"   
-}
-** 실패시
-{
-    "msg": "이미지를 등록해주세요." / "링크를 입력해주세요." etc.
-    "successYn": "N"
 }
 ```
 
