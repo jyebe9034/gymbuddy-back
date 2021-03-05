@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.youtube.service;
 
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.YoutubeDto;
 import com.gymbuddy.backgymbuddy.admin.youtube.repository.YoutubeRepository;
@@ -13,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -43,17 +41,19 @@ public class YoutubeService {
     }
 
     public Youtube findOne(Long id) {
-        return youtubeRepository.findById(id).get();
+        Optional<Youtube> byId = youtubeRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 유튜브입니다.");
+        }
+        return byId.get();
     }
 
     @Transactional
-    public Map<String, Object> save(YoutubeDto youtube) {
+    public Long save(YoutubeDto youtube) {
         // 현재 로그인한 아이디 정보 조회
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails userDetails = (UserDetails) principal;
         String loginId = userDetails.getUsername();
-
-        Map<String, Object> result = new HashMap<>();
 
         Youtube entity = new Youtube();
         if (youtube.getUploadDate() != null) {
@@ -62,45 +62,33 @@ public class YoutubeService {
         if (youtube.getTitle() != null) {
             entity.setTitle(youtube.getTitle());
         } else {
-            result.put("successYn", "N");
-            result.put("msg", "제목을 입력해주세요.");
-            return result;
+            throw new DMException("제목을 입력해주세요.");
         }
         if (youtube.getContents() != null) {
             entity.setContents(youtube.getContents());
         } else {
-            result.put("successYn", "N");
-            result.put("msg", "내용을 입력해주세요.");
-            return result;
+            throw new DMException("내용을 입력해주세요.");
         }
         if (youtube.getLink() != null) {
             entity.setLink(youtube.getLink());
         } else {
-            result.put("successYn", "N");
-            result.put("msg", "링크를 입력해주세요.");
-            return result;
+            throw new DMException("링크를 입력해주세요.");
         }
         if (youtube.getImgPath() != null) {
             entity.setImgPath(youtube.getImgPath());
         } else {
-            result.put("successYn", "N");
-            result.put("msg", "이미지를 등록해주세요.");
-            return result;
+            throw new DMException("이미지를 등록해주세요.");
         }
         if (youtube.getImgName() != null) {
             entity.setImgName(youtube.getImgName());
         } else {
-            result.put("successYn", "N");
-            result.put("msg", "이미지를 등록해주세요.");
-            return result;
+            throw new DMException("이미지를 등록해주세요.");
         }
         entity.setCreateId(loginId);
         entity.setUpdateId(loginId);
 
         youtubeRepository.save(entity);
-        result.put("successYn", "N");
-        result.put("id", entity.getId());
-        return result;
+        return entity.getId();
     }
 
     @Transactional

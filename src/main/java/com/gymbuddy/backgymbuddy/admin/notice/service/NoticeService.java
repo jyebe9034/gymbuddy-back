@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.notice.service;
 
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import com.gymbuddy.backgymbuddy.admin.notice.domain.NoticeDto;
 import com.gymbuddy.backgymbuddy.admin.notice.repository.NoticeRepository;
@@ -14,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -41,7 +39,11 @@ public class NoticeService {
     }
 
     public Notice findOne(Long id) {
-        return noticeRepository.findById(id).get();
+        Optional<Notice> byId = noticeRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 공지사항입니다.");
+        }
+        return byId.get();
     }
 
     @Transactional
@@ -54,9 +56,13 @@ public class NoticeService {
         Notice entity = new Notice();
         if (notice.getTitle() != null) {
             entity.setTitle(notice.getTitle());
+        } else {
+            throw new DMException("제목을 입력해주세요.");
         }
         if (notice.getContents() != null) {
             entity.setContents(notice.getContents());
+        } else {
+            throw new DMException("내용을 입력해주세요.");
         }
         if (notice.getImgPath() != null) {
             entity.setImgPath(notice.getImgPath());
@@ -79,16 +85,16 @@ public class NoticeService {
         String loginId = userDetails.getUsername();
 
         Notice origin = findOne(id);
-        if (notice.getTitle() != null) {
+        if (notice.getTitle() != null && !origin.getTitle().equals(notice.getTitle())) {
             origin.setTitle(notice.getTitle());
         }
-        if (notice.getContents() != null) {
+        if (notice.getContents() != null && !origin.getContents().equals(notice.getContents())) {
             origin.setContents(notice.getContents());
         }
-        if (notice.getImgPath() != null && !origin.getImgPath().equals(notice.getImgPath())) {
+        if (notice.getImgPath() != null) {
             origin.setImgPath(notice.getImgPath());
         }
-        if (notice.getImgName() != null && !origin.getImgName().equals(notice.getImgName())) {
+        if (notice.getImgName() != null) {
             origin.setImgName(notice.getImgName());
         }
         origin.setUpdateId(loginId);

@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.news.service;
 
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.news.domain.News;
 import com.gymbuddy.backgymbuddy.admin.news.domain.NewsDto;
 import com.gymbuddy.backgymbuddy.admin.news.repository.NewsRepository;
@@ -15,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,7 +40,11 @@ public class NewsService {
     }
 
     public News findOne(Long id) {
-        return newsRepository.findById(id).get();
+        Optional<News> byId = newsRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 컬럼 작성자입니다.");
+        }
+        return byId.get();
     }
 
     @Transactional
@@ -55,9 +57,13 @@ public class NewsService {
         News entity = new News();
         if (news.getTitle() != null) {
             entity.setTitle(news.getTitle());
+        } else {
+            throw new DMException("제목을 입력해주세요.");
         }
         if (news.getContents() != null) {
             entity.setContents(news.getContents());
+        } else {
+            throw new DMException("내용을 입력해주세요.");
         }
         if (news.getImgPath() != null) {
             entity.setImgPath(news.getImgPath());
@@ -80,16 +86,16 @@ public class NewsService {
         String loginId = userDetails.getUsername();
 
         News origin = findOne(id);
-        if (origin.getTitle() != null) {
+        if (news.getTitle() != null && !origin.getTitle().equals(news.getTitle())) {
             origin.setTitle(news.getTitle());
         }
-        if (origin.getContents() != null) {
+        if (news.getContents() != null && !origin.getContents().equals(news.getContents())) {
             origin.setContents(news.getContents());
         }
-        if (origin.getImgPath() != null && !origin.getImgPath().equals(news.getImgPath())) {
+        if (news.getImgPath() != null) {
             origin.setImgPath(news.getImgPath());
         }
-        if (origin.getImgName() != null && !origin.getImgName().equals(news.getImgName())) {
+        if (news.getImgName() != null) {
             origin.setImgName(news.getImgName());
         }
         origin.setUpdateId(loginId);

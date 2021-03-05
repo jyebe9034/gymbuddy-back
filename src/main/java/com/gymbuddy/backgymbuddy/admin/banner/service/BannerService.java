@@ -3,6 +3,7 @@ package com.gymbuddy.backgymbuddy.admin.banner.service;
 import com.gymbuddy.backgymbuddy.admin.banner.domain.Banner;
 import com.gymbuddy.backgymbuddy.admin.banner.domain.BannerDto;
 import com.gymbuddy.backgymbuddy.admin.banner.repository.BannerRepository;
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -26,7 +30,11 @@ public class BannerService {
     }
 
     public Banner findOne(Long id) {
-        return bannerRepository.findById(id).get();
+        Optional<Banner> byId = bannerRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 배너입니다.");
+        }
+        return byId.get();
     }
 
     @Transactional
@@ -38,22 +46,38 @@ public class BannerService {
 
         Banner entity = new Banner();
         if (banner.getTitle() != null) {
+            Optional<Banner> byTitle = bannerRepository.findByTitle(banner.getTitle());
+            if (byTitle.isPresent()) {
+                throw new DMException("동일한 제목의 배너가 존재합니다.");
+            }
             entity.setTitle(banner.getTitle());
+        } else {
+            throw new DMException("제목을 입력해주세요.");
         }
         if (banner.getCategoryId() != null) {
             entity.setCategoryId(banner.getCategoryId());
+        } else {
+            throw new DMException("카테고리를 입력해주세요.");
         }
         if (banner.getLink() != null) {
             entity.setLink(banner.getLink());
+        } else {
+            throw new DMException("링크를 입력해주세요.");
         }
         if (banner.getBtnTitle() != null) {
             entity.setBtnTitle(banner.getBtnTitle());
+        } else {
+            throw new DMException("버튼명을 입력해주세요.");
         }
         if (banner.getImgPath() != null) {
             entity.setImgPath(banner.getImgPath());
+        } else {
+            throw new DMException("이미지를 등록해주세요.");
         }
         if (banner.getImgName() != null) {
             entity.setImgName(banner.getImgName());
+        } else {
+            throw new DMException("이미지를 등록해주세요.");
         }
         entity.setCreateId(loginId);
         entity.setUpdateId(loginId);
@@ -70,22 +94,22 @@ public class BannerService {
         String loginId = userDetails.getUsername();
 
         Banner origin = findOne(id);
-        if (origin.getTitle() != null) {
+        if (banner.getTitle() != null && !origin.getTitle().equals(banner.getTitle())) {
             origin.setTitle(banner.getTitle());
         }
-        if (origin.getCategoryId() != null) {
+        if (banner.getCategoryId() != null && !origin.getCategoryId().equals(banner.getCategoryId())) {
             origin.setCategoryId(banner.getCategoryId());
         }
-        if (origin.getLink() != null && !origin.getLink().equals(banner.getLink())) {
+        if (banner.getLink() != null && !origin.getLink().equals(banner.getLink())) {
             origin.setLink(banner.getLink());
         }
-        if (origin.getBtnTitle() != null && !origin.getBtnTitle().equals(banner.getBtnTitle())) {
+        if (banner.getBtnTitle() != null && !origin.getBtnTitle().equals(banner.getBtnTitle())) {
             origin.setBtnTitle(banner.getBtnTitle());
         }
-        if (origin.getImgPath() != null) {
+        if (banner.getImgPath() != null && !origin.getImgPath().equals(banner.getImgPath())) {
             origin.setImgPath(banner.getImgPath());
         }
-        if (origin.getImgName() != null) {
+        if (banner.getImgName() != null && !origin.getImgName().equals(banner.getImgName())) {
             origin.setImgName(banner.getImgName());
         }
         origin.setUpdateId(loginId);

@@ -2,6 +2,7 @@ package com.gymbuddy.backgymbuddy.admin.columnWriter.service;
 
 import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
 import com.gymbuddy.backgymbuddy.admin.columnWriter.repository.CWRepository;
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -38,8 +40,11 @@ public class CWService {
     }
 
     public ColumnWriter findOne(Long id) {
-        // TODO Optional일 경우 null이면 customException을 날리도록 해야함..나중에 할 것.
-        return cwRepository.findById(id).get();
+        Optional<ColumnWriter> byId = cwRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 컬럼 작성자입니다.");
+        }
+        return byId.get();
     }
 
     @Transactional
@@ -63,14 +68,14 @@ public class CWService {
         UserDetails userDetails = (UserDetails) principal;
         String loginId = userDetails.getUsername();
 
-        ColumnWriter origin = cwRepository.findById(id).get();
-        if (origin.getName() != null) {
+        ColumnWriter origin = findOne(id);
+        if (columnWriter.getName() != null && !origin.getName().equals(columnWriter.getName())) {
             origin.setName(columnWriter.getName());
         }
-        if (origin.getJob() != null) {
+        if (columnWriter.getJob() != null && !origin.getJob().equals(columnWriter.getJob())) {
             origin.setJob(columnWriter.getJob());
         }
-        if (origin.getContents() != null) {
+        if (columnWriter.getContents() != null && !origin.getContents().equals(columnWriter.getContents())) {
             origin.setContents(columnWriter.getContents());
         }
         origin.setUpdateId(loginId);
