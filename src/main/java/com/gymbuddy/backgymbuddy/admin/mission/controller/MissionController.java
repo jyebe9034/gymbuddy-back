@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_MISSION_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.MISSION_PREFIX;
 
 @Slf4j
@@ -37,7 +38,7 @@ public class MissionController extends BaseController {
     /**
      * 미션 등록
      */
-    @PostMapping(MISSION_PREFIX + "/new")
+    @PostMapping(ADMIN_MISSION_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertMission(@ModelAttribute MissionDto dto) {
         log.info("공지사항 등록: {}", dto);
 
@@ -53,21 +54,21 @@ public class MissionController extends BaseController {
                 File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
                 dto.getFile1().transferTo(realFile1);
                 dto.setImgName1(imgName1);
-                dto.setImgPath1(missionPath + "/" + realFile1.getName());
+                dto.setImgPath1(saveFile + "/" + realFile1.getName());
             }
             // 파일2
             if (!dto.getFile2().isEmpty()) {
                 File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
                 dto.getFile2().transferTo(realFile2);
                 dto.setImgName2(imgName2);
-                dto.setImgPath2(missionPath + "/" + realFile2.getName());
+                dto.setImgPath2(saveFile + "/" + realFile2.getName());
             }
             // 파일3
             if (!dto.getFile3().isEmpty()) {
                 File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
                 dto.getFile3().transferTo(realFile3);
                 dto.setImgName3(imgName3);
-                dto.setImgPath3(missionPath + "/" + realFile3.getName());
+                dto.setImgPath3(saveFile + "/" + realFile3.getName());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -81,7 +82,7 @@ public class MissionController extends BaseController {
     /**
      * 미션 수정
      */
-    @PutMapping("/api/mission/update/{id}")
+    @PutMapping(ADMIN_MISSION_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateMission(
             @PathVariable("id") Long id, @ModelAttribute MissionDto dto) {
         log.info("미션 수정 id: {}, dto: {}", id, dto);
@@ -95,9 +96,9 @@ public class MissionController extends BaseController {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
                     dto.getFile1().transferTo(realFile);
                     dto.setImgName1(imgName1);
-                    dto.setImgPath1(missionPath + "/" + realFile.getName());
+                    dto.setImgPath1(saveFile + "/" + realFile.getName());
 
-                    File originFile = new File(saveFile + "/" + dto.getImgPath1());
+                    File originFile = new File(mission.getImgPath1());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
@@ -113,9 +114,9 @@ public class MissionController extends BaseController {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
                     dto.getFile2().transferTo(realFile);
                     dto.setImgName2(imgName2);
-                    dto.setImgPath2(missionPath + "/" + realFile.getName());
+                    dto.setImgPath2(saveFile + "/" + realFile.getName());
 
-                    File originFile = new File(saveFile + "/" + dto.getImgPath2());
+                    File originFile = new File(mission.getImgPath2());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
@@ -131,9 +132,9 @@ public class MissionController extends BaseController {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
                     dto.getFile3().transferTo(realFile);
                     dto.setImgName3(imgName3);
-                    dto.setImgPath3(missionPath + "/" + realFile.getName());
+                    dto.setImgPath3(saveFile + "/" + realFile.getName());
 
-                    File originFile = new File(saveFile + "/" + mission.getImgPath3());
+                    File originFile = new File(mission.getImgPath3());
                     if (originFile.exists()) {
                         originFile.delete();
                     }

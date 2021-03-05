@@ -74,7 +74,7 @@ public class MemberController extends BaseController {
                 File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                 dto.getFile().transferTo(realFile);
                 dto.setImgName(imgName);
-                dto.setImgPath(memberPath + realFile.getName());
+                dto.setImgPath(saveFile + "/" + realFile.getName());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -98,9 +98,9 @@ public class MemberController extends BaseController {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                     dto.getFile().transferTo(realFile);
                     dto.setImgName(imgName);
-                    dto.setImgPath(memberPath + realFile.getName());
+                    dto.setImgPath(saveFile + "/" + realFile.getName());
 
-                    File originFile = new File(saveFile + "/" + member.getImgPath());
+                    File originFile = new File(member.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }

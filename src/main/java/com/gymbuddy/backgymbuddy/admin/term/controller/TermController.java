@@ -76,7 +76,7 @@ public class TermController extends BaseController {
                 File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                 dto.getFile().transferTo(realFile);
                 dto.setImgName(imgName);
-                dto.setImgPath(termPath + "/" + realFile.getName());
+                dto.setImgPath(saveFile + "/" + realFile.getName());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -90,7 +90,7 @@ public class TermController extends BaseController {
     /**
      * 약관 (이미지) 수정(삭제 & 등록)
      */
-    @PutMapping("/term/update/{id}")
+    @PutMapping(ADMIN_TERM_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateTerm(
             @PathVariable("id") Long id, @ModelAttribute TermDto dto) {
         log.info("약관 수정 id: {}, dto: {}", dto);
@@ -105,10 +105,10 @@ public class TermController extends BaseController {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                     dto.getFile().transferTo(realFile);
                     dto.setImgName(imgName);
-                    dto.setImgPath(termPath + "/" + realFile.getName());
+                    dto.setImgPath(saveFile + "/" + realFile.getName());
 
                     // 기존 이미지를 파일 서버에서 삭제
-                    File originFile = new File(saveFile + "/" + term.getImgPath());
+                    File originFile = new File(term.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }

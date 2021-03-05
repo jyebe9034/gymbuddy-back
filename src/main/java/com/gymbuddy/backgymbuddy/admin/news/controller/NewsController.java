@@ -69,7 +69,7 @@ public class NewsController extends BaseController {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
                 news.getFile().transferTo(realFile);
                 news.setImgName(filename);
-                news.setImgPath(newsPath + "/" + realFile.getName());
+                news.setImgPath(newfile + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -96,10 +96,10 @@ public class NewsController extends BaseController {
                     File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
                     news.getFile().transferTo(realFile);
                     news.setImgName(filename);
-                    news.setImgPath(newsPath + "/" + realFile.getName());
+                    news.setImgPath(newfile + "/" + realFile.getName());
 
                     // 기존 이미지 파일 서버에서 삭제
-                    File originFile = new File(newfile + "/" + origin.getImgPath());
+                    File originFile = new File(origin.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
@@ -142,7 +142,7 @@ public class NewsController extends BaseController {
             long idL = new Long(id);
             News origin = newsService.findOne(idL);
             // 이미지 삭제
-            File originFile = new File(newfile + "/" + origin.getImgPath());
+            File originFile = new File(origin.getImgPath());
             if (originFile.exists()) {
                 originFile.delete();
             }
