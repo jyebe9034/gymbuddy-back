@@ -71,22 +71,22 @@ public class YoutubeController extends BaseController {
         log.info("유튜브 등록: {}", youtube);
 
         // 이미지 업로드
-        String filename = youtube.getFile().getOriginalFilename();
-        try {
-            if (!newFile.exists()) {
-                newFile.mkdir();
+        if (youtube.getFile() != null) {
+            String filename = youtube.getFile().getOriginalFilename();
+            try {
+                if (!newFile.exists()) {
+                    newFile.mkdir();
+                }
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
+                youtube.getFile().transferTo(realFile);
+                youtube.setImgName(filename);
+                youtube.setImgPath(newFile + "/" + realFile.getName());
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
-            File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
-            youtube.getFile().transferTo(realFile);
-            youtube.setImgName(filename);
-            youtube.setImgPath(newFile + "/" + realFile.getName());
-        } catch (Exception e) {
-            log.error(e.getMessage());
         }
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("id", youtubeService.save(youtube));
-        return createResponseEntity(true, result);
+        return createResponseEntity(true, youtubeService.save(youtube));
     }
 
     /**

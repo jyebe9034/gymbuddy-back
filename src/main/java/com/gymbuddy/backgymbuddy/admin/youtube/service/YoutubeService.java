@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -46,11 +47,13 @@ public class YoutubeService {
     }
 
     @Transactional
-    public Long save(YoutubeDto youtube) {
+    public Map<String, Object> save(YoutubeDto youtube) {
         // 현재 로그인한 아이디 정보 조회
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails userDetails = (UserDetails) principal;
         String loginId = userDetails.getUsername();
+
+        Map<String, Object> result = new HashMap<>();
 
         Youtube entity = new Youtube();
         if (youtube.getUploadDate() != null) {
@@ -58,24 +61,46 @@ public class YoutubeService {
         }
         if (youtube.getTitle() != null) {
             entity.setTitle(youtube.getTitle());
+        } else {
+            result.put("successYn", "N");
+            result.put("msg", "제목을 입력해주세요.");
+            return result;
         }
         if (youtube.getContents() != null) {
             entity.setContents(youtube.getContents());
+        } else {
+            result.put("successYn", "N");
+            result.put("msg", "내용을 입력해주세요.");
+            return result;
         }
         if (youtube.getLink() != null) {
             entity.setLink(youtube.getLink());
+        } else {
+            result.put("successYn", "N");
+            result.put("msg", "링크를 입력해주세요.");
+            return result;
         }
         if (youtube.getImgPath() != null) {
             entity.setImgPath(youtube.getImgPath());
+        } else {
+            result.put("successYn", "N");
+            result.put("msg", "이미지를 등록해주세요.");
+            return result;
         }
         if (youtube.getImgName() != null) {
             entity.setImgName(youtube.getImgName());
+        } else {
+            result.put("successYn", "N");
+            result.put("msg", "이미지를 등록해주세요.");
+            return result;
         }
         entity.setCreateId(loginId);
         entity.setUpdateId(loginId);
 
         youtubeRepository.save(entity);
-        return entity.getId();
+        result.put("successYn", "N");
+        result.put("id", entity.getId());
+        return result;
     }
 
     @Transactional
@@ -86,22 +111,22 @@ public class YoutubeService {
         String loginId = userDetails.getUsername();
 
         Youtube origin = findOne(id);
-        if (origin.getUploadDate() != null && !origin.getUploadDate().equals(youtube.getUploadDate())) {
+        if (youtube.getUploadDate() != null) {
             origin.setUploadDate(youtube.getUploadDate());
         }
-        if (origin.getTitle() != null) {
+        if (youtube.getTitle() != null && !origin.getTitle().equals(youtube.getTitle())) {
             origin.setTitle(youtube.getTitle());
         }
-        if (origin.getContents() != null) {
+        if (youtube.getContents() != null && !origin.getContents().equals(youtube.getContents())) {
             origin.setContents(youtube.getContents());
         }
-        if (origin.getLink() != null) {
+        if (youtube.getLink() != null && !origin.getLink().equals(youtube.getLink())) {
             origin.setLink(youtube.getLink());
         }
-        if (origin.getImgPath() != null) {
+        if (youtube.getImgPath() != null && !origin.getImgPath().equals(youtube.getImgPath())) {
             origin.setImgPath(youtube.getImgPath());
         }
-        if (origin.getImgName() != null) {
+        if (youtube.getImgName() != null && !origin.getImgName().equals(youtube.getImgName())) {
             origin.setImgName(youtube.getImgName());
         }
         origin.setUpdateId(loginId);
