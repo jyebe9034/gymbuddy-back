@@ -11,4 +11,7 @@ public interface QuestionCommentRepository extends JpaRepository<QuestionComment
 
     @Query("select c from QuestionComment c where c.question.id = :id")
     List<QuestionComment> findByQuestionId(@Param("id") Long id);
+
+    @Query("select count(c) from QuestionComment c where c.question.id = :id")
+    int commentCount(@Param("id") Long id);
 }

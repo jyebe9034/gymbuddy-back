@@ -39,7 +39,7 @@ public class FQController extends BaseController {
     }
 
     /**
-     * 전체 굿즈 갯수 조회
+     * 자주묻는질문 전체 갯수 조회
      */
     @GetMapping(FQ_PREFIX + "/totalCount")
     public ResponseEntity<Map<String, Object>> selectFaqTotalCount() {
@@ -60,7 +60,7 @@ public class FQController extends BaseController {
     /**
      * 자주묻는질문 등록
      */
-    @PostMapping(FQ_PREFIX + "/new")
+    @PostMapping(ADMIN_FQ_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertFq(@RequestBody FQDto dto) {
         log.info("자주묻는질문 등록: {}", dto);
 

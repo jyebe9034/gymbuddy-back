@@ -34,7 +34,7 @@ public class GoodsController extends BaseController {
     /**
      * 전체 굿즈 조회
      */
-    @GetMapping("/goods/all/{page}")
+    @GetMapping(GOODS_PREFIX + "/all/{page}")
     public ResponseEntity<Map<String, Object>> selectGoodsList(@PathVariable("page") int page) {
         return createResponseEntity(true, goodsService.findAllByDto(page));
     }
@@ -97,7 +97,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 수정
      */
-    @PutMapping(GOODS_PREFIX + "/update/{id}")
+    @PutMapping("/goods/update/{id}")
     public ResponseEntity<Map<String, Object>> updateGoods(
             @PathVariable("id") Long id, @RequestBody GoodsDto dto) {
         log.info("굿즈 수정 id: {}, dto: {}", id, dto);
