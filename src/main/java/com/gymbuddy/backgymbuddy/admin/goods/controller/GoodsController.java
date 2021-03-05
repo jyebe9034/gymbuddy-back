@@ -97,7 +97,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 수정
      */
-    @PutMapping(ADMIN_GOODS_PREFIX + "/update/{id}")
+    @PutMapping("/goods/update/{id}")
     public ResponseEntity<Map<String, Object>> updateGoods(
             @PathVariable("id") Long id, @RequestBody GoodsDto dto) {
         log.info("굿즈 수정 id: {}, dto: {}", id, dto);
@@ -141,6 +141,7 @@ public class GoodsController extends BaseController {
         }
 
         goodsService.update(id, dto);
+
         Goods findGoods = goodsService.findOne(id);
 
         boolean flag = true;
@@ -165,24 +166,18 @@ public class GoodsController extends BaseController {
         if (dto.getDetailImgPath() != null) {
             flag = dto.getDetailImgPath().equals(findGoods.getDetailImgPath()) ? true : false;
         }
-
         List<GoodsOptionDto> optionList = dto.getOptionList();
         for (GoodsOptionDto optionDto : optionList) {
-            Long optionId = optionDto.getId();
-            if (optionId == null) {
-                goodsService.optionSave(goods, optionDto);
-            } else {
-                GoodsOption option = goodsService.findOption(dto.getId());
-                if (optionDto.getColorAndSize() != null) {
-                    flag = optionDto.getColorAndSize().equals(option.getColorAndSize()) ? true : false;
+             GoodsOption option = goodsService.findOption(dto.getId());
+             if (optionDto.getColorAndSize() != null) {
+                 flag = optionDto.getColorAndSize().equals(option.getColorAndSize()) ? true : false;
+             }
+             if (optionDto.getInventory() != 0) {
+                 flag = optionDto.getInventory() == option.getInventory() ? true : false;
                 }
-                if (optionDto.getInventory() != 0) {
-                    flag = optionDto.getInventory() == option.getInventory() ? true : false;
-                }
-                if (optionDto.getExtraPrice() != null) {
-                    flag = optionDto.getExtraPrice().compareTo(option.getExtraPrice()) == 0 ? true : false;
-                }
-            }
+             if (optionDto.getExtraPrice() != null) {
+                 flag = optionDto.getExtraPrice().compareTo(option.getExtraPrice()) == 0 ? true : false;
+             }
         }
 
         Map<String, Object> result = new HashMap<>();
