@@ -142,9 +142,11 @@ public class NewsController extends BaseController {
             long idL = new Long(id);
             News origin = newsService.findOne(idL);
             // 이미지 삭제
-            File originFile = new File(origin.getImgPath());
-            if (originFile.exists()) {
-                originFile.delete();
+            if (origin.getImgPath() != null) {
+                File originFile = new File(origin.getImgPath());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
             }
             newsService.delete(idL);
         }

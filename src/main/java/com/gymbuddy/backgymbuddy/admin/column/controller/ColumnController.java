@@ -86,9 +86,7 @@ public class ColumnController extends BaseController {
             log.error(e.getMessage());
         }
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("id", columnService.save(columns));
-        return createResponseEntity(true, result);
+        return createResponseEntity(true, columnService.save(columns));
     }
 
     /**
@@ -153,9 +151,11 @@ public class ColumnController extends BaseController {
             long idL = new Long(id);
             Columns origin = columnService.findOne(idL);
             // 이미지 삭제
-            File originFile = new File(origin.getImgPath());
-            if (originFile.exists()) {
-                originFile.delete();
+            if (origin.getImgPath() != null) {
+                File originFile = new File(origin.getImgPath());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
             }
             columnService.delete(idL);
         }

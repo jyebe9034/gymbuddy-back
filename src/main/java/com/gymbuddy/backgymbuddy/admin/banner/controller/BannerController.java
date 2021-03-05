@@ -71,17 +71,12 @@ public class BannerController extends BaseController {
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             banner.getFile().transferTo(realFile);
             banner.setImgName(filename);
-            banner.setImgPath(bannerPath + "/" + realFile.getName());
+            banner.setImgPath(newFile + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
-        // 저장
-        Long id = bannerService.save(banner);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
-        return createResponseEntity(true, result);
+        return createResponseEntity(true, bannerService.save(banner));
     }
 
     /**
@@ -99,9 +94,9 @@ public class BannerController extends BaseController {
                     File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                     banner.getFile().transferTo(realFile);
                     banner.setImgName(filename);
-                    banner.setImgPath(bannerPath + "/" + realFile.getName());
+                    banner.setImgPath(newFile + "/" + realFile.getName());
 
-                    File originFile = new File(newFile + "/" + origin.getImgPath());
+                    File originFile = new File(origin.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
@@ -150,9 +145,11 @@ public class BannerController extends BaseController {
             long idL = new Long(id);
             Banner origin = bannerService.findOne(idL);
             // 이미지 삭제
-            File originFile = new File(newFile + "/" + origin.getImgPath());
-            if (originFile.exists()) {
-                originFile.delete();
+            if (origin.getImgPath() != null) {
+                File originFile = new File(origin.getImgPath());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
             }
             bannerService.delete(idL);
         }
