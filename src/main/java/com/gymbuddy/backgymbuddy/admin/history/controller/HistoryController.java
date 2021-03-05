@@ -43,6 +43,9 @@ public class HistoryController extends BaseController {
 
         for (HistoryDto dto : dtoList) {
             Long id = dto.getId();
+            if (id == null) {
+                insertHistory(dto);
+            }
             historyService.update(id, dto);
         }
 
