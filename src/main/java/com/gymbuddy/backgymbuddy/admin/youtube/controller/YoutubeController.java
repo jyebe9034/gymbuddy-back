@@ -159,9 +159,11 @@ public class YoutubeController extends BaseController {
             long idL = new Long(id);
             Youtube origin = youtubeService.findOne(idL);
             // 이미지 삭제
-            File originFile = new File(origin.getImgPath());
-            if (originFile.exists()) {
-                originFile.delete();
+            if (origin.getImgPath() != null) {
+                File originFile = new File(origin.getImgPath());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
             }
             youtubeService.delete(idL);
         }

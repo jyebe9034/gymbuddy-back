@@ -263,15 +263,21 @@ public class ProgramController extends BaseController {
             long idL = new Long(id);
             Program origin = programService.findOne(idL);
             // 썸네일 이미지 삭제
-            File originThumbFile = new File(origin.getThumbnailImgPath());
-            if (originThumbFile.exists()) {
-                originThumbFile.delete();
+            if (origin.getThumbnailImgPath() != null) {
+                File originThumbFile = new File(origin.getThumbnailImgPath());
+                if (originThumbFile.exists()) {
+                    originThumbFile.delete();
+                }
             }
+
             // 상세 이미지 삭제
-            File originDetailFile = new File(origin.getDetailImgPath());
-            if (originDetailFile.exists()) {
-                originDetailFile.delete();
+            if (origin.getDetailImgPath() != null) {
+                File originDetailFile = new File(origin.getDetailImgPath());
+                if (originDetailFile.exists()) {
+                    originDetailFile.delete();
+                }
             }
+
             programService.delete(idL);
         }
 
