@@ -25,11 +25,6 @@ public class BannerService {
 
     private final BannerRepository bannerRepository;
 
-    // 현재 로그인한 아이디 정보 조회
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    UserDetails userDetails = (UserDetails) principal;
-    String loginId = userDetails.getUsername();
-
     public List<Banner> findAll() {
         return bannerRepository.findAll();
     }
@@ -44,6 +39,11 @@ public class BannerService {
 
     @Transactional
     public Long save(BannerDto banner) {
+        // 현재 로그인한 아이디 정보 조회
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
         Banner entity = new Banner();
         if (banner.getTitle() != null) {
             Optional<Banner> byTitle = bannerRepository.findByTitle(banner.getTitle());
@@ -88,6 +88,11 @@ public class BannerService {
 
     @Transactional
     public void update(Long id, BannerDto banner) {
+        // 현재 로그인한 아이디 정보 조회
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
         Banner origin = findOne(id);
         if (banner.getTitle() != null && !origin.getTitle().equals(banner.getTitle())) {
             origin.setTitle(banner.getTitle());

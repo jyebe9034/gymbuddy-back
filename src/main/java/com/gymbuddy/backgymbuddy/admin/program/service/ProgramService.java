@@ -28,11 +28,6 @@ public class ProgramService {
     private final ProgramRepository programRepository;
     private final ProgramOptionRepository optionRepository;
 
-    // 현재 로그인한 아이디 정보 조회
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    UserDetails userDetails = (UserDetails) principal;
-    String loginId = userDetails.getUsername();
-
     public int selectTotalCount() {
         return programRepository.findAll().size();
     }
@@ -179,6 +174,11 @@ public class ProgramService {
 
     @Transactional
     public Long save(ProgramDto program) {
+        // 현재 로그인한 아이디 정보 조회
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
         Program entity = new Program();
         if (program.getTitle() != null) {
             entity.setTitle(program.getTitle());
@@ -281,6 +281,11 @@ public class ProgramService {
 
     @Transactional
     public void update(Long id, ProgramDto program) {
+        // 현재 로그인한 아이디 정보 조회
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
         Program origin = findOne(id);
         if (program.getTitle() != null) {
             origin.setTitle(program.getTitle());
