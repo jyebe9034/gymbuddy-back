@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_PROGRAM_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.PROGRAM_PREFIX;
 
 @Slf4j
@@ -61,8 +62,8 @@ public class ProgramController extends BaseController {
     /**
      * 프로그램 등록
      */
-    @PostMapping(PROGRAM_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertProgram(@RequestBody ProgramDto program) {
+    @PostMapping(ADMIN_PROGRAM_PREFIX + "/new")
+    public ResponseEntity<Map<String, Object>> insertProgram(@ModelAttribute ProgramDto program) {
         // 여기에서 받은 프로그램 + 프로그램 옵션...
         log.info("프로그램 등록: {}", program);
 
@@ -106,7 +107,7 @@ public class ProgramController extends BaseController {
     /**
      * 프로그램 진행상태 변경
      */
-    @PutMapping(PROGRAM_PREFIX + "/updateStatus/{status}")
+    @PutMapping(ADMIN_PROGRAM_PREFIX + "/updateStatus/{status}")
     public ResponseEntity<Map<String, Object>> updateProgramStatus(
             @RequestBody List<Integer> ids, @PathVariable ProgramStatus status) {
         log.info("프로그램 진행상태 변경: {}", ids);
@@ -133,7 +134,7 @@ public class ProgramController extends BaseController {
     /**
      * 프로그램 메인 설정
      */
-    @PutMapping(PROGRAM_PREFIX + "/setMainYn/{id}/{mainYn}")
+    @PutMapping(ADMIN_PROGRAM_PREFIX + "/setMainYn/{id}/{mainYn}")
     public ResponseEntity<Map<String, Object>> setProgramMainYn(
             @PathVariable Long id, @PathVariable String mainYn) {
         log.info("프로그램 메인 설정: {}", id);
@@ -154,8 +155,8 @@ public class ProgramController extends BaseController {
     /**
      * 프로그램 수정
      */
-    @PutMapping(PROGRAM_PREFIX + "/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateProgram(@PathVariable("id") Long id, @RequestBody ProgramDto program) {
+    @PutMapping(ADMIN_PROGRAM_PREFIX + "/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateProgram(@PathVariable("id") Long id, @ModelAttribute ProgramDto program) {
         // 프로그램 + 프로그램 옵션 수정을 같이 처리해야 함..
         log.info("프로그램 수정 - id: {}, program: {}", id, program);
 
@@ -170,9 +171,11 @@ public class ProgramController extends BaseController {
                 program.setThumbnailImgPath(newfile + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
-                File originThumbFile = new File(origin.getThumbnailImgPath());
-                if (originThumbFile.exists()) {
-                    originThumbFile.delete();
+                if (origin.getThumbnailImgPath() != null) {
+                    File originThumbFile = new File(origin.getThumbnailImgPath());
+                    if (originThumbFile.exists()) {
+                        originThumbFile.delete();
+                    }
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -189,9 +192,11 @@ public class ProgramController extends BaseController {
                 program.setDetailImgPath(newfile + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
-                File originDetailFile = new File(origin.getDetailImgPath());
-                if (originDetailFile.exists()) {
-                    originDetailFile.delete();
+                if (origin.getDetailImgPath() != null) {
+                    File originDetailFile = new File(origin.getDetailImgPath());
+                    if (originDetailFile.exists()) {
+                        originDetailFile.delete();
+                    }
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -255,7 +260,7 @@ public class ProgramController extends BaseController {
     /**
      * 프로그램 삭제
      */
-    @DeleteMapping(PROGRAM_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_PROGRAM_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteProgram(@RequestBody List<Integer> ids) {
         log.info("프로그램 삭제: {}", ids);
 

@@ -33,13 +33,11 @@ public class ProgramOption extends BaseDomain {
     /**
      * 추가 금액
      */
-    @Column(nullable = false)
+    @Column
     private BigDecimal addPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "program_id")
     private Program program;
-
-
 
 }
