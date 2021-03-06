@@ -186,7 +186,7 @@ PARAM: 없음
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteQuestionByAdmin
-PATH : /api/user/question/delete
+PATH : /api/admin/question/delete
 PARAM : List<Integer>
 === PARAM 설명 ===
 아이디를 배열로 넘기면 됨.

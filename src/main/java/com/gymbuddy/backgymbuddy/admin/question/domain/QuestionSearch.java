@@ -8,17 +8,13 @@ import javax.persistence.Column;
 @Data
 public class QuestionSearch {
 
-    private String categoryId;
-
-    @Column(nullable = true)
-    private String title;
+    private QuestionEnum categoryId;
 
     private String keyword;
-
-    private String type;
-
+    @Column(nullable = true)
+    private String title;
     @Column(nullable = true)
     private String createId;
 
-
+    private String type;
 }

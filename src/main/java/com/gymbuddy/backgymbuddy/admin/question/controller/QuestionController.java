@@ -67,6 +67,26 @@ public class QuestionController extends BaseController {
 
         for (int id : ids) {
             long idL = new Long(id);
+
+            Question findQuestion = questionService.findOne(idL);
+            if (findQuestion.getImgPath1() != null) {
+                File file = new File(findQuestion.getImgPath1());
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
+            if (findQuestion.getImgPath2() != null) {
+                File file = new File(findQuestion.getImgPath2());
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
+            if (findQuestion.getImgPath3() != null) {
+                File file = new File(findQuestion.getImgPath3());
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
             questionService.delete(idL);
         }
 
@@ -97,7 +117,7 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 등록(사용자)
      */
-    @PostMapping(USER_QUESTION_PREFIX + "/new")
+    @PostMapping("/question/new")
     public ResponseEntity<Map<String, Object>> insertQuestion(@ModelAttribute QuestionDto dto) {
         log.info("1:1 문의 등록: {}", dto);
 
@@ -143,14 +163,14 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 수정(사용자)
      */
-    @PutMapping(USER_QUESTION_PREFIX + "/update/{id}")
+    @PutMapping("/question/update/{id}")
     public ResponseEntity<Map<String, Object>> updateQuestion(
             @PathVariable("id") Long id, @ModelAttribute QuestionDto dto) {
         log.info("미션 수정 id: {}, dto: {}", id, dto);
 
         Question question = questionService.findOne(id);
 
-        if (!dto.getFile1().isEmpty()) {
+        if (dto.getFile1() != null) {
             String imgName1 = dto.getFile1().getOriginalFilename();
             if (!question.getImgName1().equals(imgName1)) {
                 try {
@@ -168,7 +188,7 @@ public class QuestionController extends BaseController {
                 }
             }
         }
-        if (!dto.getFile2().isEmpty()) {
+        if (dto.getFile2() != null) {
             String imgName2 = dto.getFile2().getOriginalFilename();
             if (!question.getImgName2().equals(imgName2)) {
                 try {
@@ -186,7 +206,7 @@ public class QuestionController extends BaseController {
                 }
             }
         }
-        if (!dto.getFile3().isEmpty()) {
+        if (dto.getFile3() != null) {
             String imgName3 = dto.getFile3().getOriginalFilename();
             if (!question.getImgName3().equals(imgName3)) {
                 try {
@@ -244,6 +264,26 @@ public class QuestionController extends BaseController {
     public ResponseEntity<History> deleteQuestion(@PathVariable("id") Long id) {
         log.info("1:1 문의 삭제: {}", id);
 
+        Question findQuestion = questionService.findOne(id);
+
+        if (findQuestion.getImgPath1() != null) {
+            File file = new File(findQuestion.getImgPath1());
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+        if (findQuestion.getImgPath2() != null) {
+            File file = new File(findQuestion.getImgPath2());
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+        if (findQuestion.getImgPath3() != null) {
+            File file = new File(findQuestion.getImgPath3());
+            if (file.exists()) {
+                file.delete();
+            }
+        }
         questionService.delete(id);
 
         Map<String, Object> result = new HashMap<>();
@@ -303,8 +343,10 @@ public class QuestionController extends BaseController {
      * 문의글 검색(관리자)
      */
     @GetMapping(ADMIN_QUESTION_PREFIX + "/search/{page}")
-    public ResponseEntity<List<QuestionDto>> searchQuestion(@PathVariable("page") int page, @RequestParam QuestionSearch search) {
-        log.info("문의글 검색: {}", search);
-        return createResponseEntity(true, questionService.search(search.getCategoryId(), search.getKeyword(), search.getType(), page));
+    public ResponseEntity<List<QuestionDto>> searchQuestion(
+            @PathVariable("page") int page, @RequestParam QuestionEnum categoryId,
+            @RequestParam String keyword, @RequestParam String type) {
+        log.info("문의글 검색 - categoryId: {}, keyword: {}, type: {}", categoryId, keyword, type);
+        return createResponseEntity(true, questionService.search(categoryId, keyword, type, page));
     }
 }
