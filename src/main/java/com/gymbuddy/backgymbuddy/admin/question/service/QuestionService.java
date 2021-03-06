@@ -1,10 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.question.service;
 
 import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
-import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionComment;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionCommentDto;
-import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionDto;
+import com.gymbuddy.backgymbuddy.admin.question.domain.*;
 import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionCommentRepository;
 import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -230,13 +227,15 @@ public class QuestionService {
     }
 
     @Transactional
-    public List<QuestionDto> search(String categoryId, String keyword, String type, int page) {
+    public List<QuestionDto> search(QuestionEnum categoryId, String keyword, String type, int page) {
         List<Question> result = new ArrayList<>();
 
         if (type.equals("T")) {
-            result = questionRepository.findAllByCategoryIdAndTitleContaining(categoryId, keyword, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+            result = questionRepository.findAllByCategoryIdAndTitleContaining(
+                    categoryId, keyword, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
         } else if (type.equals("I")) {
-            result = questionRepository.findAllByCategoryIdAndCreateIdContaining(categoryId, keyword, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+            result = questionRepository.findAllByCategoryIdAndCreateIdContaining(
+                    categoryId, keyword, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
         }
 
         List<QuestionDto> dtoList = new ArrayList<>();

@@ -11,6 +11,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findQuestionListByCreateId(@Param("createId") String createId, Pageable pageable);
 
-    Page<Question> findAllByCategoryIdAndTitleContaining(@Param("categoryId") String categoryId, @Param("title") String title, Pageable pageable);
-    Page<Question> findAllByCategoryIdAndCreateIdContaining(@Param("categoryId") String categoryId, @Param("createId") String createId, Pageable pageable);
+    Page<Question> findAllByCategoryIdAndTitleContaining(@Param("categoryId") QuestionEnum categoryId, @Param("title") String title, Pageable pageable);
+    Page<Question> findAllByCategoryIdAndCreateIdContaining(@Param("categoryId") QuestionEnum categoryId, @Param("createId") String createId, Pageable pageable);
 }

@@ -9,6 +9,8 @@ import com.gymbuddy.backgymbuddy.admin.mission.domain.MissionDto;
 import com.gymbuddy.backgymbuddy.admin.mission.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +37,7 @@ public class MissionService {
     }
 
     public Map<String, Object> findAllByMap() {
-        List<History> histories = historyRepository.findAll();
+        List<History> histories = historyRepository.findAll(PageRequest.of(0, 10, Sort.by("id").descending())).getContent();
         List<BusinessIdentity> biList = biRepository.findAll();
         List<Mission> mission = findAll();
 
