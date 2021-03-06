@@ -184,7 +184,7 @@ PATH : /api/program/detail/{id}
 ```
 HTTP METHOD: POST
 METHOD NAME: insertProgram
-PATH : /api/program/new
+PATH : /api/admin/program/new
 === PARAM 설명 ===
 {
     "thumbnailFile" : 썸네일 파일
@@ -254,7 +254,7 @@ PATH : /api/program/new
 ```
 HTTP METHOD: PUT
 METHOD NAME: updateProgramStatus
-PATH : /api/program/updateStatus/{status}
+PATH : /api/admin/program/updateStatus/{status}
 *** 변경하는 상태값(INPROGRESS, COMPLETE, TUMBLBUG)을 Path에 입력
 PARAM : List<Integer>
 === PARAM 설명 ===
@@ -283,7 +283,7 @@ PARAM : List<Integer>
 ```
 HTTP METHOD: PUT
 METHOD NAME: setProgramMainYn
-PATH : /api/program/setMainYn/{id}/{mainYn}
+PATH : /api/admin/program/setMainYn/{id}/{mainYn}
 *** 변경하는 id와 메인 여부를 Path에 입력
 === PARAM 설명 ===
 ```
@@ -306,7 +306,7 @@ PATH : /api/program/setMainYn/{id}/{mainYn}
 ```
 HTTP METHOD: PUT
 METHOD NAME: updateProgram
-PATH : /api/program/update/{id}
+PATH : /api/admin/program/update/{id}
 === PARAM 설명 ===
 {
     "title" : 제목
@@ -371,7 +371,7 @@ PATH : /api/program/update/{id}
 ```
 HTTP METHOD: DELETE
 METHOD NAME: deleteProgram
-PATH : /api/program/delete
+PATH : /api/admin/program/delete
 PARAM : List<nteger>
 === PARAM 설명 ===
 아이디 배열을 넘기면 됌

@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.program.service;
 
 import com.gymbuddy.backgymbuddy.admin.enums.status.ProgramStatus;
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramDto;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramOption;
@@ -11,13 +12,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -27,6 +27,11 @@ public class ProgramService {
 
     private final ProgramRepository programRepository;
     private final ProgramOptionRepository optionRepository;
+
+    // 현재 로그인한 아이디 정보 조회
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    UserDetails userDetails = (UserDetails) principal;
+    String loginId = userDetails.getUsername();
 
     public int selectTotalCount() {
         return programRepository.findAll().size();
@@ -84,7 +89,12 @@ public class ProgramService {
     }
 
     public Program findOne(Long id) {
-        Program program = programRepository.findById(id).get();
+        Optional<Program> byId = programRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 프로그램입니다.");
+        }
+        Program program = byId.get();
+
         List<ProgramOption> options = optionRepository.findAllByProgramId(id);
         program.setProgramOptions(options);
         return program;
@@ -160,56 +170,70 @@ public class ProgramService {
     }
 
     public ProgramOption findOneOption(Long id) {
-        return optionRepository.findById(id).get();
+        Optional<ProgramOption> byId = optionRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 프로그램 옵션입니다.");
+        }
+        return byId.get();
     }
 
     @Transactional
     public Long save(ProgramDto program) {
-        // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
-
         Program entity = new Program();
         if (program.getTitle() != null) {
             entity.setTitle(program.getTitle());
+        } else {
+            throw new DMException("제목을 입력해주세요.");
         }
         if (program.getCoach() != null) {
             entity.setCoach(program.getCoach());
+        } else {
+            throw new DMException("진행자를 입력해주세요.");
         }
         if (program.getClassAddress() != null) {
             entity.setClassAddress(program.getClassAddress());
+        } else {
+            throw new DMException("장소를 입력해주세요.");
         }
         if (program.getClassDate() != null) {
             entity.setClassDate(program.getClassDate());
+        } else {
+            throw new DMException("일자를 입력해주세요.");
         }
         if (program.getClassTime() != null) {
             entity.setClassTime(program.getClassTime());
+        } else {
+            throw new DMException("시간을 입력해주세요.");
         }
         if (program.getPrice() != null) {
             entity.setPrice(program.getPrice());
-        }
-        if (program.getMainYn() != null) {
-            entity.setMainYn(program.getMainYn());
-        }
-        if (program.getStatus() != null) {
-            entity.setStatus(program.getStatus());
+        } else {
+            throw new DMException("가격을 입력해주세요.");
         }
         if (program.getThumbnailImgName() != null) {
         entity.setThumbnailImgName(program.getThumbnailImgName());
+        } else {
+            throw new DMException("대표 이미지를 입력해주세요.");
         }
         if (program.getThumbnailImgPath() != null) {
         entity.setThumbnailImgPath(program.getThumbnailImgPath());
+        } else {
+            throw new DMException("대표 이미지를 입력해주세요.");
         }
         if (program.getDetailImgName() != null) {
         entity.setDetailImgName(program.getDetailImgName());
+        } else {
+            throw new DMException("상세 이미지를 입력해주세요.");
         }
         if (program.getDetailImgPath() != null) {
         entity.setDetailImgPath(program.getDetailImgPath());
+        } else {
+            throw new DMException("상세 이미지를 입력해주세요.");
         }
+        entity.setMainYn("N");
         entity.setStatus(ProgramStatus.INPROGRESS);
-//        entity.setCreateId(loginId);
-//        entity.setUpdateId(loginId);
+        entity.setCreateId(loginId);
+        entity.setUpdateId(loginId);
 
         programRepository.save(entity);
 
@@ -219,16 +243,20 @@ public class ProgramService {
             ProgramOption option = new ProgramOption();
             if (dto.getClassDateTime() != null) {
                 option.setClassDateTime(dto.getClassDateTime());
+            } else {
+                throw new DMException("옵션명을 입력해주세요.");
             }
             if (dto.getUserCount() != 0) {
                 option.setUserCount(dto.getUserCount());
+            } else {
+                throw new DMException("참여 인원수를 입력해주세요.");
             }
             if (dto.getAddPrice() != null) {
                 option.setAddPrice(dto.getAddPrice());
             }
             option.setProgram(entity);
-//        option.setCreateId(loginId);
-//        option.setUpdateId(loginId);
+            option.setCreateId(loginId);
+            option.setUpdateId(loginId);
             optionRepository.save(option);
         }
 
@@ -253,11 +281,6 @@ public class ProgramService {
 
     @Transactional
     public void update(Long id, ProgramDto program) {
-        // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
-
         Program origin = findOne(id);
         if (program.getTitle() != null) {
             origin.setTitle(program.getTitle());
@@ -295,7 +318,7 @@ public class ProgramService {
         if (origin.getDetailImgName() != null && !origin.getDetailImgName().equals(program.getDetailImgName())) {
             origin.setDetailImgName(program.getDetailImgName());
         }
-//        origin.setUpdateId(loginId);
+        origin.setUpdateId(loginId);
 
         // 옵션 수정..
         List<ProgramOptionDto> optionList = program.getOptionList();
@@ -311,7 +334,7 @@ public class ProgramService {
                 if (dto.getAddPrice() != null) {
                     originOption.setAddPrice(dto.getAddPrice());
                 }
-                // origin.setUpdateId(loginId);
+                 origin.setUpdateId(loginId);
             }
         }
     }

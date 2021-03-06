@@ -99,9 +99,11 @@ public class NewsController extends BaseController {
                     news.setImgPath(newfile + "/" + realFile.getName());
 
                     // 기존 이미지 파일 서버에서 삭제
-                    File originFile = new File(origin.getImgPath());
-                    if (originFile.exists()) {
-                        originFile.delete();
+                    if (origin.getImgPath() != null) {
+                        File originFile = new File(origin.getImgPath());
+                        if (originFile.exists()) {
+                            originFile.delete();
+                        }
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage());

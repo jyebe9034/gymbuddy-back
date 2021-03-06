@@ -96,9 +96,12 @@ public class BannerController extends BaseController {
                     banner.setImgName(filename);
                     banner.setImgPath(newFile + "/" + realFile.getName());
 
-                    File originFile = new File(origin.getImgPath());
-                    if (originFile.exists()) {
-                        originFile.delete();
+                    // 이미지가 있는 경우 삭제
+                    if (origin.getImgPath() != null) {
+                        File originFile = new File(origin.getImgPath());
+                        if (originFile.exists()) {
+                            originFile.delete();
+                        }
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage());
