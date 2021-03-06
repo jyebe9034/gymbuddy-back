@@ -90,26 +90,24 @@ public class NoticeController extends BaseController {
 
         // 이미지가 있는 경우에만 실행
         if (notice.getFile() != null) {
-            Notice origin = noticeService.findOne(id);
             String filename = notice.getFile().getOriginalFilename();
-            if (!origin.getImgName().equals(filename)) {
-                // 이미지 업로드
-                try {
-                    File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
-                    notice.getFile().transferTo(realFile);
-                    notice.setImgName(filename);
-                    notice.setImgPath(newfile + "/" + realFile.getName());
+            // 이미지 업로드
+            try {
+                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                notice.getFile().transferTo(realFile);
+                notice.setImgName(filename);
+                notice.setImgPath(newfile + "/" + realFile.getName());
 
-                    // 기존 이미지 파일 서버에서 삭제
-                    if (origin.getImgPath() != null) {
-                        File originFile = new File(origin.getImgPath());
-                        if (originFile.exists()) {
-                            originFile.delete();
-                        }
+                // 기존 이미지 파일 서버에서 삭제
+                Notice origin = noticeService.findOne(id);
+                if (origin.getImgPath() != null) {
+                    File originFile = new File(origin.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 

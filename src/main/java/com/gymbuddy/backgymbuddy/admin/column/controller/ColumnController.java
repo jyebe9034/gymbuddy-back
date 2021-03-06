@@ -97,26 +97,24 @@ public class ColumnController extends BaseController {
         log.info("컬럼 수정 - id: {}, columns: {}", id, columns);
 
         if (columns.getFile() != null) {
-            Columns origin = columnService.findOne(id);
             String filename = columns.getFile().getOriginalFilename();
-            if (!origin.getImgName().equals(filename)) {
-                // 이미지 업로드
-                try {
-                    File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
-                    columns.getFile().transferTo(realFile);
-                    columns.setImgName(filename);
-                    columns.setImgPath(newfile + "/" + realFile.getName());
+            // 이미지 업로드
+            try {
+                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                columns.getFile().transferTo(realFile);
+                columns.setImgName(filename);
+                columns.setImgPath(newfile + "/" + realFile.getName());
 
-                    // 기존 이미지 파일 서버에서 삭제
-                    if (origin.getImgPath() != null) {
-                        File originFile = new File(origin.getImgPath());
-                        if (originFile.exists()) {
-                            originFile.delete();
-                        }
+                // 기존 이미지 파일 서버에서 삭제
+                Columns origin = columnService.findOne(id);
+                if (origin.getImgPath() != null) {
+                    File originFile = new File(origin.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 

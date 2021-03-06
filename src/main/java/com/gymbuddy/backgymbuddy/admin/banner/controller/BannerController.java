@@ -87,25 +87,23 @@ public class BannerController extends BaseController {
         log.info("메인 배너 수정 - id: {}, banner: {}", id, banner);
 
         if (banner.getFile() != null) {
-            Banner origin = bannerService.findOne(id);
             String filename = banner.getFile().getOriginalFilename();
-            if (!origin.getImgName().equals(filename)) {
-                try {
-                    File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
-                    banner.getFile().transferTo(realFile);
-                    banner.setImgName(filename);
-                    banner.setImgPath(newFile + "/" + realFile.getName());
+            try {
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
+                banner.getFile().transferTo(realFile);
+                banner.setImgName(filename);
+                banner.setImgPath(newFile + "/" + realFile.getName());
 
-                    // 이미지가 있는 경우 삭제
-                    if (origin.getImgPath() != null) {
-                        File originFile = new File(origin.getImgPath());
-                        if (originFile.exists()) {
-                            originFile.delete();
-                        }
+                // 이미지가 있는 경우 삭제
+                Banner origin = bannerService.findOne(id);
+                if (origin.getImgPath() != null) {
+                    File originFile = new File(origin.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 

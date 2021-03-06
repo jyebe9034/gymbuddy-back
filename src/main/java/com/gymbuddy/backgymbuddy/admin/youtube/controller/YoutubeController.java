@@ -98,27 +98,26 @@ public class YoutubeController extends BaseController {
 
         // 이미지가 있는 경우에만 실행
         if (youtube.getFile() != null) {
-            Youtube origin = youtubeService.findOne(id);
             // 기존의 이미지 파일과 다른 파일인 경우에만 새로운 파일을 서버에 올린다.
             String filename = youtube.getFile().getOriginalFilename();
-            if (!origin.getImgName().equals(filename)) {
-                // 이미지 업로드
-                try {
-                    File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
-                    youtube.getFile().transferTo(realFile);
-                    youtube.setImgName(filename);
-                    youtube.setImgPath(newFile + "/" + realFile.getName());
+            // 이미지 업로드
+            try {
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
+                youtube.getFile().transferTo(realFile);
+                youtube.setImgName(filename);
+                youtube.setImgPath(newFile + "/" + realFile.getName());
 
-                    // 기존 이미지 파일 서버에서 삭제
-                    if (origin.getImgPath() != null) {
-                        File originFile = new File(origin.getImgPath());
-                        if (originFile.exists()) {
-                            originFile.delete();
-                        }
+                // 기존 이미지 파일 서버에서 삭제
+                Youtube origin = youtubeService.findOne(id);
+
+                if (origin.getImgPath() != null) {
+                    File originFile = new File(origin.getImgPath());
+                    if (originFile.exists()) {
+                        originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 
