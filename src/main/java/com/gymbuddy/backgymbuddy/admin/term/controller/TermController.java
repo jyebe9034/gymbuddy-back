@@ -67,19 +67,19 @@ public class TermController extends BaseController {
     public ResponseEntity<Map<String, Object>> insertTerm(@ModelAttribute TermDto dto) {
         log.info("약관 등록: {}", dto);
 
-        String imgName = dto.getFile().getOriginalFilename();
-        try {
-            if (!saveFile.exists()) {
-                saveFile.mkdir();
-            }
-            if (!dto.getFile().isEmpty()) {
+        if (dto.getFile() != null) {
+            String imgName = dto.getFile().getOriginalFilename();
+            try {
+                if (!saveFile.exists()) {
+                    saveFile.mkdir();
+                }
                 File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                 dto.getFile().transferTo(realFile);
                 dto.setImgName(imgName);
                 dto.setImgPath(saveFile + "/" + realFile.getName());
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
-        } catch (Exception e) {
-            log.error(e.getMessage());
         }
 
         Map<String, Object> result = new HashMap<>();
@@ -99,22 +99,20 @@ public class TermController extends BaseController {
 
         if (dto.getFile() != null) {
             String imgName = dto.getFile().getOriginalFilename();
-            if (!term.getImgName().equals(imgName)) {
-                try {
-                    // 이미지 업로드
-                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
-                    dto.getFile().transferTo(realFile);
-                    dto.setImgName(imgName);
-                    dto.setImgPath(saveFile + "/" + realFile.getName());
+            try {
+                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
+                dto.getFile().transferTo(realFile);
+                dto.setImgName(imgName);
+                dto.setImgPath(saveFile + "/" + realFile.getName());
 
-                    // 기존 이미지를 파일 서버에서 삭제
+                if (term.getImgPath() != null) {
                     File originFile = new File(term.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 

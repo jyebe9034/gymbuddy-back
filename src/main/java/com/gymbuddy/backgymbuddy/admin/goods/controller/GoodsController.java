@@ -111,9 +111,11 @@ public class GoodsController extends BaseController {
                 dto.setThumbnailImgName(thumbnailName);
                 dto.setThumbnailImgPath(saveFile + "/" + thumbnail.getName());
 
-                File originThumbnail = new File(goods.getThumbnailImgPath());
-                if (originThumbnail.exists()) {
-                    originThumbnail.delete();
+                if (goods.getThumbnailImgPath() != null) {
+                    File originThumbnail = new File(goods.getThumbnailImgPath());
+                    if (originThumbnail.exists()) {
+                        originThumbnail.delete();
+                    }
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -128,9 +130,11 @@ public class GoodsController extends BaseController {
                 dto.setDetailImgName(detailName);
                 dto.setDetailImgPath(saveFile + "/" + detail.getName());
 
-                File originDetail = new File(goods.getDetailImgPath());
-                if (originDetail.exists()) {
-                    originDetail.delete();
+                if (goods.getThumbnailImgPath() != null) {
+                    File originDetail = new File(goods.getDetailImgPath());
+                    if (originDetail.exists()) {
+                        originDetail.delete();
+                    }
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());
