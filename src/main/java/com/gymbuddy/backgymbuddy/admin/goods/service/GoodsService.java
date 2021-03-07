@@ -1,5 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.goods.service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.gymbuddy.backgymbuddy.admin.enums.status.GoodsStatus;
 import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.Goods;
@@ -8,6 +10,7 @@ import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsOption;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsOptionDto;
 import com.gymbuddy.backgymbuddy.admin.goods.repository.GoodsOptionRepository;
 import com.gymbuddy.backgymbuddy.admin.goods.repository.GoodsRepository;
+import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramOptionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
 import java.util.*;
 
 @Slf4j
@@ -99,7 +103,7 @@ public class GoodsService {
                 }
                 optionDtoList.add(optionDto);
             }
-            dto.setOptionList(optionDtoList);
+            dto.setOptions(optionDtoList);
         }
         return dto;
     }
@@ -163,7 +167,12 @@ public class GoodsService {
         goods.setUpdateId(loginId);
         goodsRepository.save(goods);
 
-        List<GoodsOptionDto> optionList = dto.getOptionList();
+        // 옵션 저장(String -> List<GoodsOptionDto>로 변환 후 처리)
+        String list = dto.getOptionList();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<GoodsOptionDto>>(){}.getType();
+        ArrayList<GoodsOptionDto> optionList = gson.fromJson(list, listType);
+
         for (GoodsOptionDto optionDto : optionList) {
             GoodsOption option = new GoodsOption();
             if (optionDto.getColorAndSize() != null) {
@@ -178,8 +187,6 @@ public class GoodsService {
             }
             if (optionDto.getExtraPrice() != null) {
                 option.setExtraPrice(optionDto.getExtraPrice());
-            } else {
-                throw new DMException("추가 가격을 입력해주세요.");
             }
             option.setCreateId(loginId);
             option.setUpdateId(loginId);
@@ -218,7 +225,12 @@ public class GoodsService {
             goods.setDetailImgPath(dto.getDetailImgPath());
         }
 
-        List<GoodsOptionDto> optionList = dto.getOptionList();
+        // 옵션 저장(String -> List<GoodsOptionDto>로 변환 후 처리)
+        String list = dto.getOptionList();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<GoodsOptionDto>>(){}.getType();
+        ArrayList<GoodsOptionDto> optionList = gson.fromJson(list, listType);
+
         if (!optionList.isEmpty()) {
             optionRepository.deleteByGoodsId(id);
             for (GoodsOptionDto optionDto : optionList) {
