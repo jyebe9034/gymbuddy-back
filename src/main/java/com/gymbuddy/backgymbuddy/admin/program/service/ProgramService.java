@@ -1,5 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.program.service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.gymbuddy.backgymbuddy.admin.enums.status.ProgramStatus;
 import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
@@ -10,6 +12,7 @@ import com.gymbuddy.backgymbuddy.admin.program.repository.ProgramOptionRepositor
 import com.gymbuddy.backgymbuddy.admin.program.repository.ProgramRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
 import java.util.*;
 
 @Slf4j
@@ -159,7 +163,7 @@ public class ProgramService {
                 }
                 optionList.add(optDto);
             }
-            dto.setOptionList(optionList);
+//            dto.setOptionList(optionList);
         }
         return dto;
     }
@@ -238,27 +242,36 @@ public class ProgramService {
         programRepository.save(entity);
 
         // 옵션 저장
-        List<ProgramOptionDto> optionList = program.getOptionList();
-        for (ProgramOptionDto dto : optionList) {
-            ProgramOption option = new ProgramOption();
-            if (dto.getClassDateTime() != null) {
-                option.setClassDateTime(dto.getClassDateTime());
-            } else {
-                throw new DMException("옵션명을 입력해주세요.");
-            }
-            if (dto.getUserCount() != 0) {
-                option.setUserCount(dto.getUserCount());
-            } else {
-                throw new DMException("참여 인원수를 입력해주세요.");
-            }
-            if (dto.getAddPrice() != null) {
-                option.setAddPrice(dto.getAddPrice());
-            }
-            option.setProgram(entity);
-            option.setCreateId(loginId);
-            option.setUpdateId(loginId);
-            optionRepository.save(option);
-        }
+        String list = program.getOptionList();
+
+        Gson gson = new Gson();
+
+        Type listType = new TypeToken<ArrayList<ProgramOptionDto>>(){}.getType();
+
+        ArrayList<ProgramOptionDto> optionList = gson.fromJson(list, listType);
+        log.info("optionList: {}", optionList);
+
+//        List<ProgramOptionDto> optionList = program.getOptionList();
+//        for (ProgramOptionDto dto : optionList) {
+//            ProgramOption option = new ProgramOption();
+//            if (dto.getClassDateTime() != null) {
+//                option.setClassDateTime(dto.getClassDateTime());
+//            } else {
+//                throw new DMException("옵션명을 입력해주세요.");
+//            }
+//            if (dto.getUserCount() != 0) {
+//                option.setUserCount(dto.getUserCount());
+//            } else {
+//                throw new DMException("참여 인원수를 입력해주세요.");
+//            }
+//            if (dto.getAddPrice() != null) {
+//                option.setAddPrice(dto.getAddPrice());
+//            }
+//            option.setProgram(entity);
+//            option.setCreateId(loginId);
+//            option.setUpdateId(loginId);
+//            optionRepository.save(option);
+//        }
 
         return entity.getId();
     }
@@ -326,22 +339,22 @@ public class ProgramService {
         origin.setUpdateId(loginId);
 
         // 옵션 수정..
-        List<ProgramOptionDto> optionList = program.getOptionList();
-        if (!optionList.isEmpty()) {
-            for (ProgramOptionDto dto : optionList) {
-                ProgramOption originOption = findOneOption(dto.getId());
-                if (dto.getClassDateTime() != null) {
-                    originOption.setClassDateTime(dto.getClassDateTime());
-                }
-                if (dto.getUserCount() != 0) {
-                    originOption.setUserCount(dto.getUserCount());
-                }
-                if (dto.getAddPrice() != null) {
-                    originOption.setAddPrice(dto.getAddPrice());
-                }
-                 origin.setUpdateId(loginId);
-            }
-        }
+//        List<ProgramOptionDto> optionList = program.getOptionList();
+//        if (!optionList.isEmpty()) {
+//            for (ProgramOptionDto dto : optionList) {
+//                ProgramOption originOption = findOneOption(dto.getId());
+//                if (dto.getClassDateTime() != null) {
+//                    originOption.setClassDateTime(dto.getClassDateTime());
+//                }
+//                if (dto.getUserCount() != 0) {
+//                    originOption.setUserCount(dto.getUserCount());
+//                }
+//                if (dto.getAddPrice() != null) {
+//                    originOption.setAddPrice(dto.getAddPrice());
+//                }
+//                 origin.setUpdateId(loginId);
+//            }
+//        }
     }
 
     @Transactional
