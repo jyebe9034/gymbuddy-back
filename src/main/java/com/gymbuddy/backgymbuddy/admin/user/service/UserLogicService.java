@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.user.service;
 
 import com.gymbuddy.backgymbuddy.admin.base.Address;
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.user.domain.Auth;
 import com.gymbuddy.backgymbuddy.admin.user.domain.Grade;
 import com.gymbuddy.backgymbuddy.admin.user.domain.User;
@@ -48,6 +49,17 @@ public class UserLogicService {
      */
     public Optional<User> findOneByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    /**
+     * 아이디 찾기
+     */
+    public String findIdentityByEmail(String email) {
+        Optional<User> byEmail = userRepository.findByEmail(email);
+        if (!byEmail.isPresent()) {
+            throw new DMException("존재하지 않는 이메일입니다.");
+        }
+        return byEmail.get().getIdentity();
     }
 
     /**
@@ -304,4 +316,5 @@ public class UserLogicService {
         result.put("msg", "비밀번호가 일치하지 않습니다.");
         return result;
     }
+
 }

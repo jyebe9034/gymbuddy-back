@@ -92,6 +92,29 @@ authNum: 인증번호 6자리(대문자, 숫자 조합 6자리)
 }
 ```
 
+### 아이디 찾기
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: findIdentityByEmail
+PATH : /api/userApi/findIdentity/{email}
+PARAM : Map<String, Object>
+=== PARAM 설명 ===
+email : 이메일
+```
+* 결과구조
+```
+{
+    "identity": 회원 아이디
+}
+```
+* 결과 예시
+```
+{
+    "identity": "test321"
+}
+```
+
 ### 임시 비밀번호 메일 발송
 * 기본 정보 및 파라미터 설명
 ```
