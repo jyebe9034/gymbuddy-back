@@ -73,7 +73,7 @@ public class MemberController extends BaseController {
             if (!dto.getFile().isEmpty()) {
                 File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                 dto.getFile().transferTo(realFile);
-                dto.setImgName(imgName);
+                dto.setImgName(realFile.getName());
                 dto.setImgPath(saveFile + "/" + realFile.getName());
             }
         } catch (Exception e) {

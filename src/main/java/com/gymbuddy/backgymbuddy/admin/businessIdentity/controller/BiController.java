@@ -40,7 +40,7 @@ public class BiController extends BaseController {
             }
             File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
             bi.getFile().transferTo(realFile);
-            bi.setImgName(imgName);
+            bi.setImgName(realFile.getName());
             bi.setImgPath(saveFile + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -65,7 +65,7 @@ public class BiController extends BaseController {
             }
             File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
             bi.getFile().transferTo(realFile);
-            bi.setImgName(imgName);
+            bi.setImgName(realFile.getName());
             bi.setImgPath(saveFile + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -92,7 +92,7 @@ public class BiController extends BaseController {
                 try {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                     dto.getFile().transferTo(realFile);
-                    dto.setImgName(imgName);
+                    dto.setImgName(realFile.getName());
                     dto.setImgPath(saveFile + "/" + realFile.getName());
 
                     File originFile = new File(bi.getImgPath());

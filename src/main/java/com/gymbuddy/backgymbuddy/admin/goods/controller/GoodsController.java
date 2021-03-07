@@ -60,7 +60,7 @@ public class GoodsController extends BaseController {
      * 굿즈 등록
      */
     @PostMapping(ADMIN_GOODS_PREFIX + "/new")
-    public ResponseEntity<Map<String, Object>> insertGoods(@RequestBody GoodsDto dto) {
+    public ResponseEntity<Map<String, Object>> insertGoods(@ModelAttribute GoodsDto dto) {
         log.info("굿즈 등록: {}", dto);
 
         try {
@@ -72,7 +72,7 @@ public class GoodsController extends BaseController {
                 String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
                 File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 dto.getThumbnailFile().transferTo(thumbnail);
-                dto.setThumbnailImgName(thumbnailName);
+                dto.setThumbnailImgName(thumbnail.getName());
                 dto.setThumbnailImgPath(saveFile + "/" + thumbnail.getName());
             }
             // 상세 이미지
@@ -80,7 +80,7 @@ public class GoodsController extends BaseController {
                 String detailName = dto.getThumbnailFile().getOriginalFilename();
                 File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
                 dto.getDetailFile().transferTo(detail);
-                dto.setDetailImgName(detailName);
+                dto.setDetailImgName(detail.getName());
                 dto.setDetailImgPath(saveFile + "/" + detail.getName());
             }
         } catch (Exception e) {
@@ -97,7 +97,7 @@ public class GoodsController extends BaseController {
      */
     @PutMapping(ADMIN_GOODS_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateGoods(
-            @PathVariable("id") Long id, @RequestBody GoodsDto dto) {
+            @PathVariable("id") Long id, @ModelAttribute GoodsDto dto) {
         log.info("굿즈 수정 id: {}, dto: {}", id, dto);
 
         Goods goods = goodsService.findOne(id);
@@ -108,7 +108,7 @@ public class GoodsController extends BaseController {
                 String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
                 File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 dto.getThumbnailFile().transferTo(thumbnail);
-                dto.setThumbnailImgName(thumbnailName);
+                dto.setThumbnailImgName(thumbnail.getName());
                 dto.setThumbnailImgPath(saveFile + "/" + thumbnail.getName());
 
                 if (goods.getThumbnailImgPath() != null) {
@@ -127,7 +127,7 @@ public class GoodsController extends BaseController {
                 String detailName = dto.getThumbnailFile().getOriginalFilename();
                 File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
                 dto.getDetailFile().transferTo(detail);
-                dto.setDetailImgName(detailName);
+                dto.setDetailImgName(detail.getName());
                 dto.setDetailImgPath(saveFile + "/" + detail.getName());
 
                 if (goods.getThumbnailImgPath() != null) {

@@ -51,7 +51,7 @@ public class MissionController extends BaseController {
                 String imgName1 = dto.getFile1().getOriginalFilename();
                 File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
                 dto.getFile1().transferTo(realFile1);
-                dto.setImgName1(imgName1);
+                dto.setImgName1(realFile1.getName());
                 dto.setImgPath1(saveFile + "/" + realFile1.getName());
             }
             // 파일2
@@ -59,7 +59,7 @@ public class MissionController extends BaseController {
                 String imgName2 = dto.getFile2().getOriginalFilename();
                 File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
                 dto.getFile2().transferTo(realFile2);
-                dto.setImgName2(imgName2);
+                dto.setImgName2(realFile2.getName());
                 dto.setImgPath2(saveFile + "/" + realFile2.getName());
             }
             // 파일3
@@ -67,7 +67,7 @@ public class MissionController extends BaseController {
                 String imgName3 = dto.getFile3().getOriginalFilename();
                 File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
                 dto.getFile3().transferTo(realFile3);
-                dto.setImgName3(imgName3);
+                dto.setImgName3(realFile3.getName());
                 dto.setImgPath3(saveFile + "/" + realFile3.getName());
             }
         } catch (Exception e) {
@@ -92,10 +92,10 @@ public class MissionController extends BaseController {
         if (dto.getFile1() != null) {
             String imgName1 = dto.getFile1().getOriginalFilename();
             try {
-                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
-                dto.getFile1().transferTo(realFile);
-                dto.setImgName1(imgName1);
-                dto.setImgPath1(saveFile + "/" + realFile.getName());
+                File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
+                dto.getFile1().transferTo(realFile1);
+                dto.setImgName1(realFile1.getName());
+                dto.setImgPath1(saveFile + "/" + realFile1.getName());
 
                 if (mission.getImgName1() != null) {
                     File originFile = new File(mission.getImgPath1());
@@ -110,10 +110,10 @@ public class MissionController extends BaseController {
         if (dto.getFile2() != null) {
             String imgName2 = dto.getFile2().getOriginalFilename();
             try {
-                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
-                dto.getFile2().transferTo(realFile);
-                dto.setImgName2(imgName2);
-                dto.setImgPath2(saveFile + "/" + realFile.getName());
+                File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
+                dto.getFile2().transferTo(realFile2);
+                dto.setImgName2(realFile2.getName());
+                dto.setImgPath2(saveFile + "/" + realFile2.getName());
 
                 if (mission.getImgName2() != null) {
                     File originFile = new File(mission.getImgPath2());
@@ -128,10 +128,10 @@ public class MissionController extends BaseController {
         if (dto.getFile3() != null) {
             String imgName3 = dto.getFile3().getOriginalFilename();
             try {
-                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
-                dto.getFile3().transferTo(realFile);
-                dto.setImgName3(imgName3);
-                dto.setImgPath3(saveFile + "/" + realFile.getName());
+                File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
+                dto.getFile3().transferTo(realFile3);
+                dto.setImgName3(realFile3.getName());
+                dto.setImgPath3(saveFile + "/" + realFile3.getName());
 
                 if (mission.getImgName3() != null) {
                     File originFile = new File(mission.getImgPath3());

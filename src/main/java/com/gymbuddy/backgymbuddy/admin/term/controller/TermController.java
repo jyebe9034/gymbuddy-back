@@ -75,7 +75,7 @@ public class TermController extends BaseController {
                 }
                 File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                 dto.getFile().transferTo(realFile);
-                dto.setImgName(imgName);
+                dto.setImgName(realFile.getName());
                 dto.setImgPath(saveFile + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -102,7 +102,7 @@ public class TermController extends BaseController {
             try {
                 File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                 dto.getFile().transferTo(realFile);
-                dto.setImgName(imgName);
+                dto.setImgName(realFile.getName());
                 dto.setImgPath(saveFile + "/" + realFile.getName());
 
                 if (term.getImgPath() != null) {
