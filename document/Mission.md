@@ -154,7 +154,7 @@ PARAM: 없음
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateMission
-PATH : /api/admin/mission/update/{id}
+PATH : /api/admin/mission/update/1
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 contents: 내용

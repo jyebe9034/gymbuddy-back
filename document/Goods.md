@@ -361,27 +361,6 @@ PARAM : List<Integer>
 }
 ```
 
-### 굿즈 옵션 삭제
-* 기본 정보 및 파라미터 설명
-```
-HTTP METHOD: DELETE
-METHOD NAME: deleteGoodsOption
-PATH : /api/admin/goods/deleteOption/{id}
-```
-* 결과 구조
-```
-{
-    "result": 결과값
-}
-```
-* 결과 예시
-```
-{
-    "result": "success"
-    *** 현재 모든 결과값을 성공으로 보내고 있음.
-}
-```
-
 ### 굿즈 상태 변경
 * 기본 정보 및 파라미터 설명
 ```

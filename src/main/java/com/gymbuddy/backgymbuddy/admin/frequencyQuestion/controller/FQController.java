@@ -53,7 +53,6 @@ public class FQController extends BaseController {
      */
     @GetMapping(FQ_PREFIX + "/detail/{id}")
     public ResponseEntity<FrequencyQuestion> selectFqDetail(@PathVariable("id") Long id) {
-        log.info("자주묻는질문 조회: {}", id);
         return createResponseEntity(true, fqService.findOne(id));
     }
 
@@ -62,7 +61,7 @@ public class FQController extends BaseController {
      */
     @PostMapping(ADMIN_FQ_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertFq(@RequestBody FQDto dto) {
-        log.info("자주묻는질문 등록: {}", dto);
+        log.info("FAQ 등록: {}", dto);
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", fqService.save(dto));
@@ -75,7 +74,7 @@ public class FQController extends BaseController {
     @PutMapping(ADMIN_FQ_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateFq(
             @PathVariable("id") Long id, @RequestBody FQDto dto) {
-        log.info("자주묻는질문 수정 - id: {}, dto: {}", id, dto);
+        log.info("FAQ 수정 - id: {}, dto: {}", id, dto);
 
         fqService.update(id, dto);
         FrequencyQuestion findFq = fqService.findOne(id);
@@ -101,7 +100,7 @@ public class FQController extends BaseController {
      */
     @DeleteMapping(ADMIN_FQ_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteFq(@RequestBody List<Integer> ids) {
-        log.info("자주묻는질문 삭제: {}", ids);
+        log.info("FAQ 삭제: {}", ids);
 
         for (int id : ids) {
             long idL = new Long(id);

@@ -14,7 +14,7 @@
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateMember
-PATH : /api/admin/bi/update/{id}
+PATH : /api/admin/businessIdentity/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 id: 1 - 웹, 2 - 모바일

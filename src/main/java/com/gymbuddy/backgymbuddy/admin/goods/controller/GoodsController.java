@@ -4,8 +4,6 @@ import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.enums.status.GoodsStatus;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.Goods;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsDto;
-import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsOption;
-import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsOptionDto;
 import com.gymbuddy.backgymbuddy.admin.goods.service.GoodsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -97,7 +95,7 @@ public class GoodsController extends BaseController {
     /**
      * 굿즈 수정
      */
-    @PutMapping("/goods/update/{id}")
+    @PutMapping(ADMIN_GOODS_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateGoods(
             @PathVariable("id") Long id, @RequestBody GoodsDto dto) {
         log.info("굿즈 수정 id: {}, dto: {}", id, dto);
@@ -105,7 +103,7 @@ public class GoodsController extends BaseController {
         Goods goods = goodsService.findOne(id);
 
         // 썸네일 이미지 수정
-        if (dto.getThumbnailFile() != null && !dto.getThumbnailImgName().equals(goods.getThumbnailImgName())) {
+        if (dto.getThumbnailFile() != null) {
             try {
                 String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
                 File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
@@ -121,9 +119,8 @@ public class GoodsController extends BaseController {
                 log.error(e.getMessage());
             }
         }
-
         // 상세 이미지 수정
-        if (dto.getDetailFile() != null && !dto.getDetailImgName().equals(goods.getDetailImgName())) {
+        if (dto.getDetailFile() != null) {
             try {
                 String detailName = dto.getThumbnailFile().getOriginalFilename();
                 File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
@@ -166,19 +163,6 @@ public class GoodsController extends BaseController {
         if (dto.getDetailImgPath() != null) {
             flag = dto.getDetailImgPath().equals(findGoods.getDetailImgPath()) ? true : false;
         }
-        List<GoodsOptionDto> optionList = dto.getOptionList();
-        for (GoodsOptionDto optionDto : optionList) {
-             GoodsOption option = goodsService.findOption(dto.getId());
-             if (optionDto.getColorAndSize() != null) {
-                 flag = optionDto.getColorAndSize().equals(option.getColorAndSize()) ? true : false;
-             }
-             if (optionDto.getInventory() != 0) {
-                 flag = optionDto.getInventory() == option.getInventory() ? true : false;
-                }
-             if (optionDto.getExtraPrice() != null) {
-                 flag = optionDto.getExtraPrice().compareTo(option.getExtraPrice()) == 0 ? true : false;
-             }
-        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("result", flag);
@@ -195,15 +179,19 @@ public class GoodsController extends BaseController {
         for (int id : ids) {
             long idL = new Long(id);
             Goods goods = goodsService.findOne(idL);
-            // 썸네일 이미지 삭제
-            File thumbnail = new File(goods.getThumbnailImgPath());
-            if (thumbnail.exists()) {
-                thumbnail.delete();
+            if (goods.getThumbnailImgPath() != null) {
+                // 썸네일 이미지 삭제
+                File thumbnail = new File(goods.getThumbnailImgPath());
+                if (thumbnail.exists()) {
+                    thumbnail.delete();
+                }
             }
-            // 상세 이미지 삭제
-            File detail = new File(goods.getDetailImgPath());
-            if (detail.exists()) {
-                detail.delete();
+            if (goods.getDetailImgPath() != null) {
+                // 상세 이미지 삭제
+                File detail = new File(goods.getDetailImgPath());
+                if (detail.exists()) {
+                    detail.delete();
+                }
             }
             goodsService.delete(idL);
         }
@@ -212,21 +200,6 @@ public class GoodsController extends BaseController {
         result.put("result", "success");
         return createResponseEntity(true, result);
     }
-
-    /**
-     * 굿즈 옵션 삭제
-     */
-    @DeleteMapping(ADMIN_GOODS_PREFIX + "/deleteOption/{id}")
-    public ResponseEntity<Map<String, Object>> deleteGoodsOption(@PathVariable Long id) {
-        log.info("굿즈 옵션 삭제: {}", id);
-
-        goodsService.deleteOption(id);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", "success");
-        return createResponseEntity(true, result);
-    }
-
 
     /**
      * 굿즈 상태 변경

@@ -36,9 +36,7 @@ HTTP METHOD : PUT
 METHOD NAME: updateHistory
 PATH : /api/admin/history/update
 PARAM : List<HistoryDto>
-=== PARAM 설명 ===
-수정하는 활동기록들의 리스트를 넘긴다.
-*** 수정 시에는 모든 값을 넘길 필요는 없음. 수정할 값만 넘겨도 수정 가능함.
+수정하는 활동기록을 포함하여 모든 활동기록 리스트를 넘기고, 새로운 활동기록은 아이디를 제외하고 날짜와 내용을 넘긴다.
 [
     {
         "id": 아이디(JPA 생성),
@@ -66,6 +64,10 @@ PARAM : List<HistoryDto>
         "historyDate": "2020년 12월",
         "contents": "활동기록2"
     },
+    {
+        "historyDate": "2021년 02월",
+        "contents": "활동기록3"
+    }
     ...
 ]
 ```
@@ -79,28 +81,5 @@ PARAM : List<HistoryDto>
 ```
 {
     "result": true
-}
-```
-
-### 활동기록 삭제
-* 기본 정보 및 파라미터 설명
-```
-HTTP METHOD : DELETE
-METHOD NAME: deleteHistory
-PATH : /api/admin/history/delete
-*** id는 JPA에서 생성된 값으로 목록에서 가지고 있는 값을 넘겨주면 됨.
-PARAM : List<Integer>
-=== PARAM 설명 ===
-* 아이디 배열을 넘긴다.
-```
-* 파라미터 구조
-```
-[아이디, 아이디, 아이디] 
-```
-* 결과 예시
-```
-{
-    "result": "success"
-    *** 현재 모든 결과값을 성공으로 보내고 있음.
 }
 ```

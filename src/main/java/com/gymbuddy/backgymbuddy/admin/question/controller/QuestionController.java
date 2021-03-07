@@ -52,9 +52,8 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 상세 조회(관리자)
      */
-    @GetMapping(ADMIN_QUESTION_PREFIX + "/question/detail/{id}")
+    @GetMapping(ADMIN_QUESTION_PREFIX + "/detail/{id}")
     public ResponseEntity<QuestionDto> selectAdminQuestionDetail(@PathVariable("id") Long id) {
-        log.info("1:1 문의 조회: {}", id);
         return createResponseEntity(true, questionService.findOneByDto(id));
     }
 
@@ -110,14 +109,13 @@ public class QuestionController extends BaseController {
      */
     @GetMapping(USER_QUESTION_PREFIX + "/detail/{id}")
     public ResponseEntity<Map<String, Object>> selectUserQuestionDetail(@PathVariable("id") Long id) {
-        log.info("1:1 문의 조회: {}", id);
         return createResponseEntity(true, questionService.findOneByDto(id));
     }
 
     /**
      * 1:1 문의 등록(사용자)
      */
-    @PostMapping("/question/new")
+    @PostMapping(USER_QUESTION_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertQuestion(@ModelAttribute QuestionDto dto) {
         log.info("1:1 문의 등록: {}", dto);
 
@@ -163,10 +161,10 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 수정(사용자)
      */
-    @PutMapping("/question/update/{id}")
+    @PutMapping(USER_QUESTION_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateQuestion(
             @PathVariable("id") Long id, @ModelAttribute QuestionDto dto) {
-        log.info("미션 수정 id: {}, dto: {}", id, dto);
+        log.info("1:1 문의 수정 id: {}, dto: {}", id, dto);
 
         Question question = questionService.findOne(id);
 
@@ -294,7 +292,7 @@ public class QuestionController extends BaseController {
     /**
      * 1:1 문의 댓글 등록(관리자)
      */
-    @PostMapping(ADMIN_QUESTION_PREFIX + "/newReply//{id}")
+    @PostMapping(ADMIN_QUESTION_PREFIX + "/newReply/{id}")
     public ResponseEntity<QuestionComment> insertQuestionReply(
             @PathVariable("id") Long id, @RequestBody QuestionCommentDto dto) {
         log.info("1:1 문의 댓글 등록: {}", dto);
