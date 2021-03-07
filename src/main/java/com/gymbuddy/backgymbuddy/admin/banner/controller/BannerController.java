@@ -70,13 +70,15 @@ public class BannerController extends BaseController {
             }
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             banner.getFile().transferTo(realFile);
-            banner.setImgName(filename);
+            banner.setImgName(realFile.getName());
             banner.setImgPath(newFile + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
-        return createResponseEntity(true, bannerService.save(banner));
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", bannerService.save(banner));
+        return createResponseEntity(true, result);
     }
 
     /**

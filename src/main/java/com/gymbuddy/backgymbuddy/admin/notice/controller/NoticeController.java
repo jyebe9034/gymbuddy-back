@@ -69,7 +69,7 @@ public class NoticeController extends BaseController {
                 }
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
                 notice.getFile().transferTo(realFile);
-                notice.setImgName(filename);
+                notice.setImgName(realFile.getName());
                 notice.setImgPath(newfile + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -95,7 +95,7 @@ public class NoticeController extends BaseController {
             try {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
                 notice.getFile().transferTo(realFile);
-                notice.setImgName(filename);
+                notice.setImgName(realFile.getName());
                 notice.setImgPath(newfile + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제

@@ -102,7 +102,7 @@ public class ColumnController extends BaseController {
             try {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
                 columns.getFile().transferTo(realFile);
-                columns.setImgName(filename);
+                columns.setImgName(realFile.getName());
                 columns.setImgPath(newfile + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제

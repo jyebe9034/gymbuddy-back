@@ -168,6 +168,14 @@ public class ProgramService {
         return dto;
     }
 
+    public ProgramOption findOneOption(Long id) {
+        Optional<ProgramOption> byId = optionRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 프로그램 옵션입니다.");
+        }
+        return byId.get();
+    }
+
     @Transactional
     public Long save(ProgramDto program) {
         // 현재 로그인한 아이디 정보 조회
