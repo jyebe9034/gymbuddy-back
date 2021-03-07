@@ -132,20 +132,20 @@ public class ColumnService {
         String loginId = userDetails.getUsername();
 
         Columns origin = findOne(id);
-        if (column.getTitle() != null && !origin.getTitle().equals(column.getTitle())) {
+        if (column.getTitle() != null) {
             origin.setTitle(column.getTitle());
         }
-        if (column.getContents() != null && !origin.getContents().equals(column.getContents())) {
+        if (column.getContents() != null) {
             origin.setContents(column.getContents());
         }
-        if (column.getColumnWriter() != null && !origin.getColumnWriter().getId().equals(column.getColumnWriterId())) {
+        if (column.getColumnWriter() != null) {
             ColumnWriter columnWriter = findOneCw(column.getColumnWriterId());
             origin.setColumnWriter(columnWriter);
         }
-        if (column.getImgPath() != null && !origin.getImgPath().equals(column.getImgPath())) {
+        if (column.getImgPath() != null) {
             origin.setImgPath(column.getImgPath());
         }
-        if (column.getImgName() != null && !origin.getImgName().equals(column.getImgName())) {
+        if (column.getImgName() != null) {
             origin.setImgName(column.getImgName());
         }
         origin.setUpdateId(loginId);

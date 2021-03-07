@@ -69,13 +69,13 @@ public class CWService {
         String loginId = userDetails.getUsername();
 
         ColumnWriter origin = findOne(id);
-        if (columnWriter.getName() != null && !origin.getName().equals(columnWriter.getName())) {
+        if (columnWriter.getName() != null) {
             origin.setName(columnWriter.getName());
         }
-        if (columnWriter.getJob() != null && !origin.getJob().equals(columnWriter.getJob())) {
+        if (columnWriter.getJob() != null) {
             origin.setJob(columnWriter.getJob());
         }
-        if (columnWriter.getContents() != null && !origin.getContents().equals(columnWriter.getContents())) {
+        if (columnWriter.getContents() != null) {
             origin.setContents(columnWriter.getContents());
         }
         origin.setUpdateId(loginId);

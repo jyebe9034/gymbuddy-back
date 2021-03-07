@@ -85,10 +85,10 @@ public class NoticeService {
         String loginId = userDetails.getUsername();
 
         Notice origin = findOne(id);
-        if (notice.getTitle() != null && !origin.getTitle().equals(notice.getTitle())) {
+        if (notice.getTitle() != null) {
             origin.setTitle(notice.getTitle());
         }
-        if (notice.getContents() != null && !origin.getContents().equals(notice.getContents())) {
+        if (notice.getContents() != null) {
             origin.setContents(notice.getContents());
         }
         if (notice.getImgPath() != null) {

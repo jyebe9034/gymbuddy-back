@@ -94,22 +94,22 @@ public class BannerService {
         String loginId = userDetails.getUsername();
 
         Banner origin = findOne(id);
-        if (banner.getTitle() != null && !origin.getTitle().equals(banner.getTitle())) {
+        if (banner.getTitle() != null) {
             origin.setTitle(banner.getTitle());
         }
-        if (banner.getCategoryId() != null && !origin.getCategoryId().equals(banner.getCategoryId())) {
+        if (banner.getCategoryId() != null) {
             origin.setCategoryId(banner.getCategoryId());
         }
-        if (banner.getLink() != null && !origin.getLink().equals(banner.getLink())) {
+        if (banner.getLink() != null) {
             origin.setLink(banner.getLink());
         }
-        if (banner.getBtnTitle() != null && !origin.getBtnTitle().equals(banner.getBtnTitle())) {
+        if (banner.getBtnTitle() != null) {
             origin.setBtnTitle(banner.getBtnTitle());
         }
-        if (banner.getImgPath() != null && !origin.getImgPath().equals(banner.getImgPath())) {
+        if (banner.getImgPath() != null) {
             origin.setImgPath(banner.getImgPath());
         }
-        if (banner.getImgName() != null && !origin.getImgName().equals(banner.getImgName())) {
+        if (banner.getImgName() != null) {
             origin.setImgName(banner.getImgName());
         }
         origin.setUpdateId(loginId);
