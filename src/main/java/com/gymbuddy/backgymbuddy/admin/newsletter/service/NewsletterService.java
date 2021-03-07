@@ -27,6 +27,10 @@ public class NewsletterService {
         return newsletterRepository.findAll(PageRequest.of(page, 20, Sort.by("id").descending())).getContent();
     }
 
+    public int selectTotalCount() {
+        return newsletterRepository.findAll().size();
+    }
+
     @Transactional
     public Long save(NewsletterDto dto) {
         Newsletter newsletter = new Newsletter();

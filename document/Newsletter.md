@@ -47,6 +47,27 @@ PARAM: 없음
 ]
 ```
 
+### 전체 굿즈 갯수 조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectGoodsTotalCount
+PATH: /api/newsLetter/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 굿즈 갯수
+}럼
+```
+* 결과 에시
+```
+{
+    "totalCount": 2
+}
+```
+
 ### 뉴스레터 등록
 * 기본 정보 및 파라미터 설명
 ```
