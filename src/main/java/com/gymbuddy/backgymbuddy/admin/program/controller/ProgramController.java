@@ -62,7 +62,7 @@ public class ProgramController extends BaseController {
     /**
      * 프로그램 등록
      */
-    @PostMapping(path = ADMIN_PROGRAM_PREFIX + "/new", consumes = {"multipart/form-data"})
+    @PostMapping(ADMIN_PROGRAM_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertProgram(@ModelAttribute ProgramDto program) {
         // 여기에서 받은 프로그램 + 프로그램 옵션...
         log.info("프로그램 등록: {}", program);
@@ -238,19 +238,19 @@ public class ProgramController extends BaseController {
             flag = program.getDetailImgName().equals(findProgram.getDetailImgName()) ? true : false;
         }
 
-        List<ProgramOptionDto> optionList = program.getOptionList();
-        for (ProgramOptionDto dto : optionList) {
-            ProgramOption findOption = programService.findOneOption(dto.getId());
-            if (dto.getClassDateTime() != null) {
-                flag = dto.getClassDateTime().equals(findOption.getClassDateTime()) ? true : false;
-            }
-            if (dto.getUserCount() != 0) {
-                flag = dto.getUserCount() == findOption.getUserCount() ? true : false;
-            }
-            if (dto.getAddPrice() != null) {
-                flag = dto.getAddPrice().compareTo(findOption.getAddPrice()) == 0 ? true : false;
-            }
-        }
+//        List<ProgramOptionDto> optionList = program.getOptionList();
+//        for (ProgramOptionDto dto : optionList) {
+//            ProgramOption findOption = programService.findOneOption(dto.getId());
+//            if (dto.getClassDateTime() != null) {
+//                flag = dto.getClassDateTime().equals(findOption.getClassDateTime()) ? true : false;
+//            }
+//            if (dto.getUserCount() != 0) {
+//                flag = dto.getUserCount() == findOption.getUserCount() ? true : false;
+//            }
+//            if (dto.getAddPrice() != null) {
+//                flag = dto.getAddPrice().compareTo(findOption.getAddPrice()) == 0 ? true : false;
+//            }
+//        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("result", flag);

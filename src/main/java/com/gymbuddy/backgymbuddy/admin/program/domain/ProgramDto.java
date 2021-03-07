@@ -40,5 +40,5 @@ public class ProgramDto {
 
     private String detailImgName;
 
-    private List<ProgramOptionDto> optionList;
+    private String optionList;
 }
