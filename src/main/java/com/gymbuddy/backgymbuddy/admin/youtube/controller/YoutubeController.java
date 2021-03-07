@@ -79,14 +79,16 @@ public class YoutubeController extends BaseController {
                 }
                 File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                 youtube.getFile().transferTo(realFile);
-                youtube.setImgName(filename);
+                youtube.setImgName(realFile.getName());
                 youtube.setImgPath(newFile + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
         }
 
-        return createResponseEntity(true, youtubeService.save(youtube));
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", youtubeService.save(youtube));
+        return createResponseEntity(true, result);
     }
 
     /**
@@ -104,7 +106,7 @@ public class YoutubeController extends BaseController {
             try {
                 File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                 youtube.getFile().transferTo(realFile);
-                youtube.setImgName(filename);
+                youtube.setImgName(realFile.getName());
                 youtube.setImgPath(newFile + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제

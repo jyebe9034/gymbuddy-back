@@ -1,5 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.program.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.enums.status.ProgramStatus;
 import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
@@ -13,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -238,19 +242,24 @@ public class ProgramController extends BaseController {
             flag = program.getDetailImgName().equals(findProgram.getDetailImgName()) ? true : false;
         }
 
-//        List<ProgramOptionDto> optionList = program.getOptionList();
-//        for (ProgramOptionDto dto : optionList) {
-//            ProgramOption findOption = programService.findOneOption(dto.getId());
-//            if (dto.getClassDateTime() != null) {
-//                flag = dto.getClassDateTime().equals(findOption.getClassDateTime()) ? true : false;
-//            }
-//            if (dto.getUserCount() != 0) {
-//                flag = dto.getUserCount() == findOption.getUserCount() ? true : false;
-//            }
-//            if (dto.getAddPrice() != null) {
-//                flag = dto.getAddPrice().compareTo(findOption.getAddPrice()) == 0 ? true : false;
-//            }
-//        }
+        // 옵션 String -> List<ProgramOptionDto>로 변환
+        String list = program.getOptionList();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<ProgramOptionDto>>(){}.getType();
+        ArrayList<ProgramOptionDto> optionList = gson.fromJson(list, listType);
+
+        for (ProgramOptionDto dto : optionList) {
+            ProgramOption findOption = programService.findOneOption(dto.getId());
+            if (dto.getClassDateTime() != null) {
+                flag = dto.getClassDateTime().equals(findOption.getClassDateTime()) ? true : false;
+            }
+            if (dto.getUserCount() != 0) {
+                flag = dto.getUserCount() == findOption.getUserCount() ? true : false;
+            }
+            if (dto.getAddPrice() != null) {
+                flag = dto.getAddPrice().compareTo(findOption.getAddPrice()) == 0 ? true : false;
+            }
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("result", flag);
