@@ -111,8 +111,8 @@ public class MemberController extends BaseController {
         }
 
         memberService.update(id, dto);
-        Member findMember = memberService.findOne(id);
 
+        Member findMember = memberService.findOne(id);
         boolean flag = true;
         if (dto.getImgPath() != null) {
             flag = dto.getImgPath().equals(findMember.getImgPath()) ? true : false;

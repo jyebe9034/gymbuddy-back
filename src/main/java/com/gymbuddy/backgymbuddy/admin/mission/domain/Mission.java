@@ -18,10 +18,10 @@ public class Mission extends BaseDomain {
     @Column(nullable = false)
     private String contents;
 
-    @Column(length = 300, nullable = false)
+    @Column(length = 300)
     private String imgPath1;
 
-    @Column(length = 50,nullable = false)
+    @Column(length = 50)
     private String imgName1;
 
     @Column(length = 300)

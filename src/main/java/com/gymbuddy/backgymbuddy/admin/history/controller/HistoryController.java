@@ -1,13 +1,15 @@
 package com.gymbuddy.backgymbuddy.admin.history.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
-import com.gymbuddy.backgymbuddy.admin.history.domain.History;
 import com.gymbuddy.backgymbuddy.admin.history.domain.HistoryDto;
 import com.gymbuddy.backgymbuddy.admin.history.service.HistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,42 +43,7 @@ public class HistoryController extends BaseController {
     public ResponseEntity<Map<String, Object>> updateHistory(@RequestBody List<HistoryDto> dtoList) {
         log.info("활동기록 수정 dtoList: {}", dtoList);
 
-        for (HistoryDto dto : dtoList) {
-            Long id = dto.getId();
-            if (id == null) {
-                insertHistory(dto);
-            }
-            historyService.update(id, dto);
-        }
-
-        boolean flag = true;
-        for (HistoryDto dto : dtoList) {
-            Long id = dto.getId();
-            History findHistory = historyService.findOne(id);
-            if (dto.getHistoryDate() != null) {
-                flag = dto.getHistoryDate().equals(findHistory.getHistoryDate()) ? true : false;
-            }
-            if (dto.getTitle() != null) {
-                flag = dto.getTitle().equals(findHistory.getTitle()) ? true : false;
-            }
-        }
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", flag);
-        return createResponseEntity(true, result);
-    }
-
-    /**
-     * 활동기록 삭제
-     */
-    @DeleteMapping(ADMIN_HISTORY_PREFIX + "/delete")
-    public ResponseEntity<History> deleteHistory(@RequestBody List<Integer> ids) {
-        log.info("활동기록 삭제: {}", ids);
-
-        for (int id : ids) {
-            long idL = new Long(id);
-            historyService.delete(idL);
-        }
+        historyService.update(dtoList);
 
         Map<String, Object> result = new HashMap<>();
         result.put("result", "success");

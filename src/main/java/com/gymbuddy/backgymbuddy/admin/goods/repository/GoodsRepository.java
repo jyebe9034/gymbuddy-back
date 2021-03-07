@@ -17,4 +17,5 @@ public interface GoodsRepository extends JpaRepository<Goods, Long> {
 
     @Query("select count(g) from Goods g where g.mainYn = 'Y'")
     int mainYnCount();
+
 }

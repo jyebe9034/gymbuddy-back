@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.goods.service;
 
 import com.gymbuddy.backgymbuddy.admin.enums.status.GoodsStatus;
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.Goods;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsDto;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsOption;
@@ -11,13 +12,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -106,13 +106,14 @@ public class GoodsService {
 
     public Goods findOne(Long id) {
         Goods goods = goodsRepository.findById(id).get();
-        List<GoodsOption> optionList = optionRepository.findAllByGoodsId(id);
-        goods.setGoodsOptions(optionList);
-        return goods;
-    }
 
-    public GoodsOption findOption(Long id) {
-        return optionRepository.findById(id).get();
+        Optional<Goods> byId = goodsRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 굿즈입니다.");
+        }
+        List<GoodsOption> optionList = optionRepository.findAllByGoodsId(id);
+        byId.get().setGoodsOptions(optionList);
+        return byId.get();
     }
 
     public GoodsDto findOneByDto(Long id) {
@@ -122,15 +123,26 @@ public class GoodsService {
 
     @Transactional
     public Long save(GoodsDto dto) {
+        // 현재 로그인한 아이디 정보 조회
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
         Goods goods = new Goods();
         if (dto.getName() != null) {
             goods.setName(dto.getName());
+        } else {
+            throw new DMException("이름을 입력해주세요.");
         }
         if (dto.getPrice() != null) {
             goods.setPrice(dto.getPrice());
+        } else {
+            throw new DMException("가격을 입력해주세요.");
         }
         if (dto.getMainYn() != null) {
             goods.setMainYn(dto.getMainYn());
+        } else {
+            throw new DMException("메인 여부를 입력해주세요.");
         }
         if (dto.getStatus() != null) {
             goods.setStatus(dto.getStatus());
@@ -147,42 +159,35 @@ public class GoodsService {
         if (dto.getDetailImgPath() != null) {
             goods.setDetailImgPath(dto.getDetailImgPath());
         }
+        goods.setCreateId(loginId);
+        goods.setUpdateId(loginId);
         goodsRepository.save(goods);
 
         List<GoodsOptionDto> optionList = dto.getOptionList();
         for (GoodsOptionDto optionDto : optionList) {
-            optionSave(goods, optionDto);
+            GoodsOption option = new GoodsOption();
+            if (optionDto.getColorAndSize() != null) {
+                option.setColorAndSize(optionDto.getColorAndSize());
+            } else {
+                throw new DMException("색상 및 사이즈를 입력해주세요.");
+            }
+            if (optionDto.getInventory() != 0) {
+                option.setInventory(optionDto.getInventory());
+            } else {
+                throw new DMException("재고를 입력해주세요.");
+            }
+            if (optionDto.getExtraPrice() != null) {
+                option.setExtraPrice(optionDto.getExtraPrice());
+            } else {
+                throw new DMException("추가 가격을 입력해주세요.");
+            }
+            option.setCreateId(loginId);
+            option.setUpdateId(loginId);
+            option.setGoods(goods);
+            optionRepository.save(option);
         }
 
         return goods.getId();
-    }
-
-    public void optionSave(Goods goods, GoodsOptionDto optionDto) {
-        GoodsOption option = new GoodsOption();
-        if (optionDto.getColorAndSize() != null) {
-            option.setColorAndSize(optionDto.getColorAndSize());
-        }
-        if (optionDto.getInventory() != 0) {
-            option.setInventory(optionDto.getInventory());
-        }
-        if (optionDto.getExtraPrice() != null) {
-            option.setExtraPrice(optionDto.getExtraPrice());
-        }
-        option.setGoods(goods);
-        optionRepository.save(option);
-    }
-
-    public void optionUpdate(GoodsOptionDto optionDto) {
-        GoodsOption option = new GoodsOption();
-        if (optionDto.getColorAndSize() != null) {
-            option.setColorAndSize(optionDto.getColorAndSize());
-        }
-        if (optionDto.getInventory() != 0) {
-            option.setInventory(optionDto.getInventory());
-        }
-        if (optionDto.getExtraPrice() != null) {
-            option.setExtraPrice(optionDto.getExtraPrice());
-        }
     }
 
     @Transactional
@@ -215,22 +220,20 @@ public class GoodsService {
 
         List<GoodsOptionDto> optionList = dto.getOptionList();
         if (!optionList.isEmpty()) {
+            optionRepository.deleteByGoodsId(id);
             for (GoodsOptionDto optionDto : optionList) {
-                Long optionId = optionDto.getId();
-                if (optionId == null) {
-                    optionSave(goods, optionDto);
-                } else {
-                    GoodsOption option = findOption(optionDto.getId());
-                    if (optionDto.getColorAndSize() != null) {
-                        option.setColorAndSize(optionDto.getColorAndSize());
-                    }
-                    if (optionDto.getInventory() != 0) {
-                        option.setInventory(optionDto.getInventory());
-                    }
-                    if (optionDto.getExtraPrice() != null) {
-                        option.setExtraPrice(optionDto.getExtraPrice());
-                    }
+                GoodsOption option = new GoodsOption();
+                if (optionDto.getColorAndSize() != null) {
+                    option.setColorAndSize(optionDto.getColorAndSize());
                 }
+                if (optionDto.getInventory() != 0) {
+                    option.setInventory(optionDto.getInventory());
+                }
+                if (optionDto.getExtraPrice() != null) {
+                    option.setExtraPrice(optionDto.getExtraPrice());
+                }
+                option.setGoods(goods);
+                optionRepository.save(option);
             }
         }
     }
@@ -238,11 +241,6 @@ public class GoodsService {
     @Transactional
     public void delete(Long id) {
         goodsRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void deleteOption(Long id) {
-        optionRepository.deleteById(id);
     }
 
     public List<GoodsDto> findAllForMain() {

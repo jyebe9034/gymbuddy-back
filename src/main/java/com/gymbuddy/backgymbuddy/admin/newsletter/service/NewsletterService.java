@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.newsletter.service;
 
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.newsletter.domain.Newsletter;
 import com.gymbuddy.backgymbuddy.admin.newsletter.domain.NewsletterDto;
 import com.gymbuddy.backgymbuddy.admin.newsletter.repository.NewsletterRepository;
@@ -31,6 +32,8 @@ public class NewsletterService {
         Newsletter newsletter = new Newsletter();
         if (dto.getEmail() != null) {
             newsletter.setEmail(dto.getEmail());
+        }  else {
+            throw new DMException("이메일을 입력해주세요.");
         }
         newsletterRepository.save(newsletter);
         return newsletter.getId();

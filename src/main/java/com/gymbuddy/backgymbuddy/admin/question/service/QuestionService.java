@@ -1,20 +1,23 @@
 package com.gymbuddy.backgymbuddy.admin.question.service;
 
 import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
-import com.gymbuddy.backgymbuddy.admin.question.domain.*;
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
+import com.gymbuddy.backgymbuddy.admin.question.domain.Question;
+import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionComment;
+import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionCommentDto;
+import com.gymbuddy.backgymbuddy.admin.question.domain.QuestionDto;
 import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionCommentRepository;
 import com.gymbuddy.backgymbuddy.admin.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -55,10 +58,13 @@ public class QuestionService {
     }
 
     public Question findOne(Long id) {
-        Question question = questionRepository.findById(id).get();
+        Optional<Question> byId = questionRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 문의글입니다.");
+        }
         List<QuestionComment> commentList = questionCommentService.findAllByQuestionId(id);
-        question.setQuestionCommentList(commentList);
-        return question;
+        byId.get().setQuestionCommentList(commentList);
+        return byId.get();
     }
 
     public QuestionDto findOneByDto(Long id) {
@@ -156,15 +162,25 @@ public class QuestionService {
 
     @Transactional
     public Long save(QuestionDto dto) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
         Question question = new Question();
         if (dto.getTitle() != null) {
             question.setTitle(dto.getTitle());
+        } else {
+            throw new DMException("제목을 입력해주세요.");
         }
         if (dto.getContents() != null) {
             question.setContents(dto.getContents());
+        } else {
+            throw new DMException("내용을 입력해주세요.");
         }
         if (dto.getCategoryId() != null) {
             question.setCategoryId(dto.getCategoryId());
+        } else {
+            throw new DMException("카테고리를 입력해주세요.");
         }
         if (dto.getImgName1() != null) {
             question.setImgName1(dto.getImgName1());
@@ -184,6 +200,8 @@ public class QuestionService {
         if (dto.getImgPath3() != null) {
             question.setImgPath3(dto.getImgPath3());
         }
+        question.setCreateId(loginId);
+        question.setUpdateId(loginId);
 
         questionRepository.save(question);
         return question.getId();
@@ -191,6 +209,10 @@ public class QuestionService {
 
     @Transactional
     public void update(Long id, QuestionDto dto) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
         Question question = findOne(id);
         if (dto.getTitle() != null) {
             question.setTitle(dto.getTitle());
@@ -219,6 +241,7 @@ public class QuestionService {
         if (dto.getImgName3() != null) {
             question.setImgName3(dto.getImgName3());
         }
+        question.setUpdateId(loginId);
     }
 
     @Transactional
@@ -229,7 +252,6 @@ public class QuestionService {
     @Transactional
     public List<QuestionDto> search(QuestionEnum categoryId, String keyword, String type, int page) {
         List<Question> result = new ArrayList<>();
-
         if (type.equals("T")) {
             result = questionRepository.findAllByCategoryIdAndTitleContaining(
                     categoryId, keyword, PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
@@ -243,7 +265,6 @@ public class QuestionService {
             QuestionDto dto = questionToDto(question);
             dtoList.add(dto);
         }
-
         return dtoList;
     }
 }

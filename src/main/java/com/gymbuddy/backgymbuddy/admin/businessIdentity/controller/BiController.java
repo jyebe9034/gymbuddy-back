@@ -13,8 +13,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_HISTORY_PREFIX;
-import static com.gymbuddy.backgymbuddy.admin.base.Constants.BI_PREFIX;
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.*;
 
 @Slf4j
 @RestController
@@ -80,7 +79,7 @@ public class BiController extends BaseController {
     /**
      * BI 수정
      */
-    @PutMapping(ADMIN_HISTORY_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_BI_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateBi(
             @PathVariable("id") Long id, @ModelAttribute BiDto dto) {
         log.info("BI 수정 id: {}, bi: {}", id, dto);
