@@ -202,6 +202,18 @@ public class UserController extends BaseController {
     }
 
     /**
+     * 아이디 찾기
+     */
+    @GetMapping(USER_API + "/findIdentity/{email}")
+    public ResponseEntity<Map<String, Object>> findIdentityByEmail(@PathVariable("email") String email) {
+        log.info("아이디를 찾기위한 이메일: {}", email);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("identity", logicService.findIdentityByEmail(email));
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 임시 비밀번호 메일 발송
      */
     @PostMapping(USER_API + "/onetimePw")
