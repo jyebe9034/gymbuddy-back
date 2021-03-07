@@ -324,7 +324,7 @@ public class ProgramService {
         // 옵션 수정..
         if (!optionList.isEmpty()) {
             // 기존 옵션 삭제
-            optionRepository.deleteByProgramId(origin.getId());
+            optionRepository.deleteByProgramId(id);
 
             // 옵션 저장
             saveOptions(loginId, origin, optionList);
