@@ -58,6 +58,8 @@ public class YoutubeService {
         Youtube entity = new Youtube();
         if (youtube.getUploadDate() != null) {
             entity.setUploadDate(youtube.getUploadDate());
+        } else {
+            throw new DMException("작성일자를 입력해주세요.");
         }
         if (youtube.getTitle() != null) {
             entity.setTitle(youtube.getTitle());
@@ -102,19 +104,19 @@ public class YoutubeService {
         if (youtube.getUploadDate() != null) {
             origin.setUploadDate(youtube.getUploadDate());
         }
-        if (youtube.getTitle() != null && !origin.getTitle().equals(youtube.getTitle())) {
+        if (youtube.getTitle() != null) {
             origin.setTitle(youtube.getTitle());
         }
-        if (youtube.getContents() != null && !origin.getContents().equals(youtube.getContents())) {
+        if (youtube.getContents() != null) {
             origin.setContents(youtube.getContents());
         }
-        if (youtube.getLink() != null && !origin.getLink().equals(youtube.getLink())) {
+        if (youtube.getLink() != null) {
             origin.setLink(youtube.getLink());
         }
-        if (youtube.getImgPath() != null && !origin.getImgPath().equals(youtube.getImgPath())) {
+        if (youtube.getImgPath() != null) {
             origin.setImgPath(youtube.getImgPath());
         }
-        if (youtube.getImgName() != null && !origin.getImgName().equals(youtube.getImgName())) {
+        if (youtube.getImgName() != null) {
             origin.setImgName(youtube.getImgName());
         }
         origin.setUpdateId(loginId);

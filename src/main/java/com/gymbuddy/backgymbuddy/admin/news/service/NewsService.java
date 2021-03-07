@@ -86,10 +86,10 @@ public class NewsService {
         String loginId = userDetails.getUsername();
 
         News origin = findOne(id);
-        if (news.getTitle() != null && !origin.getTitle().equals(news.getTitle())) {
+        if (news.getTitle() != null) {
             origin.setTitle(news.getTitle());
         }
-        if (news.getContents() != null && !origin.getContents().equals(news.getContents())) {
+        if (news.getContents() != null) {
             origin.setContents(news.getContents());
         }
         if (news.getImgPath() != null) {
