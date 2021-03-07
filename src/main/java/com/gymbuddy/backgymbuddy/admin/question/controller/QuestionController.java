@@ -119,31 +119,29 @@ public class QuestionController extends BaseController {
     public ResponseEntity<Map<String, Object>> insertQuestion(@ModelAttribute QuestionDto dto) {
         log.info("1:1 문의 등록: {}", dto);
 
-        String imgName1 = dto.getFile1().getOriginalFilename();
-        String imgName2 = dto.getFile2().getOriginalFilename();
-        String imgName3 = dto.getFile3().getOriginalFilename();
         try {
             if (!saveFile.exists()) {
                 saveFile.mkdir();
             }
             // 파일1
-            if (!dto.getFile1().isEmpty()) {
+            if (dto.getFile1() != null) {
+                String imgName1 = dto.getFile1().getOriginalFilename();
                 File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
                 dto.getFile1().transferTo(realFile1);
                 dto.setImgName1(imgName1);
                 dto.setImgPath1(saveFile + "/" + realFile1.getName());
             }
-
             // 파일2
-            if (!dto.getFile2().isEmpty()) {
+            if (dto.getFile2() != null) {
+                String imgName2 = dto.getFile2().getOriginalFilename();
                 File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
                 dto.getFile2().transferTo(realFile2);
                 dto.setImgName2(imgName2);
                 dto.setImgPath2(saveFile + "/" + realFile2.getName());
             }
-
             // 파일3
-            if (!dto.getFile3().isEmpty()) {
+            if (dto.getFile3() != null) {
+                String imgName3 = dto.getFile3().getOriginalFilename();
                 File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
                 dto.getFile3().transferTo(realFile3);
                 dto.setImgName3(imgName3);
@@ -170,56 +168,56 @@ public class QuestionController extends BaseController {
 
         if (dto.getFile1() != null) {
             String imgName1 = dto.getFile1().getOriginalFilename();
-            if (!question.getImgName1().equals(imgName1)) {
-                try {
-                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
-                    dto.getFile1().transferTo(realFile);
-                    dto.setImgName1(imgName1);
-                    dto.setImgPath1(saveFile + "/" + realFile.getName());
+            try {
+                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
+                dto.getFile1().transferTo(realFile);
+                dto.setImgName1(imgName1);
+                dto.setImgPath1(saveFile + "/" + realFile.getName());
 
+                if (question.getImgPath1() != null) {
                     File originFile = new File(question.getImgPath1());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
         if (dto.getFile2() != null) {
             String imgName2 = dto.getFile2().getOriginalFilename();
-            if (!question.getImgName2().equals(imgName2)) {
-                try {
+            try {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
                     dto.getFile2().transferTo(realFile);
                     dto.setImgName2(imgName2);
                     dto.setImgPath2(saveFile + "/" + realFile.getName());
 
+                if (question.getImgPath2() != null) {
                     File originFile = new File(question.getImgPath2());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
         if (dto.getFile3() != null) {
             String imgName3 = dto.getFile3().getOriginalFilename();
-            if (!question.getImgName3().equals(imgName3)) {
-                try {
+            try {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
                     dto.getFile3().transferTo(realFile);
                     dto.setImgName3(imgName3);
                     dto.setImgPath3(saveFile + "/" + realFile.getName());
 
+                if (question.getImgPath3() != null) {
                     File originFile = new File(question.getImgPath3());
-                    if (originFile.exists() == true) {
+                    if (originFile.exists()) {
                         originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 

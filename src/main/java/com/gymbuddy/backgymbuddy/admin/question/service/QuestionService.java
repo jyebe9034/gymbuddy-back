@@ -138,7 +138,7 @@ public class QuestionService {
     }
 
     /**
-     * 회원 id로 작성한 문의글 전체 가져오기
+     * 사용자 문의글 목록
      * id = 회원 id
      */
     public Map<String, Object> findAllByUser(String createId, int page) {

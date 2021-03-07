@@ -19,7 +19,7 @@ public class BusinessIdentity extends BaseDomain {
     @Column(length = 300, nullable = false)
     private String imgPath;
 
-    @Column(length = 300, nullable = false)
+    @Column(length = 50, nullable = false)
     private String imgName;
 
     @Enumerated(EnumType.STRING)

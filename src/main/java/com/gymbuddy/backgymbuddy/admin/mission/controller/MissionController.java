@@ -89,61 +89,58 @@ public class MissionController extends BaseController {
 
         Mission mission = missionService.findOne(id);
 
-        String imgName1 = dto.getFile1().getOriginalFilename();
-        String imgName2 = dto.getFile2().getOriginalFilename();
-        String imgName3 = dto.getFile3().getOriginalFilename();
+        if (dto.getFile1() != null) {
+            String imgName1 = dto.getFile1().getOriginalFilename();
+            try {
+                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
+                dto.getFile1().transferTo(realFile);
+                dto.setImgName1(imgName1);
+                dto.setImgPath1(saveFile + "/" + realFile.getName());
 
-        if (!mission.getImgName1().equals(imgName1)) {
-            if (dto.getFile1() != null) {
-                try {
-                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
-                    dto.getFile1().transferTo(realFile);
-                    dto.setImgName1(imgName1);
-                    dto.setImgPath1(saveFile + "/" + realFile.getName());
-
+                if (mission.getImgName1() != null) {
                     File originFile = new File(mission.getImgPath1());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
+        if (dto.getFile2() != null) {
+            String imgName2 = dto.getFile2().getOriginalFilename();
+            try {
+                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
+                dto.getFile2().transferTo(realFile);
+                dto.setImgName2(imgName2);
+                dto.setImgPath2(saveFile + "/" + realFile.getName());
 
-        if (!mission.getImgName2().equals(imgName2)) {
-            if (dto.getFile2() != null) {
-                try {
-                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
-                    dto.getFile2().transferTo(realFile);
-                    dto.setImgName2(imgName2);
-                    dto.setImgPath2(saveFile + "/" + realFile.getName());
-
+                if (mission.getImgName2() != null) {
                     File originFile = new File(mission.getImgPath2());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
+        if (dto.getFile3() != null) {
+            String imgName3 = dto.getFile3().getOriginalFilename();
+            try {
+                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
+                dto.getFile3().transferTo(realFile);
+                dto.setImgName3(imgName3);
+                dto.setImgPath3(saveFile + "/" + realFile.getName());
 
-        if (!mission.getImgName3().equals(imgName3)) {
-            if (dto.getFile3() != null) {
-                try {
-                    File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
-                    dto.getFile3().transferTo(realFile);
-                    dto.setImgName3(imgName3);
-                    dto.setImgPath3(saveFile + "/" + realFile.getName());
-
+                if (mission.getImgName3() != null) {
                     File originFile = new File(mission.getImgPath3());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 

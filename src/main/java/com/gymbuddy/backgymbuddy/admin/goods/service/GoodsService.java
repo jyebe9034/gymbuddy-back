@@ -10,7 +10,6 @@ import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsOption;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsOptionDto;
 import com.gymbuddy.backgymbuddy.admin.goods.repository.GoodsOptionRepository;
 import com.gymbuddy.backgymbuddy.admin.goods.repository.GoodsRepository;
-import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramOptionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -36,10 +35,6 @@ public class GoodsService {
         return goodsRepository.findAllByMainYnAndCreateDate(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
-    public int selectTotalCount() {
-        return goodsRepository.findAll().size();
-    }
-
     public Map<String, Object> findAllByDto(int page) {
         List<Goods> goodsList = findAll(page);
         List<GoodsDto> dtoList = new ArrayList<>();
@@ -54,6 +49,10 @@ public class GoodsService {
         result.put("goodsList", dtoList);
         result.put("mainCounts", count);
         return result;
+    }
+
+    public int selectTotalCount() {
+        return goodsRepository.findAll().size();
     }
 
     private GoodsDto goodsToDto(Goods goods) {
@@ -109,150 +108,28 @@ public class GoodsService {
     }
 
     public Goods findOne(Long id) {
-        Goods goods = goodsRepository.findById(id).get();
-
         Optional<Goods> byId = goodsRepository.findById(id);
         if (!byId.isPresent()) {
             throw new DMException("존재하지 않는 굿즈입니다.");
         }
+        Goods goods = byId.get();
+
         List<GoodsOption> optionList = optionRepository.findAllByGoodsId(id);
         byId.get().setGoodsOptions(optionList);
+        return goods;
+    }
+
+    public GoodsOption findOption(Long id) {
+        Optional<GoodsOption> byId = optionRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 굿즈 옵션입니다.");
+        }
         return byId.get();
     }
 
     public GoodsDto findOneByDto(Long id) {
         Goods goods = findOne(id);
         return goodsToDto(goods);
-    }
-
-    @Transactional
-    public Long save(GoodsDto dto) {
-        // 현재 로그인한 아이디 정보 조회
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = (UserDetails) principal;
-        String loginId = userDetails.getUsername();
-
-        Goods goods = new Goods();
-        if (dto.getName() != null) {
-            goods.setName(dto.getName());
-        } else {
-            throw new DMException("이름을 입력해주세요.");
-        }
-        if (dto.getPrice() != null) {
-            goods.setPrice(dto.getPrice());
-        } else {
-            throw new DMException("가격을 입력해주세요.");
-        }
-        if (dto.getMainYn() != null) {
-            goods.setMainYn(dto.getMainYn());
-        } else {
-            throw new DMException("메인 여부를 입력해주세요.");
-        }
-        if (dto.getStatus() != null) {
-            goods.setStatus(dto.getStatus());
-        }
-        if (dto.getThumbnailImgName() != null) {
-            goods.setThumbnailImgName(dto.getThumbnailImgName());
-        }
-        if (dto.getThumbnailImgPath() != null) {
-            goods.setThumbnailImgPath(dto.getThumbnailImgPath());
-        }
-        if (dto.getDetailImgName() != null) {
-            goods.setDetailImgName(dto.getDetailImgName());
-        }
-        if (dto.getDetailImgPath() != null) {
-            goods.setDetailImgPath(dto.getDetailImgPath());
-        }
-        goods.setCreateId(loginId);
-        goods.setUpdateId(loginId);
-        goodsRepository.save(goods);
-
-        // 옵션 저장(String -> List<GoodsOptionDto>로 변환 후 처리)
-        String list = dto.getOptionList();
-        Gson gson = new Gson();
-        Type listType = new TypeToken<ArrayList<GoodsOptionDto>>(){}.getType();
-        ArrayList<GoodsOptionDto> optionList = gson.fromJson(list, listType);
-
-        for (GoodsOptionDto optionDto : optionList) {
-            GoodsOption option = new GoodsOption();
-            if (optionDto.getColorAndSize() != null) {
-                option.setColorAndSize(optionDto.getColorAndSize());
-            } else {
-                throw new DMException("색상 및 사이즈를 입력해주세요.");
-            }
-            if (optionDto.getInventory() != 0) {
-                option.setInventory(optionDto.getInventory());
-            } else {
-                throw new DMException("재고를 입력해주세요.");
-            }
-            if (optionDto.getExtraPrice() != null) {
-                option.setExtraPrice(optionDto.getExtraPrice());
-            }
-            option.setCreateId(loginId);
-            option.setUpdateId(loginId);
-            option.setGoods(goods);
-            optionRepository.save(option);
-        }
-
-        return goods.getId();
-    }
-
-    @Transactional
-    public void update(Long id, GoodsDto dto) {
-        Goods goods = findOne(id);
-        if (dto.getName() != null) {
-            goods.setName(dto.getName());
-        }
-        if (dto.getPrice() != null) {
-            goods.setPrice(dto.getPrice());
-        }
-        if (dto.getMainYn() != null) {
-            goods.setMainYn(dto.getMainYn());
-        }
-        if (dto.getStatus() != null) {
-            goods.setStatus(dto.getStatus());
-        }
-        if (dto.getThumbnailImgName() != null) {
-            goods.setThumbnailImgName(dto.getThumbnailImgName());
-        }
-        if (dto.getThumbnailImgPath() != null) {
-            goods.setThumbnailImgPath(dto.getThumbnailImgPath());
-        }
-        if (dto.getDetailImgName() != null) {
-            goods.setDetailImgName(dto.getDetailImgName());
-        }
-        if (dto.getDetailImgPath() != null) {
-            goods.setDetailImgPath(dto.getDetailImgPath());
-        }
-
-        // 옵션 저장(String -> List<GoodsOptionDto>로 변환 후 처리)
-        String list = dto.getOptionList();
-        Gson gson = new Gson();
-        Type listType = new TypeToken<ArrayList<GoodsOptionDto>>(){}.getType();
-        ArrayList<GoodsOptionDto> optionList = gson.fromJson(list, listType);
-
-        if (!optionList.isEmpty()) {
-            optionRepository.deleteByGoodsId(id);
-            for (GoodsOptionDto optionDto : optionList) {
-                GoodsOption option = new GoodsOption();
-                if (optionDto.getColorAndSize() != null) {
-                    option.setColorAndSize(optionDto.getColorAndSize());
-                }
-                if (optionDto.getInventory() != 0) {
-                    option.setInventory(optionDto.getInventory());
-                }
-                if (optionDto.getExtraPrice() != null) {
-                    option.setExtraPrice(optionDto.getExtraPrice());
-                }
-                option.setGoods(goods);
-                optionRepository.save(option);
-            }
-        }
-    }
-
-    @Transactional
-    public void delete(Long id) {
-        goodsRepository.deleteById(id);
     }
 
     public List<GoodsDto> findAllForMain() {
@@ -283,6 +160,130 @@ public class GoodsService {
     }
 
     @Transactional
+    public Long save(GoodsDto dto) {
+        // 현재 로그인한 아이디 정보 조회
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
+        Goods goods = new Goods();
+        if (dto.getName() != null) {
+            goods.setName(dto.getName());
+        } else {
+            throw new DMException("이름을 입력해주세요.");
+        }
+        if (dto.getPrice() != null) {
+            goods.setPrice(dto.getPrice());
+        } else {
+            throw new DMException("가격을 입력해주세요.");
+        }
+        if (dto.getStatus() != null) {
+            goods.setStatus(dto.getStatus());
+        }
+        if (dto.getThumbnailImgName() != null) {
+            goods.setThumbnailImgName(dto.getThumbnailImgName());
+        } else {
+            throw new DMException("대표 이미지를 입력해주세요.");
+        }
+        if (dto.getThumbnailImgPath() != null) {
+            goods.setThumbnailImgPath(dto.getThumbnailImgPath());
+        }
+        if (dto.getDetailImgName() != null) {
+            goods.setDetailImgName(dto.getDetailImgName());
+        } else {
+            throw new DMException("상세 이미지를 입력해주세요.");
+        }
+        if (dto.getDetailImgPath() != null) {
+            goods.setDetailImgPath(dto.getDetailImgPath());
+        }
+        goods.setMainYn("N");
+        goods.setStatus(GoodsStatus.SALE);
+        goods.setCreateId(loginId);
+        goods.setUpdateId(loginId);
+
+        goodsRepository.save(goods);
+
+        // 옵션 저장(String -> List<GoodsOptionDto>로 변환 후 처리)
+        String list = dto.getOptionList();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<GoodsOptionDto>>(){}.getType();
+        ArrayList<GoodsOptionDto> optionList = gson.fromJson(list, listType);
+
+        optionSave(loginId, goods, optionList);
+
+        return goods.getId();
+    }
+
+    private void optionSave(String loginId, Goods goods, ArrayList<GoodsOptionDto> optionList) {
+        for (GoodsOptionDto optionDto : optionList) {
+            GoodsOption option = new GoodsOption();
+            if (optionDto.getColorAndSize() != null) {
+                option.setColorAndSize(optionDto.getColorAndSize());
+            } else {
+                throw new DMException("색상 및 사이즈를 입력해주세요.");
+            }
+            if (optionDto.getInventory() != 0) {
+                option.setInventory(optionDto.getInventory());
+            } else {
+                throw new DMException("재고를 입력해주세요.");
+            }
+            if (optionDto.getExtraPrice() != null) {
+                option.setExtraPrice(optionDto.getExtraPrice());
+            }
+            option.setCreateId(loginId);
+            option.setUpdateId(loginId);
+            option.setGoods(goods);
+            optionRepository.save(option);
+        }
+    }
+
+    @Transactional
+    public void update(Long id, GoodsDto dto) {
+        // 현재 로그인한 아이디 정보 조회
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
+        Goods goods = findOne(id);
+        if (dto.getName() != null) {
+            goods.setName(dto.getName());
+        }
+        if (dto.getPrice() != null) {
+            goods.setPrice(dto.getPrice());
+        }
+        if (dto.getMainYn() != null) {
+            goods.setMainYn(dto.getMainYn());
+        }
+        if (dto.getStatus() != null) {
+            goods.setStatus(dto.getStatus());
+        }
+        if (dto.getThumbnailImgName() != null) {
+            goods.setThumbnailImgName(dto.getThumbnailImgName());
+        }
+        if (dto.getThumbnailImgPath() != null) {
+            goods.setThumbnailImgPath(dto.getThumbnailImgPath());
+        }
+        if (dto.getDetailImgName() != null) {
+            goods.setDetailImgName(dto.getDetailImgName());
+        }
+        if (dto.getDetailImgPath() != null) {
+            goods.setDetailImgPath(dto.getDetailImgPath());
+        }
+        goods.setUpdateId(loginId);
+
+        // 옵션 저장(String -> List<GoodsOptionDto>로 변환 후 처리)
+        String list = dto.getOptionList();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<GoodsOptionDto>>(){}.getType();
+        ArrayList<GoodsOptionDto> optionList = gson.fromJson(list, listType);
+
+        if (!optionList.isEmpty()) {
+            optionRepository.deleteByGoodsId(id);
+            optionSave(loginId, goods, optionList);
+        }
+    }
+
+    @Transactional
     public void updateStatus(Long id, GoodsStatus status) {
         Goods goods = findOne(id);
         if (status != null) {
@@ -296,5 +297,10 @@ public class GoodsService {
         if (mainYn != null) {
             goods.setMainYn(mainYn);
         }
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        goodsRepository.deleteById(id);
     }
 }
