@@ -24,6 +24,6 @@ public class Notice extends BaseDomain {
     @Column(length = 300)
     private String imgPath;
 
-    @Column(length = 50)
+    @Column(length = 300)
     private String imgName;
 }

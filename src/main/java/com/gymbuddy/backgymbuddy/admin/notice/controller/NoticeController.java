@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.util.*;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_NOTICE_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.NOTICE_PREFIX;
 
 @Slf4j
@@ -19,7 +20,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.NOTICE_PREFIX;
 @RequiredArgsConstructor
 public class NoticeController extends BaseController {
 
-    private final String URI_PREFIX = NOTICE_PREFIX;
     private String noticePath = "/resources/static/img/notice";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + noticePath;
     private File newfile = new File(rootPath);
@@ -27,9 +27,19 @@ public class NoticeController extends BaseController {
     private final NoticeService noticeService;
 
     /**
+     * 전체 공지사항 갯수 조회
+     */
+    @GetMapping(NOTICE_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectNoticeTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", noticeService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 전체 공지사항 조회(관리자)
      */
-    @GetMapping(URI_PREFIX + "/all/{page}")
+    @GetMapping(NOTICE_PREFIX + "/all/{page}")
     public ResponseEntity<List<Notice>> selectNoticeList(@PathVariable("page") int page) {
         return createResponseEntity(true, noticeService.findAll(page));
     }
@@ -37,7 +47,7 @@ public class NoticeController extends BaseController {
     /**
      * 공지사항 상세
      */
-    @GetMapping(URI_PREFIX + "/detail/{id}")
+    @GetMapping(NOTICE_PREFIX + "/detail/{id}")
     public ResponseEntity<Notice> selectNoticeDetail(@PathVariable("id") Long id) {
         log.info("공지사항 아이디로 조회: {}", id);
         return createResponseEntity(true, noticeService.findOne(id));
@@ -46,11 +56,11 @@ public class NoticeController extends BaseController {
     /**
      * 공지사항 등록
      */
-    @PostMapping(URI_PREFIX + "/new")
+    @PostMapping(ADMIN_NOTICE_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertNotice(@ModelAttribute NoticeDto notice) {
         log.info("공지사항 등록: {}", notice);
 
-        // 이미지 업로드
+        // 이미지가 있는 경우에만 실행
         if (notice.getFile() != null) {
             String filename = notice.getFile().getOriginalFilename();
             try {
@@ -59,8 +69,8 @@ public class NoticeController extends BaseController {
                 }
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
                 notice.getFile().transferTo(realFile);
-                notice.setImgName(filename);
-                notice.setImgPath(noticePath + "/" + realFile.getName());
+                notice.setImgName(realFile.getName());
+                notice.setImgPath(newfile + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -72,32 +82,32 @@ public class NoticeController extends BaseController {
     }
 
     /**
-     * 공지사항의 제목, 내용, 이미지, 메인 노출 여부 수정
+     * 공지사항 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_NOTICE_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateNotice(@PathVariable("id") Long id, @ModelAttribute NoticeDto notice) {
         log.info("공지사항 수정 - id: {}, notice: {}", id, notice);
 
         // 이미지가 있는 경우에만 실행
         if (notice.getFile() != null) {
-            Notice origin = noticeService.findOne(id);
             String filename = notice.getFile().getOriginalFilename();
-            if (!origin.getImgName().equals(filename)) {
-                // 이미지 업로드
-                try {
-                    File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
-                    notice.getFile().transferTo(realFile);
-                    notice.setImgName(filename);
-                    notice.setImgPath(noticePath + "/" + realFile.getName());
+            // 이미지 업로드
+            try {
+                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                notice.getFile().transferTo(realFile);
+                notice.setImgName(realFile.getName());
+                notice.setImgPath(newfile + "/" + realFile.getName());
 
-                    // 기존 이미지 파일 서버에서 삭제
-                    File originFile = new File(newfile + "/" + origin.getImgPath());
+                // 기존 이미지 파일 서버에서 삭제
+                Notice origin = noticeService.findOne(id);
+                if (origin.getImgPath() != null) {
+                    File originFile = new File(origin.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 
@@ -126,7 +136,7 @@ public class NoticeController extends BaseController {
     /**
      * 공지사항 삭제
      */
-    @DeleteMapping(URI_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_NOTICE_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteNotice(@RequestBody List<Integer> ids) {
         log.info("공지사항 삭제: {}", ids);
 
@@ -134,9 +144,11 @@ public class NoticeController extends BaseController {
             long idL = new Long(id);
             Notice origin = noticeService.findOne(idL);
             // 이미지 삭제
-            File originFile = new File(newfile + "/" + origin.getImgPath());
-            if (originFile.exists()) {
-                originFile.delete();
+            if (origin.getImgPath() != null) {
+                File originFile = new File(origin.getImgPath());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
             }
             noticeService.delete(idL);
         }

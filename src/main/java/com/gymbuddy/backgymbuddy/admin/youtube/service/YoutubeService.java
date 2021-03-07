@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.youtube.service;
 
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.YoutubeDto;
 import com.gymbuddy.backgymbuddy.admin.youtube.repository.YoutubeRepository;
@@ -13,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -25,36 +24,70 @@ public class YoutubeService {
 
     private final YoutubeRepository youtubeRepository;
 
+    public int selectTotalCount() {
+        return youtubeRepository.findAll().size();
+    }
+
     public List<Youtube> findAllForMain() {
-        return youtubeRepository.findTop9ByOrderByIdDesc();
+        return youtubeRepository.findAll(PageRequest.of(0, 9, Sort.by("id").descending())).getContent();
     }
 
     public List<Youtube> findAll(int page) {
-        return youtubeRepository.findAll(PageRequest.of(page, 10)).getContent();
+        return youtubeRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+    }
+
+    public List<Youtube> findAllForUser(int page) {
+        return youtubeRepository.findAll(PageRequest.of(page, 15, Sort.by("id").descending())).getContent();
     }
 
     public Youtube findOne(Long id) {
-        return youtubeRepository.findById(id).get();
+        Optional<Youtube> byId = youtubeRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 유튜브입니다.");
+        }
+        return byId.get();
     }
 
     @Transactional
     public Long save(YoutubeDto youtube) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         Youtube entity = new Youtube();
-        entity.setUploadDate(youtube.getUploadDate());
-        entity.setTitle(youtube.getTitle());
-        entity.setContents(youtube.getContents());
-        entity.setLink(youtube.getLink());
-        entity.setImgPath(youtube.getImgPath());
-        entity.setImgName(youtube.getImgName());
-        entity.setCreateDate(LocalDateTime.now());
-//        entity.setCreateId(loginId);
-        entity.setUpdateDate(LocalDateTime.now());
-//        entity.setUpdateId(loginId);
+        if (youtube.getUploadDate() != null) {
+            entity.setUploadDate(youtube.getUploadDate());
+        } else {
+            throw new DMException("작성일자를 입력해주세요.");
+        }
+        if (youtube.getTitle() != null) {
+            entity.setTitle(youtube.getTitle());
+        } else {
+            throw new DMException("제목을 입력해주세요.");
+        }
+        if (youtube.getContents() != null) {
+            entity.setContents(youtube.getContents());
+        } else {
+            throw new DMException("내용을 입력해주세요.");
+        }
+        if (youtube.getLink() != null) {
+            entity.setLink(youtube.getLink());
+        } else {
+            throw new DMException("링크를 입력해주세요.");
+        }
+        if (youtube.getImgPath() != null) {
+            entity.setImgPath(youtube.getImgPath());
+        } else {
+            throw new DMException("이미지를 등록해주세요.");
+        }
+        if (youtube.getImgName() != null) {
+            entity.setImgName(youtube.getImgName());
+        } else {
+            throw new DMException("이미지를 등록해주세요.");
+        }
+        entity.setCreateId(loginId);
+        entity.setUpdateId(loginId);
 
         youtubeRepository.save(entity);
         return entity.getId();
@@ -63,9 +96,9 @@ public class YoutubeService {
     @Transactional
     public void update(Long id, YoutubeDto youtube) {
         // 현재 로그인한 아이디 정보 조회
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = (UserDetails) principal;
-//        String loginId = userDetails.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
 
         Youtube origin = findOne(id);
         if (youtube.getUploadDate() != null) {
@@ -86,8 +119,7 @@ public class YoutubeService {
         if (youtube.getImgName() != null) {
             origin.setImgName(youtube.getImgName());
         }
-        origin.setUpdateDate(LocalDateTime.now());
-//        origin.setUpdateId(loginId);
+        origin.setUpdateId(loginId);
     }
 
     @Transactional

@@ -1,6 +1,77 @@
 # ColumnWriter API
 
-### 전체 칼럼 작성자 목록 조회
+### 전체 컬럼 작성자 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectColumnWriterTotalCount
+PATH: /api/columnWriter/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 컬럼 작성자수
+}
+```
+* 결과 에시
+```
+{
+    "totalCount": 3
+}
+```
+
+### 전체 칼럼 작성자 목록 조회(페이징 미포)
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD : GET
+METHOD NAME: selectColumnWriterList
+PATH : /api/columnWriter/all
+PARAM : 없음
+```
+* 결과 구조
+```
+[
+    {
+        "createDate": 생성일,
+        "createId": 생성자,
+        "updateDate": 수정일,
+        "updateId": 수정자,
+        "id": 아이디(JPA 생성),
+        "name": 이름,
+        "job": 직업,
+        "contents": 내용
+    }
+]
+```
+* 결과 예시
+```
+[
+    {
+        "createDate": "2021-02-06T21:27:09.629",
+        "createId": test,
+        "updateDate": "2021-02-06T21:27:09.629",
+        "updateId": test,
+        "id": 1,
+        "name": "김작가",
+        "job": "작가",
+        "contents": "글을 쓰는 작가입니다."
+    },
+    {
+        "createDate": "2021-02-06T21:27:46.772",
+        "createId": test,
+        "updateDate": "2021-02-06T21:27:46.772",
+        "updateId": test,
+        "id": 2,
+        "name": "김운동",
+        "job": "운동선수",
+        "contents": "운동 선수입니다."
+    },
+    ...
+]
+```
+
+### 전체 칼럼 작성자 목록 조회함(페이징 포함)
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD : GET
@@ -92,7 +163,7 @@ PARAM: 없음
 ```
 HTTP METHOD : POST
 METHOD NAME: insertColumnWriter
-PATH : /api/columnWriter/new
+PATH : /api/admin/columnWriter/new
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 name: 이름
@@ -117,7 +188,7 @@ contents: 내용
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateColumnWriter
-PATH : /api/columnWriter/update/{id}
+PATH : /api/admin/columnWriter/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 name: 이름
@@ -143,10 +214,10 @@ contents: 내용
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteColumnWriter
-PATH : /api/columnWriter/delete
+PATH : /api/admin/columnWriter/delete
 PARAM : List<Integer>
 === PARAM 설명 ===
-그냥 아이 배열만 넘기면 됌
+아이디 배열을 넘기면 됌
 ```
 * 파라미터 구조
 ```

@@ -1,20 +1,21 @@
 package com.gymbuddy.backgymbuddy.admin.program.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gymbuddy.backgymbuddy.admin.base.Product;
-import com.gymbuddy.backgymbuddy.admin.cart.domain.Cart;
-import com.gymbuddy.backgymbuddy.admin.cart.domain.CartProgram;
-import com.gymbuddy.backgymbuddy.admin.order.domain.OrderProgram;
+import com.gymbuddy.backgymbuddy.admin.enums.status.ProgramStatus;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.FetchType.LAZY;
-
 @Entity
 @Table(name = "program")
+@ToString(exclude = "program")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @Data
 public class Program extends Product {
 
@@ -62,8 +63,15 @@ public class Program extends Product {
     /**
      * 메인 노출 여부
      */
-    @Column
+    @Column(nullable = false)
     private String mainYn;
+
+    /**
+     * 프로그램 상태
+     */
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProgramStatus status;
 
 //    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
 //    private List<OrderProgram> orderProduct = new ArrayList<>();
@@ -71,6 +79,6 @@ public class Program extends Product {
 //    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
 //    private List<CartProgram> cartProgram = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
-//    private List<ProgramOption> programOptions = new ArrayList<>();
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+    private List<ProgramOption> programOptions = new ArrayList<>();
 }

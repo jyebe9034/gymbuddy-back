@@ -19,11 +19,11 @@ public class Member extends BaseDomain {
     @Column(length = 300, nullable = false)
     private String imgPath;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 300, nullable = false)
     private String imgName;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private WebMobileStatus webOrMobile;
+    private WebMobileStatus webMobile;
 
 }

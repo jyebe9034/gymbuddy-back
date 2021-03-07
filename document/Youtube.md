@@ -1,5 +1,26 @@
 # Youtube API
 
+### 전체 유튜브 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectYoutubeTotalCount
+PATH: /api/youtube/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 유튜브 갯수
+}
+```
+* 결과 에시
+```
+{
+    "totalCount": 15
+}
+```
+
 ### 전체 유튜브 목록조회
 * 기본 정보 및 파라미터 설명
 ```
@@ -19,8 +40,7 @@ PARAM: 없음
         "contents": 내용,
         "link": 유튜브 링크,
         "imgPath": 이미지 경로,
-        "imgName": 이미지 명,
-        "mainYn": 메인 노출 여부
+        "imgName": 이미지 명
     },
     {
         "id": 유튜브 아이디(JPA 생성),
@@ -29,8 +49,7 @@ PARAM: 없음
         "contents": 내용,
         "link": 유튜브 링크,
         "imgPath": 이미지 경로,
-        "imgName": 이미지 명,
-        "mainYn": 메인 노출 여부
+        "imgName": 이미지 명
     },
     ...
 ]
@@ -45,8 +64,7 @@ PARAM: 없음
         "contents": "첫번째 유튜브 입니다.",
         "link": "localhost:8080/youtube",
         "imgPath": "/resources/static/img/youtube/1612437700781_테스트.png",
-        "imgName": "테스트.png",
-        "mainYn": "Y"
+        "imgName": "테스트.png"
     },
     {
         "id": 2,
@@ -55,8 +73,7 @@ PARAM: 없음
         "contents": "두번째 유튜브 입니다.",
         "link": "localhost:8080/youtube",
         "imgPath": "/resources/static/img/youtube/1612437682220_테스트.png",
-        "imgName": "테스트.png",
-        "mainYn": "Y"
+        "imgName": "테스트.png"
     },
     ...
 ]
@@ -80,8 +97,7 @@ PARAM: 없음
     "contents": 내용,
     "link": 유튜브 링크,
     "imgPath": 이미지 경로,
-    "imgName": 이미지 명,
-    "mainYn": 메인 노출 여부
+    "imgName": 이미지 명
 }
 ```
 * 결과 예시
@@ -93,8 +109,7 @@ PARAM: 없음
     "contents": "여섯번째 유튜브 입니다",
     "link": "localhost:8080/youtube",
     "imgPath": "/resources/static/img/youtube/1612437647277_테스트.png",
-    "imgName": "테스트.png",
-    "mainYn": "Y"
+    "imgName": "테스트.png"
 }
 ```
 
@@ -103,7 +118,7 @@ PARAM: 없음
 ```
 HTTP METHOD : POST
 METHOD NAME: insertYoutube
-PATH : /api/youtube/new
+PATH : /api/admin/youtube/new
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 uploadDate: 업로드 날짜(YYYY-MM-DD)
@@ -111,7 +126,6 @@ title: 제목
 contents: 내용
 link:  유튜브 링크
 file: 이미지 파일
-mainYn: 메인 노출 여부 (Y or N)
 ```
 * 결과 구조
 ```
@@ -122,7 +136,7 @@ mainYn: 메인 노출 여부 (Y or N)
 * 결과 예시
 ```
 {
-    "id": 13     
+    "id": 13  
 }
 ```
 
@@ -131,7 +145,7 @@ mainYn: 메인 노출 여부 (Y or N)
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateYoutube
-PATH : /api/youtube/update/{id}
+PATH : /api/admin/youtube/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 uploadDate: 업로드 날짜(YYYY-MM-DD)
@@ -139,7 +153,6 @@ title: 제목
 contents: 내용
 link:  유튜브 링크
 file: 이미지 파일
-mainYn: 메인 노출 여부 (Y or N)
 *** 수정 시에는 모든 값을 넘길 필요는 없음. 수정할 값만 넘겨도 수정 가능함.
 ```
 * 결과 구조
@@ -160,10 +173,10 @@ mainYn: 메인 노출 여부 (Y or N)
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteYoutube
-PATH : /api/youtube/delete
+PATH : /api/admin/youtube/delete
 PARAM : List<Integer>
 === PARAM 설명 ===
-그냥 숫자 배열만 넘기면 됌
+아이디 배열을 넘기면 됌
 ```
 * 파라미터 구조
 ```

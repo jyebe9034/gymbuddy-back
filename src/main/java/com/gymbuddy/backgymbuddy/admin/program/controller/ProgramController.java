@@ -1,7 +1,9 @@
 package com.gymbuddy.backgymbuddy.admin.program.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
-import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
+import com.gymbuddy.backgymbuddy.admin.enums.status.ProgramStatus;
 import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramDto;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramOption;
@@ -13,10 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_PROGRAM_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.PROGRAM_PREFIX;
 
 @Slf4j
@@ -34,23 +39,34 @@ public class ProgramController extends BaseController {
      * 전체 프로그램 조회(관리자)
      */
     @GetMapping(PROGRAM_PREFIX + "/all/{page}")
-    public ResponseEntity<List<Program>> selectProgramList(@PathVariable("page") int page) {
-        return createResponseEntity(true, programService.findAll(page));
+    public ResponseEntity<Map<String, Object>> selectProgramList(@PathVariable("page") int page) {
+        return createResponseEntity(true, programService.findAllDto(page));
+    }
+
+    /**
+     * 전체 프로그램 갯수 조회
+     * @return
+     */
+    @GetMapping(PROGRAM_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectProgramTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", programService.selectTotalCount());
+        return createResponseEntity(true, result);
     }
 
     /**
      * 프로그램 상세
      */
     @GetMapping(PROGRAM_PREFIX + "/detail/{id}")
-    public ResponseEntity<Program> selectProgramDetail(@PathVariable("id") Long id) {
+    public ResponseEntity<ProgramDto> selectProgramDetail(@PathVariable("id") Long id) {
         log.info("프로그램 아이디로 조회: {}", id);
-        return createResponseEntity(true, programService.findOne(id));
+        return createResponseEntity(true, programService.findOneDto(id));
     }
 
     /**
      * 프로그램 등록
      */
-    @PostMapping(PROGRAM_PREFIX + "/new")
+    @PostMapping(ADMIN_PROGRAM_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertProgram(@ModelAttribute ProgramDto program) {
         // 여기에서 받은 프로그램 + 프로그램 옵션...
         log.info("프로그램 등록: {}", program);
@@ -65,7 +81,7 @@ public class ProgramController extends BaseController {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 program.getThumbnailFile().transferTo(realFile);
                 program.setThumbnailImgName(realFile.getName());
-                program.setThumbnailImgPath(programPath + "/" + realFile.getName());
+                program.setThumbnailImgPath(newfile + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -81,7 +97,7 @@ public class ProgramController extends BaseController {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + detailName);
                 program.getDetailFile().transferTo(realFile);
                 program.setDetailImgName(realFile.getName());
-                program.setDetailImgPath(programPath + "/" + realFile.getName());
+                program.setDetailImgPath(newfile + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -93,12 +109,60 @@ public class ProgramController extends BaseController {
     }
 
     /**
+     * 프로그램 진행상태 변경
+     */
+    @PutMapping(ADMIN_PROGRAM_PREFIX + "/updateStatus/{status}")
+    public ResponseEntity<Map<String, Object>> updateProgramStatus(
+            @RequestBody List<Integer> ids, @PathVariable ProgramStatus status) {
+        log.info("프로그램 진행상태 변경: {}", ids);
+
+        boolean flag = true;
+
+        if (ids != null) {
+            for (int id : ids) {
+                long idL = new Long(id);
+                programService.updateStatus(idL, status);
+
+                Program findProgram = programService.findOne(idL);
+                if(status != null) {
+                    flag = status.equals(findProgram.getStatus()) ? true : false;
+                }
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", flag);
+        return createResponseEntity(true, result);
+    }
+
+    /**
+     * 프로그램 메인 설정
+     */
+    @PutMapping(ADMIN_PROGRAM_PREFIX + "/setMainYn/{id}/{mainYn}")
+    public ResponseEntity<Map<String, Object>> setProgramMainYn(
+            @PathVariable Long id, @PathVariable String mainYn) {
+        log.info("프로그램 메인 설정: {}", id);
+
+        programService.setMainYn(id, mainYn);
+
+        Program findProgram = programService.findOne(id);
+        boolean flag = true;
+        if (mainYn != null) {
+            flag = mainYn.equals(findProgram.getMainYn()) ? true : false;
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", flag);
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 프로그램 수정
      */
-    @PutMapping(PROGRAM_PREFIX + "/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateProgram(@PathVariable("id") Long id, @RequestBody ProgramDto program) {
+    @PutMapping(ADMIN_PROGRAM_PREFIX + "/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateProgram(@PathVariable("id") Long id, @ModelAttribute ProgramDto program) {
         // 프로그램 + 프로그램 옵션 수정을 같이 처리해야 함..
-        log.info("컬럼 수정 - id: {}, program: {}", id, program);
+        log.info("프로그램 수정 - id: {}, program: {}", id, program);
 
         Program origin = programService.findOne(id);
         // 썸네일 이미지 업로드
@@ -108,12 +172,14 @@ public class ProgramController extends BaseController {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 program.getThumbnailFile().transferTo(realFile);
                 program.setThumbnailImgName(realFile.getName());
-                program.setThumbnailImgPath(programPath + "/" + realFile.getName());
+                program.setThumbnailImgPath(newfile + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
-                File originThumbFile = new File(newfile + "/" + origin.getThumbnailImgPath());
-                if (originThumbFile.exists()) {
-                    originThumbFile.delete();
+                if (origin.getThumbnailImgPath() != null) {
+                    File originThumbFile = new File(origin.getThumbnailImgPath());
+                    if (originThumbFile.exists()) {
+                        originThumbFile.delete();
+                    }
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -127,12 +193,14 @@ public class ProgramController extends BaseController {
                 File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + detailName);
                 program.getDetailFile().transferTo(realFile);
                 program.setDetailImgName(realFile.getName());
-                program.setDetailImgPath(programPath + "/" + realFile.getName());
+                program.setDetailImgPath(newfile + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
-                File originDetailFile = new File(newfile + "/" + origin.getDetailImgPath());
-                if (originDetailFile.exists()) {
-                    originDetailFile.delete();
+                if (origin.getDetailImgPath() != null) {
+                    File originDetailFile = new File(origin.getDetailImgPath());
+                    if (originDetailFile.exists()) {
+                        originDetailFile.delete();
+                    }
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -174,7 +242,12 @@ public class ProgramController extends BaseController {
             flag = program.getDetailImgName().equals(findProgram.getDetailImgName()) ? true : false;
         }
 
-        List<ProgramOptionDto> optionList = program.getOptionList();
+        // 옵션 String -> List<ProgramOptionDto>로 변환
+        String list = program.getOptionList();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<ProgramOptionDto>>(){}.getType();
+        ArrayList<ProgramOptionDto> optionList = gson.fromJson(list, listType);
+
         for (ProgramOptionDto dto : optionList) {
             ProgramOption findOption = programService.findOneOption(dto.getId());
             if (dto.getClassDateTime() != null) {
@@ -196,7 +269,7 @@ public class ProgramController extends BaseController {
     /**
      * 프로그램 삭제
      */
-    @DeleteMapping(PROGRAM_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_PROGRAM_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteProgram(@RequestBody List<Integer> ids) {
         log.info("프로그램 삭제: {}", ids);
 
@@ -204,15 +277,21 @@ public class ProgramController extends BaseController {
             long idL = new Long(id);
             Program origin = programService.findOne(idL);
             // 썸네일 이미지 삭제
-            File originThumbFile = new File(newfile + "/" + origin.getThumbnailImgPath());
-            if (originThumbFile.exists()) {
-                originThumbFile.delete();
+            if (origin.getThumbnailImgPath() != null) {
+                File originThumbFile = new File(origin.getThumbnailImgPath());
+                if (originThumbFile.exists()) {
+                    originThumbFile.delete();
+                }
             }
+
             // 상세 이미지 삭제
-            File originDetailFile = new File(newfile + "/" + origin.getDetailImgPath());
-            if (originDetailFile.exists()) {
-                originDetailFile.delete();
+            if (origin.getDetailImgPath() != null) {
+                File originDetailFile = new File(origin.getDetailImgPath());
+                if (originDetailFile.exists()) {
+                    originDetailFile.delete();
+                }
             }
+
             programService.delete(idL);
         }
 

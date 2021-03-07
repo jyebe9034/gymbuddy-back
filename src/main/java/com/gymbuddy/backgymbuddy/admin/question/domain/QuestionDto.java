@@ -4,6 +4,10 @@ import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Column;
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 public class QuestionDto {
 
@@ -11,6 +15,7 @@ public class QuestionDto {
     private String title;
     private String contents;
     private QuestionEnum categoryId;
+
     private MultipartFile file1;
     private MultipartFile file2;
     private MultipartFile file3;
@@ -20,4 +25,11 @@ public class QuestionDto {
     private String imgName2;
     private String imgPath3;
     private String imgName3;
+
+    @Column(nullable = true)
+    private String createId;
+    @Column(nullable = true)
+    private LocalDateTime createDate;
+
+    private List<QuestionCommentDto> commentList;
 }

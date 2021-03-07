@@ -2,7 +2,6 @@
 
 ### 운동친구 소개 조회
 * 기본 정보 및 파라미터 설명
-* 미션, 활동기록, BI가 리스트 형태로 전달되므로 biList.imgName 등으로 사용 가능
 ```
 HTTP METHOD: GET
 METHOD NAME: selectMission
@@ -155,7 +154,7 @@ PARAM: 없음
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateMission
-PATH : /api/mission/update/{id}
+PATH : /api/admin/mission/update/1
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 contents: 내용

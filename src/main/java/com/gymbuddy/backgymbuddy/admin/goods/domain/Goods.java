@@ -1,20 +1,21 @@
 package com.gymbuddy.backgymbuddy.admin.goods.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gymbuddy.backgymbuddy.admin.base.Product;
-import com.gymbuddy.backgymbuddy.admin.cart.domain.Cart;
-import com.gymbuddy.backgymbuddy.admin.cart.domain.CartGoods;
-import com.gymbuddy.backgymbuddy.admin.order.domain.OrderGoods;
-import com.gymbuddy.backgymbuddy.admin.order.domain.OrderProgram;
+import com.gymbuddy.backgymbuddy.admin.enums.status.GoodsStatus;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.FetchType.LAZY;
-
 @Entity
 @Table(name = "goods")
+@ToString(exclude = "goods")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @Data
 public class Goods extends Product {
 
@@ -23,21 +24,37 @@ public class Goods extends Product {
     @Column(name = "goods_id")
     private Long id;
 
+    /**
+     * 굿즈 이름
+     */
     @Column(length = 200, nullable = false)
     private String name;
 
     /**
+     * 가격
+     */
+    @Column(length = 20, nullable = false)
+    private BigDecimal price;
+
+    /**
      * 메인 노출 여부
      */
-    @Column
+    @Column(nullable = false)
     private String mainYn;
 
-    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
-    private List<OrderGoods> orderGoods = new ArrayList<>();
-
-    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
-    private List<CartGoods> cartGoods = new ArrayList<>();
+    /**
+     * 굿즈 상태
+     */
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private GoodsStatus status;
 
     @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
     private List<GoodsOption> goodsOptions = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
+//    private List<OrderGoods> orderGoods = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
+//    private List<CartGoods> cartGoods = new ArrayList<>();
 }

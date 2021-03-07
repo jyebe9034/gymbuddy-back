@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_MEMBER_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.MEMBER_PREFIX;
 
 @Slf4j
@@ -21,7 +22,6 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.MEMBER_PREFIX;
 @RequiredArgsConstructor
 public class MemberController extends BaseController {
 
-    private final String URI_PREFIX = MEMBER_PREFIX;
     private String memberPath = "/resources/static/img/member";
     private String rootPath = System.getProperty("user.dir") + "/src/main" + memberPath;
     private File saveFile = new File(rootPath);
@@ -31,7 +31,7 @@ public class MemberController extends BaseController {
     /**
      * 멤버소개 조회
      */
-    @GetMapping(URI_PREFIX + "/all")
+    @GetMapping(MEMBER_PREFIX + "/all")
     public ResponseEntity<List<Member>> selectMemberList() {
         return createResponseEntity(true, memberService.findAll());
     }
@@ -39,7 +39,7 @@ public class MemberController extends BaseController {
     /**
      * 웹 멤버소개 등록
      */
-    @PostMapping(URI_PREFIX + "/newWeb")
+    @PostMapping(MEMBER_PREFIX + "/newWeb")
     public ResponseEntity<Map<String, Object>> insertWebMember(@ModelAttribute MemberDto member) {
         log.info("웹 멤버소개 등록: {}", member);
 
@@ -53,7 +53,7 @@ public class MemberController extends BaseController {
     /**
      * 모바일 멤버소개 등록
      */
-    @PostMapping(URI_PREFIX + "/newMobile")
+    @PostMapping(MEMBER_PREFIX + "/newMobile")
     public ResponseEntity<Map<String, Object>> insertMobileMember(@ModelAttribute MemberDto member) {
         log.info("모바일 멤버소개 등록: {}", member);
 
@@ -70,10 +70,12 @@ public class MemberController extends BaseController {
             if (!saveFile.exists()) {
                 saveFile.mkdir();
             }
-            File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
-            dto.getFile().transferTo(realFile);
-            dto.setImgName(imgName);
-            dto.setImgPath(memberPath + realFile.getName());
+            if (!dto.getFile().isEmpty()) {
+                File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
+                dto.getFile().transferTo(realFile);
+                dto.setImgName(realFile.getName());
+                dto.setImgPath(saveFile + "/" + realFile.getName());
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -82,7 +84,7 @@ public class MemberController extends BaseController {
     /**
      * 멤버소개 수정
      */
-    @PutMapping(URI_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_MEMBER_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateMember(
             @PathVariable("id") Long id, @ModelAttribute MemberDto dto) {
         log.info("멤버소개 수정 id: {}, dto: {}", id, dto);
@@ -93,14 +95,12 @@ public class MemberController extends BaseController {
             String imgName = dto.getFile().getOriginalFilename();
             if (!member.getImgName().equals(imgName)) {
                 try {
-                    // 이미지 업로드
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                     dto.getFile().transferTo(realFile);
                     dto.setImgName(imgName);
-                    dto.setImgPath(memberPath + realFile.getName());
+                    dto.setImgPath(saveFile + "/" + realFile.getName());
 
-                    // 기존 이미지를 파일 서버에서 삭제
-                    File originFile = new File(saveFile + "/" + member.getImgPath());
+                    File originFile = new File(member.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
@@ -111,17 +111,14 @@ public class MemberController extends BaseController {
         }
 
         memberService.update(id, dto);
-        Member findBi = memberService.findOne(id);
 
+        Member findMember = memberService.findOne(id);
         boolean flag = true;
         if (dto.getImgPath() != null) {
-            flag = dto.getImgPath().equals(findBi.getImgPath());
+            flag = dto.getImgPath().equals(findMember.getImgPath()) ? true : false;
         }
         if (dto.getImgName() != null) {
-            flag = dto.getImgName().equals(findBi.getImgName());
-        }
-        if (dto.getWebMobile() != null) {
-            flag = dto.getWebMobile().equals(findBi.getWebOrMobile());
+            flag = dto.getImgName().equals(findMember.getImgName()) ? true : false;
         }
 
         Map<String, Object> result = new HashMap<>();

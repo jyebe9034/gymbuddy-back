@@ -1,5 +1,26 @@
 # Banner API
 
+### 전체 메인 배너 갯수조회
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: GET
+METHOD NAME: selectBannerTotalCount
+PATH: /api/banner/totalCount
+PARAM: 없음
+```
+* 결과구조
+```
+{
+    "totalCount": 전체 메인 배너 갯수
+}
+```
+* 결과 에시
+```
+{
+    "totalCount": 6
+}
+```
+
 ### 전체 메인 베너 목록조회(최대 5개)
 * 기본 정보 및 파라미터 설명
 ```
@@ -120,7 +141,7 @@ PARAM: 없음
 ```
 HTTP METHOD : POST
 METHOD NAME: insertMainBanner
-PATH : /api/banner/new
+PATH : /api/admin/banner/new
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 title: 제목
@@ -147,7 +168,7 @@ file: 이미지 파일
 ```
 HTTP METHOD : PUT
 METHOD NAME: updateMainBanner
-PATH : /api/banner/update/{id}
+PATH : /api/admin/banner/update/{id}
 PARAM : Map<String, Object>
 === PARAM 설명 ===
 title: 제목
@@ -175,10 +196,10 @@ file: 이미지 파일
 ```
 HTTP METHOD : DELETE
 METHOD NAME: deleteMainBanner
-PATH : /api/banner/delete
+PATH : /api/admin/banner/delete
 PARAM : List<Integer>
 === PARAM 설명 ===
-그냥 아이 배열만 넘기면 됌
+아이디 배열을 넘기면 됌
 ```
 * 파라미터 구조
 ```

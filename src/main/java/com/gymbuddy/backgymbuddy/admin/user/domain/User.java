@@ -97,7 +97,7 @@ public class User extends BaseDomain implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return identity;
     }
 
     /**

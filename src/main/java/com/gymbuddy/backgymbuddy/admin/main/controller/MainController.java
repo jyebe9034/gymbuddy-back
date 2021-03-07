@@ -5,10 +5,14 @@ import com.gymbuddy.backgymbuddy.admin.banner.service.BannerService;
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
 import com.gymbuddy.backgymbuddy.admin.column.service.ColumnService;
+import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsDto;
+import com.gymbuddy.backgymbuddy.admin.goods.service.GoodsService;
 import com.gymbuddy.backgymbuddy.admin.news.domain.News;
 import com.gymbuddy.backgymbuddy.admin.news.service.NewsService;
 import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import com.gymbuddy.backgymbuddy.admin.notice.service.NoticeService;
+import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramDto;
+import com.gymbuddy.backgymbuddy.admin.program.service.ProgramService;
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
 import com.gymbuddy.backgymbuddy.admin.youtube.service.YoutubeService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +37,8 @@ public class MainController extends BaseController {
     private final NoticeService noticeService;
     private final NewsService newsService;
     private final ColumnService columnService;
-    // TODO 나중에 굿즈 & 프로그램 추가
+    private final ProgramService programService;
+    private final GoodsService goodsService;
     
     @GetMapping(MAIN_PREFIX + "/all")
     public ResponseEntity<Map<String, Object>> selectAllMainInfo() {
@@ -42,6 +47,8 @@ public class MainController extends BaseController {
         List<Notice> noticeList = noticeService.findAllForMain();
         List<News> newsList = newsService.findAllForMain();
         List<Columns> columnsList = columnService.findAllForMain();
+        List<ProgramDto> programList = programService.findAllForMain();
+        List<GoodsDto> goodsList = goodsService.findAllForMain();
 
         Map<String, Object> result = new HashMap<>();
         result.put("bannerList", bannerList);
@@ -49,6 +56,8 @@ public class MainController extends BaseController {
         result.put("noticeList", noticeList);
         result.put("newsList", newsList);
         result.put("columnsList", columnsList);
+        result.put("programList", programList);
+        result.put("goodsList", goodsList);
 
         return createResponseEntity(true, result);
     }

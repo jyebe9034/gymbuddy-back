@@ -1,19 +1,18 @@
 package com.gymbuddy.backgymbuddy.admin.history.service;
 
+import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
 import com.gymbuddy.backgymbuddy.admin.history.domain.HistoryDto;
 import com.gymbuddy.backgymbuddy.admin.history.repository.HistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -27,45 +26,44 @@ public class HistoryService {
         return historyRepository.findAll();
     }
 
-    public List<History> findAllByDate() {
-        List<History> allByDate = findAllByDate();
-        for (History history : allByDate) {
-            String historyDate = history.getHistoryDate();
-        }
-        return allByDate;
-        //LocalDateTime historyDate = LocalDateTime.parse(historyDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
-
     public History findOne(Long id) {
-        return historyRepository.findById(id).get();
+        Optional<History> byId = historyRepository.findById(id);
+        if (!byId.isPresent()) {
+            throw new DMException("존재하지 않는 활동기록입니다.");
+        }
+        return byId.get();
     }
 
     @Transactional
     public Long save(HistoryDto dto) {
+        // 현재 로그인한 아이디 정보 조회
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
         History history = new History();
-        history.setHistoryDate(dto.getHistoryDate());
-        history.setTitle(dto.getTitle());
-        history.setCreateDate(LocalDateTime.now());
-        history.setUpdateDate(LocalDateTime.now());
+        if (dto.getHistoryDate() != null) {
+            history.setHistoryDate(dto.getHistoryDate());
+        } else {
+            throw new DMException("날짜를 입력해주세요.");
+        }
+        if (dto.getTitle() != null) {
+            history.setTitle(dto.getTitle());
+        } else {
+            throw new DMException("제목을 입력해주세요.");
+        }
+        history.setCreateId(loginId);
+        history.setUpdateId(loginId);
 
         historyRepository.save(history);
         return history.getId();
     }
 
     @Transactional
-    public void update(Long id, HistoryDto dto) {
-        History history = findOne(id);
-        if (dto.getHistoryDate() != null) {
-            history.setHistoryDate(dto.getHistoryDate());
+    public void update(List<HistoryDto> dtoList) {
+        historyRepository.deleteAll();
+        for (HistoryDto dto : dtoList) {
+            save(dto);
         }
-        if (dto.getTitle() != null) {
-            history.setTitle(dto.getTitle());
-        }
-        history.setUpdateDate(LocalDateTime.now());
-    }
-
-    @Transactional
-    public void delete(Long id) {
-        historyRepository.deleteById(id);
     }
 }

@@ -1,8 +1,10 @@
 package com.gymbuddy.backgymbuddy.admin.newsletter.domain;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "newsletter")
@@ -16,5 +18,14 @@ public class Newsletter {
 
     @Column(length = 100, nullable = false)
     private String email;
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDate createDate;
+
+    @PrePersist
+    private void prePersist() {
+        createDate = LocalDate.now();
+    }
 
 }

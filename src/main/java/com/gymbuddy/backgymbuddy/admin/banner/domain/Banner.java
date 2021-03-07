@@ -21,16 +21,16 @@ public class Banner extends BaseDomain {
     @Column(length = 10, nullable = false)
     private String categoryId;
 
-    @Column(length = 500)
+    @Column(length = 500, nullable = false)
     private String link;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private String btnTitle;
 
     @Column(length = 300, nullable = false)
     private String imgPath;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 300, nullable = false)
     private String imgName;
 
 }

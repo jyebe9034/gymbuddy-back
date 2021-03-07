@@ -1,5 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.program.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gymbuddy.backgymbuddy.admin.base.BaseDomain;
 import lombok.Data;
 
@@ -28,7 +30,10 @@ public class ProgramOption extends BaseDomain {
     @Column(nullable = false)
     private int userCount;
 
-    @Column(nullable = false)
+    /**
+     * 추가 금액
+     */
+    @Column
     private BigDecimal addPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)

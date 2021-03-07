@@ -4,8 +4,6 @@ import com.gymbuddy.backgymbuddy.admin.base.BaseController;
 import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
 import com.gymbuddy.backgymbuddy.admin.column.domain.ColumnsDto;
 import com.gymbuddy.backgymbuddy.admin.column.service.ColumnService;
-import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriter;
-import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +13,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_COLUMN_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.COLUMN_PREFIX;
 
 @Slf4j
@@ -31,11 +29,31 @@ public class ColumnController extends BaseController {
     private final ColumnService columnService;
 
     /**
-     * 전체 칼럼 조회(관리자)
+     * 전체 컬럼 갯수 조회
+     */
+    @GetMapping(COLUMN_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectColumnTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", columnService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
+    /**
+     * 전체 칼럼 조회 (관리자 화면 목록, 10개씩)
      */
     @GetMapping(COLUMN_PREFIX + "/all/{page}")
     public ResponseEntity<List<Columns>> selectColumnList(@PathVariable("page") int page) {
         return createResponseEntity(true, columnService.findAll(page));
+    }
+
+    /**
+     * 전체 컬럼 조회 (사용자 화면 목록, 15개씩)
+     * @param page
+     * @return
+     */
+    @GetMapping(COLUMN_PREFIX + "/allForUser/{page}")
+    public ResponseEntity<List<Columns>> selectColumnListForUser(@PathVariable("page") int page) {
+        return createResponseEntity(true, columnService.findAllForUser(page));
     }
 
     /**
@@ -44,13 +62,13 @@ public class ColumnController extends BaseController {
     @GetMapping(COLUMN_PREFIX + "/detail/{id}")
     public ResponseEntity<Columns> selectColumnDetail(@PathVariable("id") Long id) {
         log.info("컬럼 아이디로 조회: {}", id);
-        return createResponseEntity(true, columnService.findOne(id));
+        return createResponseEntity(true, columnService.findOneDto(id));
     }
 
     /**
      * 칼럼 등록
      */
-    @PostMapping(COLUMN_PREFIX + "/new")
+    @PostMapping(ADMIN_COLUMN_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertColumn(@ModelAttribute ColumnsDto columns) {
         log.info("컬럼 등록: {}", columns);
 
@@ -63,42 +81,40 @@ public class ColumnController extends BaseController {
             File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
             columns.getFile().transferTo(realFile);
             columns.setImgName(realFile.getName());
-            columns.setImgPath(columnPath + "/" + realFile.getName());
+            columns.setImgPath(newfile + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("id", columnService.save(columns));
-        return createResponseEntity(true, result);
+        return createResponseEntity(true, columnService.save(columns));
     }
 
     /**
      * 칼럼 수정
      */
-    @PutMapping(COLUMN_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_COLUMN_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateColumn(@PathVariable("id") Long id, @ModelAttribute ColumnsDto columns) {
         log.info("컬럼 수정 - id: {}, columns: {}", id, columns);
 
         if (columns.getFile() != null) {
-            Columns origin = columnService.findOne(id);
             String filename = columns.getFile().getOriginalFilename();
-            if (!origin.getImgName().equals(filename)) {
-                // 이미지 업로드
-                try {
-                    File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
-                    columns.getFile().transferTo(realFile);
-                    columns.setImgName(filename);
-                    columns.setImgPath(columnPath + "/" + realFile.getName());
+            // 이미지 업로드
+            try {
+                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                columns.getFile().transferTo(realFile);
+                columns.setImgName(realFile.getName());
+                columns.setImgPath(newfile + "/" + realFile.getName());
 
-                    // 기존 이미지 파일 서버에서 삭제
-                    File originFile = new File(newfile + "/" + origin.getImgPath());
+                // 기존 이미지 파일 서버에서 삭제
+                Columns origin = columnService.findOne(id);
+                if (origin.getImgPath() != null) {
+                    File originFile = new File(origin.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 
@@ -127,7 +143,7 @@ public class ColumnController extends BaseController {
     /**
      * 칼럼 삭제
      */
-    @DeleteMapping(COLUMN_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_COLUMN_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteColumn(@RequestBody List<Integer> ids) {
         log.info("컬럼 삭제: {}", ids);
 
@@ -135,9 +151,11 @@ public class ColumnController extends BaseController {
             long idL = new Long(id);
             Columns origin = columnService.findOne(idL);
             // 이미지 삭제
-            File originFile = new File(newfile + "/" + origin.getImgPath());
-            if (originFile.exists()) {
-                originFile.delete();
+            if (origin.getImgPath() != null) {
+                File originFile = new File(origin.getImgPath());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
             }
             columnService.delete(idL);
         }

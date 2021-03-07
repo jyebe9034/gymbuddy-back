@@ -23,8 +23,8 @@ public class JwtTokenProvider {
 
     private String secretKey = "gymbuddyDev";
 
-    // 토큰 유효시간 30분
-    private long tokenValidTime = 30 * 60 * 1000L;
+    // 토큰 유효시간 12시간
+    private long tokenValidTime = 12 * 60 * 60 * 1000L;
 
     private final UserDetailsService userDetailsService;
 
@@ -35,9 +35,8 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String userPk, List<String> roles) {
+    public String createToken(String userPk) {
         Claims claims = Jwts.claims().setSubject(userPk); // jwt payload에 저장되는 정보단위
-        claims.put("roles", roles); // 정보는 key : value 쌍으로 저장된다.
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
@@ -58,9 +57,9 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    // Request의 Header에서 token값을 가져온다. "X-AUTH-TOKEN" : "TOKEN"
+    // Request의 Header에서 token값을 가져온다. "jwt-token" : "TOKEN"
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
+        return request.getHeader("jwt-token");
     }
 
     // 토큰의 유효성 + 만료일자 확인

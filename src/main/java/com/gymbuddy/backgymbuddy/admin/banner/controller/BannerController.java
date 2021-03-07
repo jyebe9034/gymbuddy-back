@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_BANNER_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.BANNER_PREFIX;
 
 @Slf4j
@@ -26,6 +27,16 @@ public class BannerController extends BaseController {
     private File newFile = new File(rootPath);
 
     private final BannerService bannerService;
+
+    /**
+     * 전체 배너 갯수 조회
+     */
+    @GetMapping(BANNER_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectBannerTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", bannerService.findAll().size());
+        return createResponseEntity(true, result);
+    }
 
     /**
      * 메인 배너 조회
@@ -47,7 +58,7 @@ public class BannerController extends BaseController {
     /**
      * 메인 베너 등록
      */
-    @PostMapping(BANNER_PREFIX + "/new")
+    @PostMapping(ADMIN_BANNER_PREFIX + "/new")
     public ResponseEntity<Map<String, Object>> insertMainBanner(@ModelAttribute BannerDto banner) {
         log.info("메인 배너 등록: {}", banner);
 
@@ -59,44 +70,42 @@ public class BannerController extends BaseController {
             }
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             banner.getFile().transferTo(realFile);
-            banner.setImgName(filename);
-            banner.setImgPath(bannerPath + "/" + realFile.getName());
+            banner.setImgName(realFile.getName());
+            banner.setImgPath(newFile + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
-        // 저장
-        Long id = bannerService.save(banner);
-
         Map<String, Object> result = new HashMap<>();
-        result.put("id", id);
+        result.put("result", bannerService.save(banner));
         return createResponseEntity(true, result);
     }
 
     /**
-     * 메인 베너의 제목과 링크 수정
+     * 메인 베너 수정
      */
-    @PutMapping(BANNER_PREFIX + "/update/{id}")
+    @PutMapping(ADMIN_BANNER_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateMainBanner(@PathVariable("id") Long id, @ModelAttribute BannerDto banner) {
         log.info("메인 배너 수정 - id: {}, banner: {}", id, banner);
 
         if (banner.getFile() != null) {
-            Banner origin = bannerService.findOne(id);
             String filename = banner.getFile().getOriginalFilename();
-            if (!origin.getImgName().equals(filename)) {
-                try {
-                    File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
-                    banner.getFile().transferTo(realFile);
-                    banner.setImgName(filename);
-                    banner.setImgPath(bannerPath + "/" + realFile.getName());
+            try {
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
+                banner.getFile().transferTo(realFile);
+                banner.setImgName(filename);
+                banner.setImgPath(newFile + "/" + realFile.getName());
 
-                    File originFile = new File(newFile + "/" + origin.getImgPath());
+                // 이미지가 있는 경우 삭제
+                Banner origin = bannerService.findOne(id);
+                if (origin.getImgPath() != null) {
+                    File originFile = new File(origin.getImgPath());
                     if (originFile.exists()) {
                         originFile.delete();
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
 
@@ -131,7 +140,7 @@ public class BannerController extends BaseController {
     /**
      * 메인 베너 삭제
      */
-    @DeleteMapping(BANNER_PREFIX + "/delete")
+    @DeleteMapping(ADMIN_BANNER_PREFIX + "/delete")
     public ResponseEntity<Map<String, Object>> deleteMainBanner(@RequestBody List<Integer> ids) {
         log.info("메인 베너 삭제: {}", ids);
 
@@ -139,9 +148,11 @@ public class BannerController extends BaseController {
             long idL = new Long(id);
             Banner origin = bannerService.findOne(idL);
             // 이미지 삭제
-            File originFile = new File(newFile + "/" + origin.getImgPath());
-            if (originFile.exists()) {
-                originFile.delete();
+            if (origin.getImgPath() != null) {
+                File originFile = new File(origin.getImgPath());
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
             }
             bannerService.delete(idL);
         }

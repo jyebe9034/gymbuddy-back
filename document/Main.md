@@ -6,7 +6,6 @@
 HTTP METHOD: GET
 METHOD NAME: selectAllMainInfo
 PATH: /api/main/all
-PARAM: 없음
 ```
 * 결과구조
 ```
@@ -365,6 +364,25 @@ PARAM: 없음
             "link": "localhost:8080/youtube",
             "imgPath": "/resources/static/img/youtube/1613805914174_테스트.png",
             "imgName": "테스트.png"
+        }
+    ],
+    "programList": [
+        {
+            "id": 3,
+            "title": "원데이 클래스: 크로스핏3",
+            "coach": "김코치",
+            "classAddress": "강남역 10번출구 00빌딩 5층",
+            "classDate": "2021.03.13 - 2021.04.10",
+            "classTime": "토요일 오후 2시, 일요일 오후 3시",
+            "price": 55000.00,
+            "mainYn": "Y",
+            "thumbnailFile": null,
+            "thumbnailImgPath": null,
+            "thumbnailImgName": null,
+            "detailFile": null,
+            "detailImgPath": null,
+            "detailImgName": null,
+            "optionList": null
         }
     ],
     "columnsList": [

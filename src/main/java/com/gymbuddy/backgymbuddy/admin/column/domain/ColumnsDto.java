@@ -1,5 +1,6 @@
 package com.gymbuddy.backgymbuddy.admin.column.domain;
 
+import com.gymbuddy.backgymbuddy.admin.columnWriter.domain.ColumnWriterDto;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,4 +20,6 @@ public class ColumnsDto {
     private String imgPath;
 
     private String imgName;
+
+    private ColumnWriterDto columnWriter;
 }
