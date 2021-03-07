@@ -168,14 +168,6 @@ public class ProgramService {
         return dto;
     }
 
-    public ProgramOption findOneOption(Long id) {
-        Optional<ProgramOption> byId = optionRepository.findById(id);
-        if (!byId.isPresent()) {
-            throw new DMException("존재하지 않는 프로그램 옵션입니다.");
-        }
-        return byId.get();
-    }
-
     @Transactional
     public Long save(ProgramDto program) {
         // 현재 로그인한 아이디 정보 조회
@@ -247,26 +239,8 @@ public class ProgramService {
         Type listType = new TypeToken<ArrayList<ProgramOptionDto>>(){}.getType();
         ArrayList<ProgramOptionDto> optionList = gson.fromJson(list, listType);
 
-        for (ProgramOptionDto dto : optionList) {
-            ProgramOption option = new ProgramOption();
-            if (dto.getClassDateTime() != null) {
-                option.setClassDateTime(dto.getClassDateTime());
-            } else {
-                throw new DMException("옵션명을 입력해주세요.");
-            }
-            if (dto.getUserCount() != 0) {
-                option.setUserCount(dto.getUserCount());
-            } else {
-                throw new DMException("참여 인원수를 입력해주세요.");
-            }
-            if (dto.getAddPrice() != null) {
-                option.setAddPrice(dto.getAddPrice());
-            }
-            option.setProgram(entity);
-            option.setCreateId(loginId);
-            option.setUpdateId(loginId);
-            optionRepository.save(option);
-        }
+        // 옵션 저장
+        saveOptions(loginId, entity, optionList);
 
         return entity.getId();
     }
@@ -341,19 +315,40 @@ public class ProgramService {
 
         // 옵션 수정..
         if (!optionList.isEmpty()) {
-            for (ProgramOptionDto dto : optionList) {
-                ProgramOption originOption = findOneOption(dto.getId());
-                if (dto.getClassDateTime() != null) {
-                    originOption.setClassDateTime(dto.getClassDateTime());
-                }
-                if (dto.getUserCount() != 0) {
-                    originOption.setUserCount(dto.getUserCount());
-                }
-                if (dto.getAddPrice() != null) {
-                    originOption.setAddPrice(dto.getAddPrice());
-                }
-                 origin.setUpdateId(loginId);
+            // 기존 옵션 삭제
+            optionRepository.deleteByProgramId(origin.getId());
+
+            // 옵션 저장
+            saveOptions(loginId, origin, optionList);
+        }
+    }
+
+    /**
+     * 옵션 저장
+     * @param loginId 로그인된 아이디
+     * @param origin 프로그램 정보
+     * @param optionList 새로운 옵션 목록
+     */
+    private void saveOptions(String loginId, Program origin, ArrayList<ProgramOptionDto> optionList) {
+        for (ProgramOptionDto dto : optionList) {
+            ProgramOption option = new ProgramOption();
+            if (dto.getClassDateTime() != null) {
+                option.setClassDateTime(dto.getClassDateTime());
+            } else {
+                throw new DMException("옵션명을 입력해주세요.");
             }
+            if (dto.getUserCount() != 0) {
+                option.setUserCount(dto.getUserCount());
+            } else {
+                throw new DMException("참여 인원수를 입력해주세요.");
+            }
+            if (dto.getAddPrice() != null) {
+                option.setAddPrice(dto.getAddPrice());
+            }
+            option.setProgram(origin);
+            option.setCreateId(loginId);
+            option.setUpdateId(loginId);
+            optionRepository.save(option);
         }
     }
 
