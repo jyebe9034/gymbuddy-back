@@ -62,7 +62,7 @@ public class ProgramController extends BaseController {
     /**
      * 프로그램 등록
      */
-    @PostMapping(ADMIN_PROGRAM_PREFIX + "/new")
+    @PostMapping(path = ADMIN_PROGRAM_PREFIX + "/new", consumes = {"multipart/form-data"})
     public ResponseEntity<Map<String, Object>> insertProgram(@ModelAttribute ProgramDto program) {
         // 여기에서 받은 프로그램 + 프로그램 옵션...
         log.info("프로그램 등록: {}", program);
