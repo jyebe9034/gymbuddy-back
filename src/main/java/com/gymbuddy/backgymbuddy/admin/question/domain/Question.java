@@ -36,19 +36,19 @@ public class Question extends BaseDomain {
     @Column(length = 300)
     private String imgPath1;
 
-    @Column(length = 50)
+    @Column(length = 300)
     private String imgName1;
 
     @Column(length = 300)
     private String imgPath2;
 
-    @Column(length = 50)
+    @Column(length = 300)
     private String imgName2;
 
     @Column(length = 300)
     private String imgPath3;
 
-    @Column(length = 50)
+    @Column(length = 300)
     private String imgName3;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

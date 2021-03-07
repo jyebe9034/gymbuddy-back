@@ -35,6 +35,6 @@ public class Columns extends BaseDomain {
     @Column(length = 300, nullable = false)
     private String imgPath;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 300, nullable = false)
     private String imgName;
 }
