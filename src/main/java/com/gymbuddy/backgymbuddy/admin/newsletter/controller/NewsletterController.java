@@ -31,6 +31,16 @@ public class NewsletterController extends BaseController {
     }
 
     /**
+     * 뉴스레터 전체 갯수 조회
+     */
+    @GetMapping(NEWSLETTER_PREFIX + "/totalCount")
+    public ResponseEntity<Map<String, Object>> selectNewsletterTotalCount() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalCount", newsletterService.selectTotalCount());
+        return createResponseEntity(true, result);
+    }
+
+    /**
      * 뉴스레터 구독 이메일 등록
      */
     @PostMapping(NEWSLETTER_PREFIX + "/newSubscribe")
