@@ -24,5 +24,6 @@ public class GoodsDto {
     private String detailImgPath;
     private String detailImgName;
 
-    private List<GoodsOptionDto> optionList;
+    private String optionList;
+    private List<GoodsOptionDto> options;
 }

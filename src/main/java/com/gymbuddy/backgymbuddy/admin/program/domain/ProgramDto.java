@@ -11,34 +11,23 @@ import java.util.List;
 public class ProgramDto {
 
     private Long id;
-
     private String title;
-
     private String coach;
-
     private String classAddress;
-
     private String classDate;
-
     private String classTime;
-
     private BigDecimal price;
-
     private String mainYn;
-
     private ProgramStatus status;
 
     private MultipartFile thumbnailFile;
-
     private String thumbnailImgPath;
-
     private String thumbnailImgName;
 
     private MultipartFile detailFile;
-
     private String detailImgPath;
-
     private String detailImgName;
 
     private String optionList;
+    private List<ProgramOptionDto> options;
 }

@@ -163,7 +163,7 @@ public class ProgramService {
                 }
                 optionList.add(optDto);
             }
-//            dto.setOptionList(optionList);
+            dto.setOptions(optionList);
         }
         return dto;
     }
@@ -241,37 +241,32 @@ public class ProgramService {
 
         programRepository.save(entity);
 
-        // 옵션 저장
+        // 옵션 저장(String -> List<ProgramOptionDto>로 변환 후 처리)
         String list = program.getOptionList();
-
         Gson gson = new Gson();
-
         Type listType = new TypeToken<ArrayList<ProgramOptionDto>>(){}.getType();
-
         ArrayList<ProgramOptionDto> optionList = gson.fromJson(list, listType);
-        log.info("optionList: {}", optionList);
 
-//        List<ProgramOptionDto> optionList = program.getOptionList();
-//        for (ProgramOptionDto dto : optionList) {
-//            ProgramOption option = new ProgramOption();
-//            if (dto.getClassDateTime() != null) {
-//                option.setClassDateTime(dto.getClassDateTime());
-//            } else {
-//                throw new DMException("옵션명을 입력해주세요.");
-//            }
-//            if (dto.getUserCount() != 0) {
-//                option.setUserCount(dto.getUserCount());
-//            } else {
-//                throw new DMException("참여 인원수를 입력해주세요.");
-//            }
-//            if (dto.getAddPrice() != null) {
-//                option.setAddPrice(dto.getAddPrice());
-//            }
-//            option.setProgram(entity);
-//            option.setCreateId(loginId);
-//            option.setUpdateId(loginId);
-//            optionRepository.save(option);
-//        }
+        for (ProgramOptionDto dto : optionList) {
+            ProgramOption option = new ProgramOption();
+            if (dto.getClassDateTime() != null) {
+                option.setClassDateTime(dto.getClassDateTime());
+            } else {
+                throw new DMException("옵션명을 입력해주세요.");
+            }
+            if (dto.getUserCount() != 0) {
+                option.setUserCount(dto.getUserCount());
+            } else {
+                throw new DMException("참여 인원수를 입력해주세요.");
+            }
+            if (dto.getAddPrice() != null) {
+                option.setAddPrice(dto.getAddPrice());
+            }
+            option.setProgram(entity);
+            option.setCreateId(loginId);
+            option.setUpdateId(loginId);
+            optionRepository.save(option);
+        }
 
         return entity.getId();
     }
@@ -324,37 +319,42 @@ public class ProgramService {
         if (program.getStatus() != null) {
             origin.setStatus(program.getStatus());
         }
-        if (origin.getThumbnailImgPath() != null && !origin.getThumbnailImgPath().equals(program.getThumbnailImgPath())) {
+        if (origin.getThumbnailImgPath() != null) {
             origin.setThumbnailImgPath(program.getThumbnailImgPath());
         }
-        if (origin.getThumbnailImgName() != null && !origin.getThumbnailImgName().equals(program.getThumbnailImgName())) {
+        if (origin.getThumbnailImgName() != null) {
             origin.setThumbnailImgName(program.getThumbnailImgName());
         }
-        if (origin.getDetailImgPath() != null && !origin.getDetailImgPath().equals(program.getDetailImgPath())) {
+        if (origin.getDetailImgPath() != null) {
             origin.setDetailImgPath(program.getDetailImgPath());
         }
-        if (origin.getDetailImgName() != null && !origin.getDetailImgName().equals(program.getDetailImgName())) {
+        if (origin.getDetailImgName() != null) {
             origin.setDetailImgName(program.getDetailImgName());
         }
         origin.setUpdateId(loginId);
 
+        // 옵션 수정(String -> List<ProgramOptionDto>로 변환 후 처리)
+        String list = program.getOptionList();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<ProgramOptionDto>>(){}.getType();
+        ArrayList<ProgramOptionDto> optionList = gson.fromJson(list, listType);
+
         // 옵션 수정..
-//        List<ProgramOptionDto> optionList = program.getOptionList();
-//        if (!optionList.isEmpty()) {
-//            for (ProgramOptionDto dto : optionList) {
-//                ProgramOption originOption = findOneOption(dto.getId());
-//                if (dto.getClassDateTime() != null) {
-//                    originOption.setClassDateTime(dto.getClassDateTime());
-//                }
-//                if (dto.getUserCount() != 0) {
-//                    originOption.setUserCount(dto.getUserCount());
-//                }
-//                if (dto.getAddPrice() != null) {
-//                    originOption.setAddPrice(dto.getAddPrice());
-//                }
-//                 origin.setUpdateId(loginId);
-//            }
-//        }
+        if (!optionList.isEmpty()) {
+            for (ProgramOptionDto dto : optionList) {
+                ProgramOption originOption = findOneOption(dto.getId());
+                if (dto.getClassDateTime() != null) {
+                    originOption.setClassDateTime(dto.getClassDateTime());
+                }
+                if (dto.getUserCount() != 0) {
+                    originOption.setUserCount(dto.getUserCount());
+                }
+                if (dto.getAddPrice() != null) {
+                    originOption.setAddPrice(dto.getAddPrice());
+                }
+                 origin.setUpdateId(loginId);
+            }
+        }
     }
 
     @Transactional
