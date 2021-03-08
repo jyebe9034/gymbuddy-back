@@ -120,7 +120,7 @@ public class UserLogicService {
             entity.setAgreeYn(user.getAgreeYn());
         }
         entity.setGrade(Grade.NORMAL.toString());
-//        entity.setRoles(Collections.emptyList());
+        entity.setRoles(Collections.emptyList());
 
         userRepository.save(entity);
 
