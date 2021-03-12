@@ -5,8 +5,14 @@ plugins {
     id 'war'
 }
 
+bootWar {
+    archiveBaseName = 'ROOT'
+    archiveFileName = 'ROOT.war'
+    archiveVersion = '0.0.1'
+}
+
 group = 'com.gymbuddy'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '1.8'
 
 configurations {
