@@ -8,9 +8,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class BackGymbuddyApplication {
+public class BackGymbuddyApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(BackGymbuddyApplication.class, args);
     }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(BackGymbuddyApplication.class);
+    }
+
 }
