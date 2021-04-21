@@ -3,10 +3,11 @@ server:
 
 spring:
   datasource:
-    #url: jdbc:mariadb://localhost:3306/gymbuddy   #개발
+    #url: jdbc:mariadb://localhost:3306/gymbuddytest   #개발
     url: jdbc:mariadb://localhost:3306/gymbuddy   #운영
     driver-class-name: org.mariadb.jdbc.Driver
     username: gymbuddy
+    #username: gymbuddytest   #개발
     password: myang2526!
   jpa:
     open-in-view: false
