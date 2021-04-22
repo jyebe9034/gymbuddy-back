@@ -40,9 +40,9 @@ public class BannerService {
     @Transactional
     public Long save(BannerDto banner) {
         // 현재 로그인한 아이디 정보 조회
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = (UserDetails) principal;
-        String loginId = userDetails.getUsername();
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = (UserDetails) principal;
+//        String loginId = userDetails.getUsername();
 
         Banner entity = new Banner();
         if (banner.getTitle() != null) {
@@ -79,8 +79,8 @@ public class BannerService {
         } else {
             throw new DMException("이미지를 등록해주세요.");
         }
-        entity.setCreateId(loginId);
-        entity.setUpdateId(loginId);
+        entity.setCreateId("jihyeTest");
+        entity.setUpdateId("jihyeTest");
 
         bannerRepository.save(entity);
         return entity.getId();
