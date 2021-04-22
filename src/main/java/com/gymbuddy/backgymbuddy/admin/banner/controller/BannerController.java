@@ -22,7 +22,7 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.BANNER_PREFIX;
 @RequiredArgsConstructor
 public class BannerController extends BaseController {
 
-    private String bannerPath = "/resources/static/img/banner";
+    private String bannerPath = "/resources/images/banner";
     private String rootPath = "/home/www" + bannerPath;
     private File newFile = new File(rootPath);
 
