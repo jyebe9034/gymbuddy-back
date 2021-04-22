@@ -25,8 +25,17 @@ public class BannerController extends BaseController {
     private String bannerPath = "/resources/images/banner";
     private String rootPath = "/home/www" + bannerPath;
     private File newFile = new File(rootPath);
-
-    private final BannerService bannerService;
+    
+    //폴더 없으면 경로 생성하기 
+    if (!newFile.exists()) {
+		try{
+		    newFile.mkdir(); //폴더 생성합니다.
+	    } 
+	    catch(Exception e){
+		    e.getStackTrace();
+		 } 
+    }
+         private final BannerService bannerService;
 
     /**
      * 전체 배너 갯수 조회
