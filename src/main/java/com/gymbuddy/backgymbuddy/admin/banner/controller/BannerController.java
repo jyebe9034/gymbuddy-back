@@ -21,11 +21,20 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.BANNER_PREFIX;
 @RestController
 @RequiredArgsConstructor
 public class BannerController extends BaseController {
-
+    private static String OS = System.getProperty("os.name").toLowerCase();
     private String bannerPath = "/resources/images/banner";
-    private String rootPath = "/home/www" + bannerPath;
+private String basePath ="";
+   if (isWindows()) {
+	     basePath ="C:\\User";
+	} else if (isMac()) {
+	     basePath ="/home/";
+	} else if (isUnix()) {
+	     basePath ="/home/www";
+	}
+    private String rootPath = basePath + bannerPath;
     private File newFile = new File(rootPath);
     
+	
     //폴더 없으면 경로 생성하기 
     if (!newFile.exists()) {
 		try{
