@@ -148,7 +148,7 @@ email : 이메일
 * 기본 정보 및 파라미터 설명
 ```
 HTTP METHOD: POST
-METHOD NAME: sendAuthNumber
+METHOD NAME: join
 PATH : /api/userApi/join
 PARAM : Map<String, Object>
 === PARAM 설명 ===

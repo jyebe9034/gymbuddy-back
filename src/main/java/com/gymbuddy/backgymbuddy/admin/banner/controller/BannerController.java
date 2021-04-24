@@ -22,7 +22,7 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.BANNER_PREFIX;
 @RequiredArgsConstructor
 public class BannerController extends BaseController {
 
-    private String bannerPath = "/resources/images/banner";
+    private String bannerPath = "/images/banner";
     private String rootPath = "/home/www" + bannerPath;
     private File newFile = new File(rootPath);
 
@@ -65,6 +65,14 @@ public class BannerController extends BaseController {
         // 이미지 업로드
         String filename = banner.getFile().getOriginalFilename();
         try {
+            if (!newFile.exists()) {
+                try{
+                    newFile.mkdir(); //폴더 생성합니다.
+                }
+                catch(Exception e){
+                    e.getStackTrace();
+                }
+            }
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             banner.getFile().transferTo(realFile);
             banner.setImgName(realFile.getName());
