@@ -22,8 +22,8 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.MEMBER_PREFIX;
 @RequiredArgsConstructor
 public class MemberController extends BaseController {
 
-    private String memberPath = "/resources/static/img/member";
-    private String rootPath = System.getProperty("user.dir") + "/src/main" + memberPath;
+    private String memberPath = "/resources/images/member";
+    private String rootPath = "/home/www" + memberPath;
     private File saveFile = new File(rootPath);
 
     private final MemberService memberService;
@@ -68,13 +68,17 @@ public class MemberController extends BaseController {
         String imgName = dto.getFile().getOriginalFilename();
         try {
             if (!saveFile.exists()) {
-                saveFile.mkdir();
+                try {
+                    saveFile.mkdir();
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
             }
             if (!dto.getFile().isEmpty()) {
                 File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                 dto.getFile().transferTo(realFile);
                 dto.setImgName(realFile.getName());
-                dto.setImgPath(saveFile + "/" + realFile.getName());
+                dto.setImgPath(memberPath + "/" + realFile.getName());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -98,7 +102,7 @@ public class MemberController extends BaseController {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                     dto.getFile().transferTo(realFile);
                     dto.setImgName(imgName);
-                    dto.setImgPath(saveFile + "/" + realFile.getName());
+                    dto.setImgPath(memberPath + "/" + realFile.getName());
 
                     File originFile = new File(member.getImgPath());
                     if (originFile.exists()) {

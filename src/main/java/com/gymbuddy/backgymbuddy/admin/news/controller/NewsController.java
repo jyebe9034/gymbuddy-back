@@ -22,9 +22,9 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.NEWS_PREFIX;
 @RequiredArgsConstructor
 public class NewsController extends BaseController {
 
-    private String newsPath = "/resources/static/img/news";
-    private String rootPath = System.getProperty("user.dir") + "/src/main" + newsPath;
-    private File newfile = new File(rootPath);
+    private String newsPath = "/resources/images/news";
+    private String rootPath = "/home/www" + newsPath;
+    private File newFile = new File(rootPath);
 
     private final NewsService newsService;
 
@@ -63,13 +63,17 @@ public class NewsController extends BaseController {
         if (news.getFile() != null) {
             String filename = news.getFile().getOriginalFilename();
             try {
-                if (!newfile.exists()) {
-                    newfile.mkdir();
+                if (!newFile.exists()) {
+                    try {
+                        newFile.mkdir();
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
                 }
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                 news.getFile().transferTo(realFile);
                 news.setImgName(realFile.getName());
-                news.setImgPath(newfile + "/" + realFile.getName());
+                news.setImgPath(newsPath + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -91,10 +95,10 @@ public class NewsController extends BaseController {
             String filename = news.getFile().getOriginalFilename();
             // 이미지 업로드
             try {
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                 news.getFile().transferTo(realFile);
                 news.setImgName(realFile.getName());
-                news.setImgPath(newfile + "/" + realFile.getName());
+                news.setImgPath(newsPath + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
                 News origin = newsService.findOne(id);

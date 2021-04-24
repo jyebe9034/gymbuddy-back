@@ -20,9 +20,9 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.NOTICE_PREFIX;
 @RequiredArgsConstructor
 public class NoticeController extends BaseController {
 
-    private String noticePath = "/resources/static/img/notice";
-    private String rootPath = System.getProperty("user.dir") + "/src/main" + noticePath;
-    private File newfile = new File(rootPath);
+    private String noticePath = "/resources/images/notice";
+    private String rootPath = "/home/www" + noticePath;
+    private File newFile = new File(rootPath);
 
     private final NoticeService noticeService;
 
@@ -64,13 +64,17 @@ public class NoticeController extends BaseController {
         if (notice.getFile() != null) {
             String filename = notice.getFile().getOriginalFilename();
             try {
-                if (!newfile.exists()) {
-                    newfile.mkdir();
+                if (!newFile.exists()) {
+                    try {
+                        newFile.mkdir();
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
                 }
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                 notice.getFile().transferTo(realFile);
                 notice.setImgName(realFile.getName());
-                notice.setImgPath(newfile + "/" + realFile.getName());
+                notice.setImgPath(noticePath + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -93,10 +97,10 @@ public class NoticeController extends BaseController {
             String filename = notice.getFile().getOriginalFilename();
             // 이미지 업로드
             try {
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                 notice.getFile().transferTo(realFile);
                 notice.setImgName(realFile.getName());
-                notice.setImgPath(newfile + "/" + realFile.getName());
+                notice.setImgPath(noticePath + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
                 Notice origin = noticeService.findOne(id);

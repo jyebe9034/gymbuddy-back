@@ -22,8 +22,8 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.TERM_PREFIX;
 @RequiredArgsConstructor
 public class TermController extends BaseController {
 
-    private String termPath = "/resources/static/img/term";
-    private String rootPath = System.getProperty("user.dir") + "/src/main" + termPath;
+    private String termPath = "/resources/images/term";
+    private String rootPath = "/home/www" + termPath;
     private File saveFile = new File(rootPath);
 
     private final TermService termService;
@@ -71,12 +71,16 @@ public class TermController extends BaseController {
             String imgName = dto.getFile().getOriginalFilename();
             try {
                 if (!saveFile.exists()) {
-                    saveFile.mkdir();
+                    try {
+                        saveFile.mkdir();
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
                 }
                 File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                 dto.getFile().transferTo(realFile);
                 dto.setImgName(realFile.getName());
-                dto.setImgPath(saveFile + "/" + realFile.getName());
+                dto.setImgPath(termPath + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -103,7 +107,7 @@ public class TermController extends BaseController {
                 File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                 dto.getFile().transferTo(realFile);
                 dto.setImgName(realFile.getName());
-                dto.setImgPath(saveFile + "/" + realFile.getName());
+                dto.setImgPath(termPath + "/" + realFile.getName());
 
                 if (term.getImgPath() != null) {
                     File originFile = new File(term.getImgPath());

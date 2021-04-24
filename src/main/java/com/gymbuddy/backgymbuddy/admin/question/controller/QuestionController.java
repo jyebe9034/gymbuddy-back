@@ -24,8 +24,8 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.USER_QUESTION_PREFI
 @RequiredArgsConstructor
 public class QuestionController extends BaseController {
 
-    private String questionPath = "/resources/static/img/question";
-    private String rootPath = System.getProperty("user.dir") + "/src/main" + questionPath;
+    private String questionPath = "/resources/images/question";
+    private String rootPath = "/home/www" + questionPath;
     private File saveFile = new File(rootPath);
 
     private final QuestionService questionService;
@@ -121,7 +121,11 @@ public class QuestionController extends BaseController {
 
         try {
             if (!saveFile.exists()) {
-                saveFile.mkdir();
+                try {
+                    saveFile.mkdir();
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
             }
             // 파일1
             if (dto.getFile1() != null) {
@@ -129,7 +133,7 @@ public class QuestionController extends BaseController {
                 File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
                 dto.getFile1().transferTo(realFile1);
                 dto.setImgName1(realFile1.getName());
-                dto.setImgPath1(saveFile + "/" + realFile1.getName());
+                dto.setImgPath1(questionPath + "/" + realFile1.getName());
             }
             // 파일2
             if (dto.getFile2() != null) {
@@ -137,7 +141,7 @@ public class QuestionController extends BaseController {
                 File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
                 dto.getFile2().transferTo(realFile2);
                 dto.setImgName2(realFile2.getName());
-                dto.setImgPath2(saveFile + "/" + realFile2.getName());
+                dto.setImgPath2(questionPath + "/" + realFile2.getName());
             }
             // 파일3
             if (dto.getFile3() != null) {
@@ -145,7 +149,7 @@ public class QuestionController extends BaseController {
                 File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
                 dto.getFile3().transferTo(realFile3);
                 dto.setImgName3(realFile3.getName());
-                dto.setImgPath3(saveFile + "/" + realFile3.getName());
+                dto.setImgPath3(questionPath + "/" + realFile3.getName());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -172,7 +176,7 @@ public class QuestionController extends BaseController {
                 File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
                 dto.getFile1().transferTo(realFile1);
                 dto.setImgName1(realFile1.getName());
-                dto.setImgPath1(saveFile + "/" + realFile1.getName());
+                dto.setImgPath1(questionPath + "/" + realFile1.getName());
 
                 if (question.getImgPath1() != null) {
                     File originFile = new File(question.getImgPath1());
@@ -190,7 +194,7 @@ public class QuestionController extends BaseController {
                     File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
                     dto.getFile2().transferTo(realFile2);
                     dto.setImgName2(realFile2.getName());
-                    dto.setImgPath2(saveFile + "/" + realFile2.getName());
+                    dto.setImgPath2(questionPath + "/" + realFile2.getName());
 
                 if (question.getImgPath2() != null) {
                     File originFile = new File(question.getImgPath2());
@@ -208,7 +212,7 @@ public class QuestionController extends BaseController {
                     File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
                     dto.getFile3().transferTo(realFile3);
                     dto.setImgName3(realFile3.getName());
-                    dto.setImgPath3(saveFile + "/" + realFile3.getName());
+                    dto.setImgPath3(questionPath + "/" + realFile3.getName());
 
                 if (question.getImgPath3() != null) {
                     File originFile = new File(question.getImgPath3());

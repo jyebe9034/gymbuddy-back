@@ -21,8 +21,8 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.MISSION_PREFIX;
 @RequiredArgsConstructor
 public class MissionController extends BaseController {
 
-    private String missionPath = "/resources/static/img/mission";
-    private String rootPath = System.getProperty("user.dir") + "/src/main" + missionPath;
+    private String missionPath = "/resources/images/mission";
+    private String rootPath = "/home/www" + missionPath;
     private File saveFile = new File(rootPath);
 
     private final MissionService missionService;
@@ -44,7 +44,11 @@ public class MissionController extends BaseController {
 
         try {
             if (!saveFile.exists()) {
-                saveFile.mkdir();
+                try {
+                    saveFile.mkdir();
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
             }
             // 파일1
             if (dto.getFile1() != null) {
@@ -52,7 +56,7 @@ public class MissionController extends BaseController {
                 File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
                 dto.getFile1().transferTo(realFile1);
                 dto.setImgName1(realFile1.getName());
-                dto.setImgPath1(saveFile + "/" + realFile1.getName());
+                dto.setImgPath1(missionPath + "/" + realFile1.getName());
             }
             // 파일2
             if (dto.getFile2() != null) {
@@ -60,7 +64,7 @@ public class MissionController extends BaseController {
                 File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
                 dto.getFile2().transferTo(realFile2);
                 dto.setImgName2(realFile2.getName());
-                dto.setImgPath2(saveFile + "/" + realFile2.getName());
+                dto.setImgPath2(missionPath + "/" + realFile2.getName());
             }
             // 파일3
             if (dto.getFile3() != null) {
@@ -68,7 +72,7 @@ public class MissionController extends BaseController {
                 File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
                 dto.getFile3().transferTo(realFile3);
                 dto.setImgName3(realFile3.getName());
-                dto.setImgPath3(saveFile + "/" + realFile3.getName());
+                dto.setImgPath3(missionPath + "/" + realFile3.getName());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -95,7 +99,7 @@ public class MissionController extends BaseController {
                 File realFile1 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName1);
                 dto.getFile1().transferTo(realFile1);
                 dto.setImgName1(realFile1.getName());
-                dto.setImgPath1(saveFile + "/" + realFile1.getName());
+                dto.setImgPath1(missionPath + "/" + realFile1.getName());
 
                 if (mission.getImgName1() != null) {
                     File originFile = new File(mission.getImgPath1());
@@ -113,7 +117,7 @@ public class MissionController extends BaseController {
                 File realFile2 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName2);
                 dto.getFile2().transferTo(realFile2);
                 dto.setImgName2(realFile2.getName());
-                dto.setImgPath2(saveFile + "/" + realFile2.getName());
+                dto.setImgPath2(missionPath + "/" + realFile2.getName());
 
                 if (mission.getImgName2() != null) {
                     File originFile = new File(mission.getImgPath2());
@@ -131,7 +135,7 @@ public class MissionController extends BaseController {
                 File realFile3 = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName3);
                 dto.getFile3().transferTo(realFile3);
                 dto.setImgName3(realFile3.getName());
-                dto.setImgPath3(saveFile + "/" + realFile3.getName());
+                dto.setImgPath3(missionPath + "/" + realFile3.getName());
 
                 if (mission.getImgName3() != null) {
                     File originFile = new File(mission.getImgPath3());

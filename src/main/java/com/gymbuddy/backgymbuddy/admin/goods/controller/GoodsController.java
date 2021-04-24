@@ -23,8 +23,8 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.GOODS_PREFIX;
 @RequiredArgsConstructor
 public class GoodsController extends BaseController {
 
-    private String goodsPath = "/resources/static/img/goods";
-    private String rootPath = System.getProperty("user.dir") + "/src/main" + goodsPath;
+    private String goodsPath = "/resources/images/goods";
+    private String rootPath = "/home/www" + goodsPath;
     private File saveFile = new File(rootPath);
 
     private final GoodsService goodsService;
@@ -65,7 +65,11 @@ public class GoodsController extends BaseController {
 
         try {
             if (!saveFile.exists()) {
-                saveFile.mkdir();
+                try {
+                    saveFile.mkdir();
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
             }
             // 썸네일 이미지
             if(dto.getThumbnailFile() != null) {
@@ -73,7 +77,7 @@ public class GoodsController extends BaseController {
                 File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 dto.getThumbnailFile().transferTo(thumbnail);
                 dto.setThumbnailImgName(thumbnail.getName());
-                dto.setThumbnailImgPath(saveFile + "/" + thumbnail.getName());
+                dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
             }
             // 상세 이미지
             if(dto.getDetailFile() != null) {
@@ -81,7 +85,7 @@ public class GoodsController extends BaseController {
                 File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
                 dto.getDetailFile().transferTo(detail);
                 dto.setDetailImgName(detail.getName());
-                dto.setDetailImgPath(saveFile + "/" + detail.getName());
+                dto.setDetailImgPath(goodsPath + "/" + detail.getName());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -109,7 +113,7 @@ public class GoodsController extends BaseController {
                 File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 dto.getThumbnailFile().transferTo(thumbnail);
                 dto.setThumbnailImgName(thumbnail.getName());
-                dto.setThumbnailImgPath(saveFile + "/" + thumbnail.getName());
+                dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
 
                 if (goods.getThumbnailImgPath() != null) {
                     File originThumbnail = new File(goods.getThumbnailImgPath());
@@ -128,7 +132,7 @@ public class GoodsController extends BaseController {
                 File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
                 dto.getDetailFile().transferTo(detail);
                 dto.setDetailImgName(detail.getName());
-                dto.setDetailImgPath(saveFile + "/" + detail.getName());
+                dto.setDetailImgPath(goodsPath + "/" + detail.getName());
 
                 if (goods.getThumbnailImgPath() != null) {
                     File originDetail = new File(goods.getDetailImgPath());

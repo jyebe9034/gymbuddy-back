@@ -22,8 +22,8 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.YOUTUBE_PREFIX;
 @RequiredArgsConstructor
 public class YoutubeController extends BaseController {
 
-    private String youtubePath = "/resources/static/img/youtube";
-    private String rootpath = System.getProperty("user.dir") + "/src/main" + youtubePath;
+    private String youtubePath = "/resources/images/youtube";
+    private String rootpath = "/home/www" + youtubePath;
     private File newFile = new File(rootpath);
 
     private final YoutubeService youtubeService;
@@ -75,12 +75,16 @@ public class YoutubeController extends BaseController {
             String filename = youtube.getFile().getOriginalFilename();
             try {
                 if (!newFile.exists()) {
-                    newFile.mkdir();
+                    try {
+                        newFile.mkdir();
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
                 }
                 File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                 youtube.getFile().transferTo(realFile);
                 youtube.setImgName(realFile.getName());
-                youtube.setImgPath(newFile + "/" + realFile.getName());
+                youtube.setImgPath(youtubePath + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -107,7 +111,7 @@ public class YoutubeController extends BaseController {
                 File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                 youtube.getFile().transferTo(realFile);
                 youtube.setImgName(realFile.getName());
-                youtube.setImgPath(newFile + "/" + realFile.getName());
+                youtube.setImgPath(youtubePath + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
                 Youtube origin = youtubeService.findOne(id);

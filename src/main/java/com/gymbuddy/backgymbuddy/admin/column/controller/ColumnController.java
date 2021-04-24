@@ -22,9 +22,9 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.COLUMN_PREFIX;
 @RequiredArgsConstructor
 public class ColumnController extends BaseController {
 
-    private String columnPath = "/resources/static/img/columns";
-    private String rootPath = System.getProperty("user.dir") + "/src/main" + columnPath;
-    private File newfile = new File(rootPath);
+    private String columnPath = "/resources/images/columns";
+    private String rootPath = "/home/www" + columnPath;
+    private File newFile = new File(rootPath);
 
     private final ColumnService columnService;
 
@@ -75,13 +75,17 @@ public class ColumnController extends BaseController {
         // 이미지 업로드
         String filename = columns.getFile().getOriginalFilename();
         try {
-            if (!newfile.exists()) {
-                newfile.mkdir();
+            if (!newFile.exists()) {
+                try {
+                    newFile.mkdir();
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
             }
-            File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+            File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             columns.getFile().transferTo(realFile);
             columns.setImgName(realFile.getName());
-            columns.setImgPath(newfile + "/" + realFile.getName());
+            columns.setImgPath(columnPath + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -100,10 +104,10 @@ public class ColumnController extends BaseController {
             String filename = columns.getFile().getOriginalFilename();
             // 이미지 업로드
             try {
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + filename);
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                 columns.getFile().transferTo(realFile);
                 columns.setImgName(realFile.getName());
-                columns.setImgPath(newfile + "/" + realFile.getName());
+                columns.setImgPath(columnPath + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
                 Columns origin = columnService.findOne(id);

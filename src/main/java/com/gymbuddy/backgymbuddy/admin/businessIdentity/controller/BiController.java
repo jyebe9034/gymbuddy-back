@@ -20,8 +20,8 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.*;
 @RequiredArgsConstructor
 public class BiController extends BaseController {
 
-    private String biPath = "/resources/static/img/bi";
-    private String rootPath = System.getProperty("user.dir") + "/src/main" + biPath;
+    private String biPath = "/resources/images/bi";
+    private String rootPath = "/home/www" + biPath;
     private File saveFile = new File(rootPath);
 
     private final BiService biService;
@@ -36,12 +36,16 @@ public class BiController extends BaseController {
         String imgName = bi.getFile().getOriginalFilename();
         try {
             if (!saveFile.exists()) {
-                saveFile.mkdir();
+                try {
+                    saveFile.mkdir();
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
             }
             File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
             bi.getFile().transferTo(realFile);
             bi.setImgName(realFile.getName());
-            bi.setImgPath(saveFile + "/" + realFile.getName());
+            bi.setImgPath(biPath + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -61,12 +65,16 @@ public class BiController extends BaseController {
         String imgName = bi.getFile().getOriginalFilename();
         try {
             if (!saveFile.exists()) {
-                saveFile.mkdir();
+                try {
+                    saveFile.mkdir();
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
             }
             File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
             bi.getFile().transferTo(realFile);
             bi.setImgName(realFile.getName());
-            bi.setImgPath(saveFile + "/" + realFile.getName());
+            bi.setImgPath(biPath + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -93,7 +101,7 @@ public class BiController extends BaseController {
                     File realFile = new File(saveFile + "/" + System.currentTimeMillis() + "_" + imgName);
                     dto.getFile().transferTo(realFile);
                     dto.setImgName(realFile.getName());
-                    dto.setImgPath(saveFile + "/" + realFile.getName());
+                    dto.setImgPath(biPath + "/" + realFile.getName());
 
                     File originFile = new File(bi.getImgPath());
                     if (originFile.exists()) {

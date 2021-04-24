@@ -30,7 +30,7 @@ public class UserController extends BaseController {
 
     // 메일발송을 위함 운동친구 메일 계정
     private static String HOSTMAIL = "jyebe9034@gmail.com";
-    private static String HOSTPW = "7pGA9034!";
+    private static String HOSTPW = "gymBuddy123";
 
     /**
      * 회원가입 인증번호 메일 발송

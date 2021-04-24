@@ -66,17 +66,16 @@ public class BannerController extends BaseController {
         String filename = banner.getFile().getOriginalFilename();
         try {
             if (!newFile.exists()) {
-                try{
-                    newFile.mkdir(); //폴더 생성합니다.
-                }
-                catch(Exception e){
-                    e.getStackTrace();
+                try {
+                    newFile.mkdir();
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
             }
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             banner.getFile().transferTo(realFile);
             banner.setImgName(realFile.getName());
-            banner.setImgPath(newFile + "/" + realFile.getName());
+            banner.setImgPath(bannerPath + "/" + realFile.getName());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -99,7 +98,7 @@ public class BannerController extends BaseController {
                 File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
                 banner.getFile().transferTo(realFile);
                 banner.setImgName(filename);
-                banner.setImgPath(newFile + "/" + realFile.getName());
+                banner.setImgPath(bannerPath + "/" + realFile.getName());
 
                 // 이미지가 있는 경우 삭제
                 Banner origin = bannerService.findOne(id);

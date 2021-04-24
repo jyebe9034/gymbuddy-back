@@ -29,9 +29,9 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.PROGRAM_PREFIX;
 @RequiredArgsConstructor
 public class ProgramController extends BaseController {
 
-    private String programPath = "/resources/static/img/program";
-    private String rootPath = System.getProperty("user.dir") + "/src/main" + programPath;
-    private File newfile = new File(rootPath);
+    private String programPath = "/resources/images/program";
+    private String rootPath = "/home/www" + programPath;
+    private File newFile = new File(rootPath);
 
     private final ProgramService programService;
 
@@ -75,13 +75,17 @@ public class ProgramController extends BaseController {
         if (program.getThumbnailFile() != null) {
             String thumbnailName = program.getThumbnailFile().getOriginalFilename();
             try {
-                if (!newfile.exists()) {
-                    newfile.mkdir();
+                if (!newFile.exists()) {
+                    try {
+                        newFile.mkdir();
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
                 }
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 program.getThumbnailFile().transferTo(realFile);
                 program.setThumbnailImgName(realFile.getName());
-                program.setThumbnailImgPath(newfile + "/" + realFile.getName());
+                program.setThumbnailImgPath(programPath + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -91,13 +95,17 @@ public class ProgramController extends BaseController {
         if (program.getDetailFile() != null) {
             String detailName = program.getDetailFile().getOriginalFilename();
             try {
-                if (!newfile.exists()) {
-                    newfile.mkdir();
+                if (!newFile.exists()) {
+                    try {
+                        newFile.mkdir();
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
                 }
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + detailName);
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + detailName);
                 program.getDetailFile().transferTo(realFile);
                 program.setDetailImgName(realFile.getName());
-                program.setDetailImgPath(newfile + "/" + realFile.getName());
+                program.setDetailImgPath(programPath + "/" + realFile.getName());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -169,10 +177,10 @@ public class ProgramController extends BaseController {
         if (program.getThumbnailFile() != null) {
             String thumbnailName = program.getThumbnailFile().getOriginalFilename();
             try {
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 program.getThumbnailFile().transferTo(realFile);
                 program.setThumbnailImgName(realFile.getName());
-                program.setThumbnailImgPath(newfile + "/" + realFile.getName());
+                program.setThumbnailImgPath(programPath + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
                 if (origin.getThumbnailImgPath() != null) {
@@ -190,10 +198,10 @@ public class ProgramController extends BaseController {
         if (program.getDetailFile() != null) {
             String detailName = program.getDetailFile().getOriginalFilename();
             try {
-                File realFile = new File(newfile + "/" + System.currentTimeMillis() + "_" + detailName);
+                File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + detailName);
                 program.getDetailFile().transferTo(realFile);
                 program.setDetailImgName(realFile.getName());
-                program.setDetailImgPath(newfile + "/" + realFile.getName());
+                program.setDetailImgPath(programPath + "/" + realFile.getName());
 
                 // 기존 이미지 파일 서버에서 삭제
                 if (origin.getDetailImgPath() != null) {
