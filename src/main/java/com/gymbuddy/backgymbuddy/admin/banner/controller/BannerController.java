@@ -65,9 +65,6 @@ public class BannerController extends BaseController {
         // 이미지 업로드
         String filename = banner.getFile().getOriginalFilename();
         try {
-            if (!newFile.exists()) {
-                newFile.mkdir();
-            }
             File realFile = new File(newFile + "/" + System.currentTimeMillis() + "_" + filename);
             banner.getFile().transferTo(realFile);
             banner.setImgName(realFile.getName());
