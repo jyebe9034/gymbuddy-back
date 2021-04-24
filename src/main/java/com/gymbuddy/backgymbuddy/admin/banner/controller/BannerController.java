@@ -21,30 +21,12 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.BANNER_PREFIX;
 @RestController
 @RequiredArgsConstructor
 public class BannerController extends BaseController {
-    private static String OS = System.getProperty("os.name").toLowerCase();
+
     private String bannerPath = "/resources/images/banner";
-private String basePath ="";
-   if (isWindows()) {
-	     basePath ="C:\\User";
-	} else if (isMac()) {
-	     basePath ="/home/";
-	} else if (isUnix()) {
-	     basePath ="/home/www";
-	}
-    private String rootPath = basePath + bannerPath;
+    private String rootPath = "/home/www" + bannerPath;
     private File newFile = new File(rootPath);
-    
-	
-    //폴더 없으면 경로 생성하기 
-    if (!newFile.exists()) {
-		try{
-		    newFile.mkdir(); //폴더 생성합니다.
-	    } 
-	    catch(Exception e){
-		    e.getStackTrace();
-		 } 
-    }
-         private final BannerService bannerService;
+
+    private final BannerService bannerService;
 
     /**
      * 전체 배너 갯수 조회
@@ -175,23 +157,5 @@ private String basePath ="";
         Map<String, Object> result = new HashMap<>();
         result.put("result", "success");
         return createResponseEntity(true, result);
-    }
-	
-	public static boolean isWindows() {
-  
-        return (OS.indexOf("win") >= 0);
-  
-    }
-  
-    public static boolean isMac() {
-  
-        return (OS.indexOf("mac") >= 0);
-  
-    }
-  
-    public static boolean isUnix() {
-  
-        return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
-  
     }
 }
