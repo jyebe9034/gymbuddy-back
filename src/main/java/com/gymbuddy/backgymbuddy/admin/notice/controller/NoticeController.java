@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.notice.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import com.gymbuddy.backgymbuddy.admin.notice.domain.Notice;
 import com.gymbuddy.backgymbuddy.admin.notice.domain.NoticeDto;
 import com.gymbuddy.backgymbuddy.admin.notice.service.NoticeService;
@@ -22,7 +23,7 @@ public class NoticeController extends BaseController {
 
     private String noticePath = "/resources/images/notice";
     private String rootPath = "/home/www" + noticePath;
-    private File newFile = new File(rootPath);
+    private File newFile = DirMake.testdir(rootPath);
 
     private final NoticeService noticeService;
 

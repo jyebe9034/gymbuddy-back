@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.column.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import com.gymbuddy.backgymbuddy.admin.column.domain.Columns;
 import com.gymbuddy.backgymbuddy.admin.column.domain.ColumnsDto;
 import com.gymbuddy.backgymbuddy.admin.column.service.ColumnService;
@@ -24,7 +25,7 @@ public class ColumnController extends BaseController {
 
     private String columnPath = "/resources/images/columns";
     private String rootPath = "/home/www" + columnPath;
-    private File newFile = new File(rootPath);
+    private File newFile = DirMake.testdir(rootPath);
 
     private final ColumnService columnService;
 

@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.member.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import com.gymbuddy.backgymbuddy.admin.member.domain.Member;
 import com.gymbuddy.backgymbuddy.admin.member.domain.MemberDto;
 import com.gymbuddy.backgymbuddy.admin.member.service.MemberService;
@@ -24,7 +25,7 @@ public class MemberController extends BaseController {
 
     private String memberPath = "/resources/images/member";
     private String rootPath = "/home/www" + memberPath;
-    private File saveFile = new File(rootPath);
+    private File saveFile = DirMake.testdir(rootPath);
 
     private final MemberService memberService;
 

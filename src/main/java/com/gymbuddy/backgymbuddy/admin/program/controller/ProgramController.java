@@ -3,6 +3,7 @@ package com.gymbuddy.backgymbuddy.admin.program.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import com.gymbuddy.backgymbuddy.admin.enums.status.ProgramStatus;
 import com.gymbuddy.backgymbuddy.admin.program.domain.Program;
 import com.gymbuddy.backgymbuddy.admin.program.domain.ProgramDto;
@@ -31,7 +32,7 @@ public class ProgramController extends BaseController {
 
     private String programPath = "/resources/images/program";
     private String rootPath = "/home/www" + programPath;
-    private File newFile = new File(rootPath);
+    private File newFile = DirMake.testdir(rootPath);
 
     private final ProgramService programService;
 

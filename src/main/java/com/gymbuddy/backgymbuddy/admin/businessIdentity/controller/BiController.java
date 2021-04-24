@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.businessIdentity.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BiDto;
 import com.gymbuddy.backgymbuddy.admin.businessIdentity.domain.BusinessIdentity;
 import com.gymbuddy.backgymbuddy.admin.businessIdentity.service.BiService;
@@ -22,7 +23,7 @@ public class BiController extends BaseController {
 
     private String biPath = "/resources/images/bi";
     private String rootPath = "/home/www" + biPath;
-    private File saveFile = new File(rootPath);
+    private File saveFile = DirMake.testdir(rootPath);
 
     private final BiService biService;
 

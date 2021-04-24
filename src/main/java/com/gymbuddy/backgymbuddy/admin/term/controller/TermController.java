@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.term.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import com.gymbuddy.backgymbuddy.admin.term.domain.Term;
 import com.gymbuddy.backgymbuddy.admin.term.domain.TermDto;
 import com.gymbuddy.backgymbuddy.admin.term.service.TermService;
@@ -24,7 +25,7 @@ public class TermController extends BaseController {
 
     private String termPath = "/resources/images/term";
     private String rootPath = "/home/www" + termPath;
-    private File saveFile = new File(rootPath);
+    private File saveFile = DirMake.testdir(rootPath);
 
     private final TermService termService;
 

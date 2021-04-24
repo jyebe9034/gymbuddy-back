@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.question.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import com.gymbuddy.backgymbuddy.admin.enums.category.QuestionEnum;
 import com.gymbuddy.backgymbuddy.admin.history.domain.History;
 import com.gymbuddy.backgymbuddy.admin.question.domain.*;
@@ -26,7 +27,7 @@ public class QuestionController extends BaseController {
 
     private String questionPath = "/resources/images/question";
     private String rootPath = "/home/www" + questionPath;
-    private File saveFile = new File(rootPath);
+    private File saveFile = DirMake.testdir(rootPath);
 
     private final QuestionService questionService;
     private final QuestionCommentService questionCommentService;

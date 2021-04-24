@@ -25,7 +25,6 @@ public class BannerController extends BaseController {
 
     private String bannerPath = "/resources/images/banner";
     private String rootPath = "/home/www" + bannerPath;
-    //private File newFile = new File(rootPath);
     private File newFile = DirMake.testdir(rootPath);//new File(rootPath);
     private final BannerService bannerService;
 

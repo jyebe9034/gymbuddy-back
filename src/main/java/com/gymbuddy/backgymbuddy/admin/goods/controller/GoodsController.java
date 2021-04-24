@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.goods.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import com.gymbuddy.backgymbuddy.admin.enums.status.GoodsStatus;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.Goods;
 import com.gymbuddy.backgymbuddy.admin.goods.domain.GoodsDto;
@@ -25,7 +26,7 @@ public class GoodsController extends BaseController {
 
     private String goodsPath = "/resources/images/goods";
     private String rootPath = "/home/www" + goodsPath;
-    private File saveFile = new File(rootPath);
+    private File saveFile = DirMake.testdir(rootPath);
 
     private final GoodsService goodsService;
 

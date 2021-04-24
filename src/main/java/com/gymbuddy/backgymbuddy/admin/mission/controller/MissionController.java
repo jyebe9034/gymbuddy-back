@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.mission.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import com.gymbuddy.backgymbuddy.admin.mission.domain.Mission;
 import com.gymbuddy.backgymbuddy.admin.mission.domain.MissionDto;
 import com.gymbuddy.backgymbuddy.admin.mission.service.MissionService;
@@ -23,7 +24,7 @@ public class MissionController extends BaseController {
 
     private String missionPath = "/resources/images/mission";
     private String rootPath = "/home/www" + missionPath;
-    private File saveFile = new File(rootPath);
+    private File saveFile = DirMake.testdir(rootPath);
 
     private final MissionService missionService;
 

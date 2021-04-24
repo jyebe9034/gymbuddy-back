@@ -1,6 +1,7 @@
 package com.gymbuddy.backgymbuddy.admin.youtube.controller;
 
 import com.gymbuddy.backgymbuddy.admin.base.BaseController;
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.Youtube;
 import com.gymbuddy.backgymbuddy.admin.youtube.domain.YoutubeDto;
 import com.gymbuddy.backgymbuddy.admin.youtube.service.YoutubeService;
@@ -23,8 +24,8 @@ import static com.gymbuddy.backgymbuddy.admin.base.Constants.YOUTUBE_PREFIX;
 public class YoutubeController extends BaseController {
 
     private String youtubePath = "/resources/images/youtube";
-    private String rootpath = "/home/www" + youtubePath;
-    private File newFile = new File(rootpath);
+    private String rootPath = "/home/www" + youtubePath;
+    private File newFile = DirMake.testdir(rootPath);
 
     private final YoutubeService youtubeService;
 
