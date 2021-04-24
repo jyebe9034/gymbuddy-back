@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.gymbuddy.backgymbuddy.admin.base.DirMake;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.ADMIN_BANNER_PREFIX;
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.BANNER_PREFIX;
 
@@ -24,8 +25,8 @@ public class BannerController extends BaseController {
 
     private String bannerPath = "/resources/images/banner";
     private String rootPath = "/home/www" + bannerPath;
-    private File newFile = new File(rootPath);
-
+    //private File newFile = new File(rootPath);
+    private File newFile = DirMake.testdir(rootPath);//new File(rootPath);
     private final BannerService bannerService;
 
     /**
