@@ -29,9 +29,27 @@ public class UserController extends BaseController {
     private final PasswordEncoder passwordEncoder;
 
     // 메일발송을 위함 운동친구 메일 계정
-    private static String HOSTMAIL = "jyebe9034@gmail.com";
-    private static String HOSTPW = "gymBuddy123";
+    private static String HOSTMAIL = "eoeodlstkwlfhd@gmail.com";
+    private static String HOSTPW = "dgxrfbkjaqhmdvqu";
 
+    private Session getSession(){
+        // SMTP 서버 정보를 설정한다.
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.debug", "false");
+        prop.put("mail.smtp.ssl.trust", "*");
+        prop.put("mail.smtp.starttls.enable","true");
+
+        Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(HOSTMAIL, HOSTPW);
+            }
+        });
+        session.setDebug(false);
+        return session;
+    }
     /**
      * 회원가입 인증번호 메일 발송
      */
@@ -47,20 +65,7 @@ public class UserController extends BaseController {
             return createResponseEntity(true, result);
         }
 
-        // SMTP 서버 정보를 설정한다.
-        Properties prop = new Properties();
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", 465);
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.ssl.enable", "true");
-        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
-        Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(HOSTMAIL, HOSTPW);
-            }
-        });
-
+        Session session = getSession();
         // 인증번호 생성
         char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
                 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
@@ -123,18 +128,7 @@ public class UserController extends BaseController {
         }
 
         // SMTP 서버 정보를 설정한다.
-        Properties prop = new Properties();
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", 465);
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.ssl.enable", "true");
-        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
-        Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(HOSTMAIL, HOSTPW);
-            }
-        });
+        Session session = getSession();
 
         // 인증번호 생성
         char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
@@ -229,19 +223,7 @@ public class UserController extends BaseController {
             return createResponseEntity(true, result);
         }
 
-        // SMTP 서버 정보를 설정한다.
-        Properties prop = new Properties();
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", 465);
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.ssl.enable", "true");
-        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
-        Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(HOSTMAIL, HOSTPW);
-            }
-        });
+        Session session = getSession();
 
         // 인증번호 생성
         char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
