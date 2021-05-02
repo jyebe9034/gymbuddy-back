@@ -86,15 +86,11 @@ public class UserLogicService {
         // 이이디 중복 확인
         Optional<User> byIdentity = userRepository.findByIdentity(user.getIdentity());
         if (byIdentity.isPresent()) {
-            result.put("successYn", "N");
-            result.put("msg", "이미 사용중인 아이디입니다.");
-            return result;
+            throw new DMException("이미 사용중인 아이디입니다.");
         }
         // 이메일 중복 확인
         if (checkDuplicateEmail(user.getEmail())) {
-            result.put("successYn", "N");
-            result.put("msg", "이미 가입된 이메일입니다.");
-            return result;
+            throw new DMException("이미 가입된 이메일입니다.");
         }
 
         User entity = new User();
@@ -148,15 +144,11 @@ public class UserLogicService {
         Map<String, Object> result = new HashMap<>();
         Optional<User> tmpMember = userRepository.findByIdentity(user.getIdentity());
         if (!tmpMember.isPresent()) {
-            result.put("successYn", "N");
-            result.put("msg", "가입되지 않은 이메일입니다.");
-            return result;
+            throw new DMException("가입되지 않은 이메일입니다.");
         }
         User member = tmpMember.get();
         if (!passwordEncoder.matches(user.getPassword(), member.getPassword())) {
-            result.put("successYn", "N");
-            result.put("msg", "잘못된 비밀번호 입니다.");
-            return result;
+            throw new DMException("잘못된 비밀번호 입니다.");
         }
 
         result.put("id", member.getId());
@@ -312,9 +304,7 @@ public class UserLogicService {
                 return result;
             }
         }
-        result.put("successYn", "N");
-        result.put("msg", "비밀번호가 일치하지 않습니다.");
-        return result;
+        throw new DMException("비밀번호가 일치하지 않습니다.");
     }
 
 }
