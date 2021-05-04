@@ -93,7 +93,7 @@ public class UserController extends BaseController {
 
         // 이메일 내용
         String content = "<div style='background-color: #00AD84; border:4px solid #231815; text-align: center;'>" +
-                "<div><img src='/resources/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
+                "<div><img src='test21.gymbuddy.co.kr/resources/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
                 "<div style='font: 700 16pt sans-serif; line-height: 140%;'>" +
                 "안녕하세요, " + user.getName() + " 님!<br>" + "회원님의 인증번호는" + authNum + "입니다.</div>";
 
@@ -158,7 +158,7 @@ public class UserController extends BaseController {
 
         // 이메일 내용
         String content = "<div style='background-color: #00AD84; border:4px solid #231815; text-align: center;'>" +
-                "<div><img src='/resources/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
+                "<div><img src='test21.gymbuddy.co.kr/resources/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
                 "<div style='font: 700 16pt sans-serif; line-height: 140%;'>" +
                 "안녕하세요, " + origin.get().getName() + " 님!<br>" + "회원님의 인증번호는" + authNum + "입니다.</div>";
 
@@ -254,7 +254,7 @@ public class UserController extends BaseController {
 
         // 이메일 내용
         String content = "<div style='background-color: #00AD84; border:4px solid #231815; text-align: center;'>" +
-                "<div><img src='/resources/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
+                "<div><img src='test21.gymbuddy.co.kr/resources/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
                 "<div style='font: 700 16pt sans-serif; line-height: 140%;'>" +
                 "안녕하세요, " + origin.get().getName() + " 님!<br>" + "임시 비밀번호가 발급되었습니다.</div>" +
                 "임시로 발급해드린 비밀번호는 <span style='color: yellow;'>" + authNum + "<span>입니다.<br>" +
