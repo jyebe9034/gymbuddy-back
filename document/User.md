@@ -3,12 +3,9 @@
 ### 회원가입시 아이디 중복체크
 * 기본 정보 및 파라미터 설명
 ```
-HTTP METHOD: POST
-METHOD NAME: chekcDuplicateIdentity
-PATH : /api/userApi/duplicateIdentity
-PARAM : String
-=== PARAM 설명 ===
-identity : 아이디
+HTTP METHOD: GET
+METHOD NAME: checkDuplicateIdentity
+PATH : /api/userApi/duplicateIdentity/{identity}
 ```
 * 결과구조
 ```
