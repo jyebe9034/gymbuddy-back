@@ -72,11 +72,11 @@ public class UserController extends BaseController {
     /**
      * 아이디 중복체크
      */
-    @PostMapping(USER_API + "/duplicateIdentity")
-    public ResponseEntity<Map<String, Object>> chekcDuplicateIdentity(@RequestBody Map<String, Object> param) {
-        log.info("아이디 중복확인: " + param);
+    @GetMapping(USER_API + "/duplicateIdentity/{identity}")
+    public ResponseEntity<Map<String, Object>> checkDuplicateIdentity(@PathVariable("identity") String identity) {
+        log.info("아이디 중복확인: " + identity);
         Map<String, Object> result = new HashMap<>();
-        result.put("result", logicService.findByIdentity(Objects.toString(param.get("identity"))));
+        result.put("result", logicService.findByIdentity(identity));
         return createResponseEntity(true, result);
     }
 
