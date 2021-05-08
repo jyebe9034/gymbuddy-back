@@ -78,6 +78,17 @@ public class UserLogicService {
     }
 
     /**
+     * 아이디 중복확인
+     */
+    public boolean findByIdentity(String identity) {
+        Optional<User> byIdentity = userRepository.findByIdentity(identity);
+        if (byIdentity.isPresent()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 회원가입
      */
     @Transactional

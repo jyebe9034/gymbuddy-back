@@ -55,6 +55,9 @@ public class UserController extends BaseController {
         return session;
     }
 
+    /**
+     * 도메인 명 조회
+     */
     public static String getDomainName(String url) {
         try {
             URI uri = new URI(url);
@@ -64,7 +67,14 @@ public class UserController extends BaseController {
             log.error(e.getMessage());
             return "www.gymbuddy.co.kr";
         }
+    }
 
+    @PostMapping(USER_API + "/duplicateIdentity")
+    public ResponseEntity<Map<String, Object>> chekcDuplicateIdentity(@RequestBody String identity) {
+        log.info("아이디 중복확인: " + identity);
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", logicService.findByIdentity(identity));
+        return createResponseEntity(true, result);
     }
 
     /**
@@ -75,7 +85,6 @@ public class UserController extends BaseController {
         log.info("회원가입 인증번호 발송을 위한 메일번호: {}", user);
         Map<String, Object> result = new HashMap<>();
 
-        // TODO 이미 가입된 이메일인지 확인
         if (logicService.checkDuplicateEmail(user.getEmail())) {
             throw new DMException("이미 가입된 이메일입니다.");
         }
