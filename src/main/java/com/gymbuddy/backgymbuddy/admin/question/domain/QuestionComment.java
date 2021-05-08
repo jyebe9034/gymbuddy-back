@@ -19,6 +19,7 @@ public class QuestionComment extends BaseDomain {
     @Column(nullable = false)
     private String contents;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     private Question question;
