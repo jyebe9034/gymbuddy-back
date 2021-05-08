@@ -1,5 +1,31 @@
 # User API
 
+### 회원가입시 아이디 중복체크
+* 기본 정보 및 파라미터 설명
+```
+HTTP METHOD: POST
+METHOD NAME: chekcDuplicateIdentity
+PATH : /api/userApi/duplicateIdentity
+PARAM : String
+=== PARAM 설명 ===
+identity : 아이디
+```
+* 결과구조
+```
+{
+    result: boolean(true OR false)
+}
+```
+* 결과 예시
+```
+{
+    "result": true
+}
+{
+    "result": false
+}
+```
+
 ### 회원가입시 인증번호 메일 발송
 * 기본 정보 및 파라미터 설명
 ```
