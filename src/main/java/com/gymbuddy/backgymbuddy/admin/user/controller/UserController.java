@@ -69,6 +69,9 @@ public class UserController extends BaseController {
         }
     }
 
+    /**
+     * 아이디 중복체크
+     */
     @PostMapping(USER_API + "/duplicateIdentity")
     public ResponseEntity<Map<String, Object>> chekcDuplicateIdentity(@RequestBody String identity) {
         log.info("아이디 중복확인: " + identity);

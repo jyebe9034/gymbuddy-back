@@ -27,7 +27,6 @@ public class Columns extends BaseDomain {
     @Column(nullable = false)
     private String contents;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "column_writer_id")
     private ColumnWriter columnWriter;

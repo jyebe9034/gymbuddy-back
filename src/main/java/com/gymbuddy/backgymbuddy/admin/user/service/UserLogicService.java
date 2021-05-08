@@ -81,8 +81,8 @@ public class UserLogicService {
      * 아이디 중복확인
      */
     public boolean findByIdentity(String identity) {
-        Optional<User> byIdentity = userRepository.findByIdentity(identity);
-        if (byIdentity.isPresent()) {
+        User user = userRepository.findByIdentity(identity).get();
+        if (user != null) {
             return true;
         }
         return false;

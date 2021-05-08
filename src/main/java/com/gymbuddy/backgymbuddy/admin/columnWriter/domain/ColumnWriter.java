@@ -28,7 +28,6 @@ public class ColumnWriter extends BaseDomain {
     @Column(nullable = false)
     private String contents;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "columnWriter", cascade = CascadeType.ALL)
     private List<Columns> columns = new ArrayList<>();
 }
