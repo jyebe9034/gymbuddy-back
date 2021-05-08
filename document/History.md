@@ -65,6 +65,7 @@ PARAM : List<HistoryDto>
         "contents": "활동기록2"
     },
     {
+        "id" : 3,
         "historyDate": "2021년 02월",
         "contents": "활동기록3"
     }

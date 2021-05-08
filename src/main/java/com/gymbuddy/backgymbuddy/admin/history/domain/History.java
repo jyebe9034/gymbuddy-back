@@ -20,6 +20,6 @@ public class History extends BaseDomain {
     private String historyDate;
 
     @Column(length = 150, nullable = false)
-    private String title;
+    private String contents;
 
 }

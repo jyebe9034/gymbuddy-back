@@ -47,8 +47,8 @@ public class HistoryService {
         } else {
             throw new DMException("날짜를 입력해주세요.");
         }
-        if (dto.getTitle() != null) {
-            history.setTitle(dto.getTitle());
+        if (dto.getContents() != null) {
+            history.setContents(dto.getContents());
         } else {
             throw new DMException("제목을 입력해주세요.");
         }

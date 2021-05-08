@@ -64,32 +64,43 @@ public class GoodsController extends BaseController {
     public ResponseEntity<Map<String, Object>> insertGoods(@ModelAttribute GoodsDto dto) {
         log.info("굿즈 등록: {}", dto);
 
-        try {
-            if (!saveFile.exists()) {
-                try {
-                    saveFile.mkdir();
-                } catch (Exception e) {
-                    log.error(e.getMessage());
+        // 썸네일 이미지
+        if(dto.getThumbnailFile() != null) {
+            String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
+            try {
+                if (!saveFile.exists()) {
+                    try {
+                        saveFile.mkdir();
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
                 }
-            }
-            // 썸네일 이미지
-            if(dto.getThumbnailFile() != null) {
-                String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
                 File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
                 dto.getThumbnailFile().transferTo(thumbnail);
                 dto.setThumbnailImgName(thumbnail.getName());
                 dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
+        }
             // 상세 이미지
-            if(dto.getDetailFile() != null) {
-                String detailName = dto.getThumbnailFile().getOriginalFilename();
+        if(dto.getDetailFile() != null) {
+            String detailName = dto.getThumbnailFile().getOriginalFilename();
+            try {
+                if (!saveFile.exists()) {
+                    try {
+                        saveFile.mkdir();
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
+                }
                 File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
                 dto.getDetailFile().transferTo(detail);
                 dto.setDetailImgName(detail.getName());
                 dto.setDetailImgPath(goodsPath + "/" + detail.getName());
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
-        } catch (Exception e) {
-            log.error(e.getMessage());
         }
 
         Map<String, Object> result = new HashMap<>();

@@ -9,5 +9,5 @@ public class HistoryDto {
 
     private Long id;
     private String historyDate;
-    private String title;
+    private String contents;
 }
