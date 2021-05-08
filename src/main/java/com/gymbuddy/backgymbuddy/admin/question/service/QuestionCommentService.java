@@ -55,9 +55,11 @@ public class QuestionCommentService {
 
     @Transactional
     public Long save(Long id, QuestionCommentDto dto) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        /*Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails userDetails = (UserDetails) principal;
-        String loginId = userDetails.getUsername();
+        String loginId = userDetails.getUsername();*/
+
+        String loginId = "test";
 
         QuestionComment comment = new QuestionComment();
         Optional<Question> findQuestion = questionRepository.findById(id);
