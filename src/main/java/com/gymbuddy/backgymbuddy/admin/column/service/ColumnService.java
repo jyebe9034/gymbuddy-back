@@ -131,6 +131,9 @@ public class ColumnService {
         UserDetails userDetails = (UserDetails) principal;
         String loginId = userDetails.getUsername();
 
+        // 컬럼 작성자 조회
+        ColumnWriter columnWriter = findOneCw(column.getColumnWriterId());
+
         Columns origin = findOne(id);
         if (column.getTitle() != null) {
             origin.setTitle(column.getTitle());
@@ -138,8 +141,7 @@ public class ColumnService {
         if (column.getContents() != null) {
             origin.setContents(column.getContents());
         }
-        if (column.getColumnWriter() != null) {
-            ColumnWriter columnWriter = findOneCw(column.getColumnWriterId());
+        if (columnWriter != null) {
             origin.setColumnWriter(columnWriter);
         }
         if (column.getImgPath() != null) {

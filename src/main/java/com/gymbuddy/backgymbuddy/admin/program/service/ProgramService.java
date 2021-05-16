@@ -321,14 +321,11 @@ public class ProgramService {
         Type listType = new TypeToken<ArrayList<ProgramOptionDto>>(){}.getType();
         ArrayList<ProgramOptionDto> optionList = gson.fromJson(list, listType);
 
-        // 옵션 수정..
-        if (!optionList.isEmpty()) {
-            // 기존 옵션 삭제
-            optionRepository.deleteByProgramId(id);
+        // 기존 옵션 삭제
+        optionRepository.deleteByProgramId(id);
 
-            // 옵션 저장
-            saveOptions(loginId, origin, optionList);
-        }
+        // 옵션 저장
+        saveOptions(loginId, origin, optionList);
     }
 
     /**
