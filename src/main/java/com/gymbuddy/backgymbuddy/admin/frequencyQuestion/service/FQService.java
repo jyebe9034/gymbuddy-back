@@ -24,18 +24,30 @@ public class FQService {
 
     private final FQRepository fqRepository;
 
+    /**
+     * 전체 자주묻는질문 조회
+     */
     public List<FrequencyQuestion> findAll(int page) {
         return fqRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 전체 자주묻는질문 갯수 조회
+     */
     public int selectTotalCount() {
         return fqRepository.findAll().size();
     }
 
+    /**
+     * 카테고리 별 자주묻는질문 조회
+     */
     public List<FrequencyQuestion> findAllByCategoryId() {
         return fqRepository.findAllByCategoryId();
     }
 
+    /**
+     * 자주묻는질문 한개 조회
+     */
     public FrequencyQuestion findOne(Long id) {
         Optional<FrequencyQuestion> byId = fqRepository.findById(id);
         if (!byId.isPresent()) {
@@ -44,6 +56,9 @@ public class FQService {
         return byId.get();
     }
 
+    /**
+     * 자주묻는질문 등록
+     */
     @Transactional
     public Long save(FQDto dto) {
         // 현재 로그인한 아이디 정보 조회
@@ -74,6 +89,9 @@ public class FQService {
         return frequencyQuestion.getId();
     }
 
+    /**
+     * 자주묻는질문 수정
+     */
     @Transactional
     public void update(Long id, FQDto dto) {
         // 현재 로그인한 아이디 정보 조회
@@ -94,6 +112,9 @@ public class FQService {
         fq.setUpdateId(loginId);
     }
 
+    /**
+     * 자주묻는질문 삭제
+     */
     @Transactional
     public void delete(Long id) {
         fqRepository.deleteById(id);

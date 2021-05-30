@@ -25,10 +25,16 @@ public class TermService {
 
     private final TermRepository termRepository;
 
+    /**
+     * 전체 약관 조회
+     */
     public List<Term> findAll() {
         return termRepository.findAll();
     }
 
+    /**
+     * 약관 한개 조회
+     */
     public Term findOne(Long id) {
         Optional<Term> byId = termRepository.findById(id);
         if (!byId.isPresent()) {
@@ -37,6 +43,9 @@ public class TermService {
         return byId.get();
     }
 
+    /**
+     * 제목별 약관 조회
+     */
     public Map<String, Object> findByTitle(String title) {
         Term web = termRepository.findByTitleAndWebMobile(title, WebMobileStatus.WEB);
         Term mobile = termRepository.findByTitleAndWebMobile(title, WebMobileStatus.MOBILE);
@@ -47,14 +56,23 @@ public class TermService {
         return result;
     }
 
+    /**
+     * 개인정보처리방침 조회
+     */
     public List<Term> findPrivatePolicy() {
         return termRepository.findByTitle("개인정보 처리방침");
     }
 
+    /**
+     * 이용약관 조회
+     */
     public List<Term> findTermsOfUse() {
         return termRepository.findByTitle("이용약관");
     }
 
+    /**
+     * 약관 등록
+     */
     @Transactional
     public Long save(TermDto dto) {
         // 현재 로그인한 아이디 정보 조회
@@ -88,6 +106,9 @@ public class TermService {
         return term.getId();
     }
 
+    /**
+     * 약관 수정
+     */
     @Transactional
     public void update(Long id, TermDto dto) {
         // 현재 로그인한 아이디 정보 조회

@@ -22,10 +22,16 @@ public class HistoryService {
 
     private final HistoryRepository historyRepository;
 
+    /**
+     * 전체 히스토리 조회
+     */
     public List<History> findALl() {
         return historyRepository.findAll();
     }
 
+    /**
+     * 히스토리 한개 조회
+     */
     public History findOne(Long id) {
         Optional<History> byId = historyRepository.findById(id);
         if (!byId.isPresent()) {
@@ -34,6 +40,9 @@ public class HistoryService {
         return byId.get();
     }
 
+    /**
+     * 히스토리 등록
+     */
     @Transactional
     public Long save(HistoryDto dto) {
         // 현재 로그인한 아이디 정보 조회
@@ -59,6 +68,9 @@ public class HistoryService {
         return history.getId();
     }
 
+    /**
+     * 히스토리 삭제
+     */
     @Transactional
     public void update(List<HistoryDto> dtoList) {
         historyRepository.deleteAll();

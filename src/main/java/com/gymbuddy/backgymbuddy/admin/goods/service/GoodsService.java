@@ -31,10 +31,16 @@ public class GoodsService {
     private final GoodsRepository goodsRepository;
     private final GoodsOptionRepository optionRepository;
 
+    /**
+     * 전체 굿즈 조회
+     */
     public List<Goods> findAll(int page) {
         return goodsRepository.findAllByMainYnAndCreateDate(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 전체 굿즈 DTO로 조회
+     */
     public Map<String, Object> findAllByDto(int page) {
         List<Goods> goodsList = findAll(page);
         List<GoodsDto> dtoList = new ArrayList<>();
@@ -51,10 +57,16 @@ public class GoodsService {
         return result;
     }
 
+    /**
+     * 전체 굿즈 갯수 조회
+     */
     public int selectTotalCount() {
         return goodsRepository.findAll().size();
     }
 
+    /**
+     * 굿즈 엔티티 -> DTO로 변환
+     */
     private GoodsDto goodsToDto(Goods goods) {
         GoodsDto dto = new GoodsDto();
         if (goods.getId() != null) {
@@ -127,11 +139,17 @@ public class GoodsService {
         return byId.get();
     }
 
+    /**
+     * 굿즈 한개 조회
+     */
     public GoodsDto findOneByDto(Long id) {
         Goods goods = findOne(id);
         return goodsToDto(goods);
     }
 
+    /**
+     * 메인에 노출 될 굿즈 조회
+     */
     public List<GoodsDto> findAllForMain() {
         List<Goods> list = goodsRepository.findAllByMainYn("Y");
         List<GoodsDto> dtoList = new ArrayList<>();
@@ -159,6 +177,9 @@ public class GoodsService {
         return dtoList;
     }
 
+    /**
+     * 굿즈 등록
+     */
     @Transactional
     public Long save(GoodsDto dto) {
         // 현재 로그인한 아이디 정보 조회
@@ -214,6 +235,9 @@ public class GoodsService {
         return goods.getId();
     }
 
+    /**
+     * 굿즈 옵션 등록
+     */
     private void optionSave(String loginId, Goods goods, ArrayList<GoodsOptionDto> optionList) {
         for (GoodsOptionDto optionDto : optionList) {
             GoodsOption option = new GoodsOption();
@@ -237,6 +261,9 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 굿즈 수정
+     */
     @Transactional
     public void update(Long id, GoodsDto dto) {
         // 현재 로그인한 아이디 정보 조회
@@ -283,6 +310,9 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 굿즈 상태 수정
+     */
     @Transactional
     public void updateStatus(Long id, GoodsStatus status) {
         Goods goods = findOne(id);
@@ -291,6 +321,9 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 굿즈 메인 노출여부 수정
+     */
     @Transactional
     public void setMainYn(Long id, String mainYn) {
         Goods goods = findOne(id);
@@ -299,6 +332,9 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 굿즈 삭제
+     */
     @Transactional
     public void delete(Long id) {
         goodsRepository.deleteById(id);

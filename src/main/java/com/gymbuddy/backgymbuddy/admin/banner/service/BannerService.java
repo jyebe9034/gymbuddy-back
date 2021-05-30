@@ -25,10 +25,16 @@ public class BannerService {
 
     private final BannerRepository bannerRepository;
 
+    /**
+     * 전체 배너 조회
+     */
     public List<Banner> findAll() {
         return bannerRepository.findAll();
     }
 
+    /**
+     * 배너 한개 조회
+     */
     public Banner findOne(Long id) {
         Optional<Banner> byId = bannerRepository.findById(id);
         if (!byId.isPresent()) {
@@ -37,6 +43,9 @@ public class BannerService {
         return byId.get();
     }
 
+    /**
+     * 배너 등록
+     */
     @Transactional
     public Long save(BannerDto banner) {
         // 현재 로그인한 아이디 정보 조회
@@ -86,6 +95,9 @@ public class BannerService {
         return entity.getId();
     }
 
+    /**
+     * 배너 수정
+     */
     @Transactional
     public void update(Long id, BannerDto banner) {
         // 현재 로그인한 아이디 정보 조회
@@ -115,6 +127,9 @@ public class BannerService {
         origin.setUpdateId(loginId);
     }
 
+    /**
+     * 배너 삭제
+     */
     @Transactional
     public void delete(Long id) {
         bannerRepository.deleteById(id);

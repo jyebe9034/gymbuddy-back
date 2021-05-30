@@ -26,19 +26,31 @@ public class CWService {
 
     private final CWRepository cwRepository;
 
+    /**
+     * 전체 칼럼작성자 개수 조회
+     */
     public int selectTotalCount() {
         List<ColumnWriter> all = cwRepository.findAll();
         return all.size();
     }
 
-    public List<ColumnWriter> findAll() {
-        return cwRepository.findAll();
-    }
-
+    /**
+     * 전체 칼럼작성자 개수 조회
+     */
     public List<ColumnWriter> findAll(int page) {
         return cwRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 전체 칼럼작성자 조회
+     */
+    public List<ColumnWriter> findAll() {
+        return cwRepository.findAll();
+    }
+
+    /**
+     * 칼럼작성자 한개 조회
+     */
     public ColumnWriter findOne(Long id) {
         Optional<ColumnWriter> byId = cwRepository.findById(id);
         if (!byId.isPresent()) {
@@ -47,6 +59,9 @@ public class CWService {
         return byId.get();
     }
 
+    /**
+     * 칼럼작성자 등록
+     */
     @Transactional
     public Long save(ColumnWriter columnWriter) {
         // 현재 로그인한 아이디 정보 조회
@@ -61,6 +76,9 @@ public class CWService {
         return columnWriter.getId();
     }
 
+    /**
+     * 칼럼작성자 수정
+     */
     @Transactional
     public void update(Long id, ColumnWriter columnWriter) {
         // 현재 로그인한 아이디 정보 조회
@@ -81,6 +99,9 @@ public class CWService {
         origin.setUpdateId(loginId);
     }
 
+    /**
+     * 칼럼작성자 삭제
+     */
     @Transactional
     public void delete(List<Integer> ids) {
         for (int id : ids) {

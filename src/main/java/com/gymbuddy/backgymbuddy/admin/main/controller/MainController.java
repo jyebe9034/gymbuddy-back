@@ -39,7 +39,10 @@ public class MainController extends BaseController {
     private final ColumnService columnService;
     private final ProgramService programService;
     private final GoodsService goodsService;
-    
+
+    /**
+     * 메인에 노출될 전체 정보 조회
+     */
     @GetMapping(MAIN_PREFIX + "/all")
     public ResponseEntity<Map<String, Object>> selectAllMainInfo() {
         List<Banner> bannerList = bannerService.findAll();

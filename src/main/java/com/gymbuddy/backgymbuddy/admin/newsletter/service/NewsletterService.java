@@ -23,14 +23,23 @@ public class NewsletterService {
 
     private final NewsletterRepository newsletterRepository;
 
+    /**
+     * 뉴스레터 구독 이메일 전체 조회
+     */
     public List<Newsletter> findAll(int page) {
         return newsletterRepository.findAll(PageRequest.of(page, 20, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 뉴스레터 구독 이메일 전체 갯수 조회
+     */
     public int selectTotalCount() {
         return newsletterRepository.findAll().size();
     }
 
+    /**
+     * 뉴스레터 구독 이메일 등록
+     */
     @Transactional
     public Long save(NewsletterDto dto) {
         Newsletter newsletter = new Newsletter();
@@ -43,11 +52,17 @@ public class NewsletterService {
         return newsletter.getId();
     }
 
+    /**
+     * 뉴스레터 구독 이메일 삭제
+     */
     @Transactional
     public void delete(Long id) {
         newsletterRepository.deleteById(id);
     }
 
+    /**
+     * 뉴스레터 구독 이메일 등록
+     */
     @Transactional
     public List<Newsletter> search(String start, String end) {
         LocalDate startDate = LocalDate.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd"));

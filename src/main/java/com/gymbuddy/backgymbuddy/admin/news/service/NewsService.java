@@ -27,18 +27,30 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
 
+    /**
+     * 전체 대외뉴스 갯수 조회
+     */
     public int selectTotalCount() {
         return newsRepository.findAll().size();
     }
 
+    /**
+     * 전체 대외뉴스 조회
+     */
     public List<News> findAll(int page) {
         return newsRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 메인에 노출 될 전체 대외뉴스 조회
+     */
     public List<News> findAllForMain() {
         return newsRepository.findAll(PageRequest.of(0, 5, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 대외뉴스 한개 조회
+     */
     public News findOne(Long id) {
         Optional<News> byId = newsRepository.findById(id);
         if (!byId.isPresent()) {
@@ -47,6 +59,9 @@ public class NewsService {
         return byId.get();
     }
 
+    /**
+     * 대외뉴스 등록
+     */
     @Transactional
     public Long save(NewsDto news) {
         // 현재 로그인한 아이디 정보 조회
@@ -78,6 +93,9 @@ public class NewsService {
         return entity.getId();
     }
 
+    /**
+     * 대외뉴스 수정
+     */
     @Transactional
     public void update(Long id, NewsDto news) {
         // 현재 로그인한 아이디 정보 조회
@@ -101,6 +119,9 @@ public class NewsService {
         origin.setUpdateId(loginId);
     }
 
+    /**
+     * 대외뉴스 삭제
+     */
     @Transactional
     public void delete(Long id) {
         newsRepository.deleteById(id);

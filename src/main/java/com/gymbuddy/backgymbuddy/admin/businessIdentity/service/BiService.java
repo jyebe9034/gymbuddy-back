@@ -22,10 +22,16 @@ public class BiService {
 
     private final BiRepository biRepository;
 
+    /**
+     * 전체 BI 조회
+     */
     public List<BusinessIdentity> findAll() {
         return biRepository.findAll();
     }
 
+    /**
+     * BI 한개 조회
+     */
     public BusinessIdentity findOne(Long id) {
         Optional<BusinessIdentity> byId = biRepository.findById(id);
         if (!byId.isPresent()) {
@@ -34,6 +40,9 @@ public class BiService {
         return byId.get();
     }
 
+    /**
+     * BI 등록
+     */
     @Transactional
     public Long save(BiDto dto) {
         // 현재 로그인한 아이디 정보 조회
@@ -62,6 +71,9 @@ public class BiService {
         return bi.getId();
     }
 
+    /**
+     * BI 수정
+     */
     @Transactional
     public void update(Long id, BiDto dto) {
         // 현재 로그인한 아이디 정보 조회

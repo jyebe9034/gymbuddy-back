@@ -28,24 +28,37 @@ public class ColumnService {
     private final ColumnRepository columnRepository;
     private final CWRepository cwRepository;
 
+    /**
+     * 전체 칼럼 갯수 조회
+     */
     public int selectTotalCount() {
         return columnRepository.findAll().size();
     }
 
+    /**
+     * 메인이 노출될 칼럼 9개 조회
+     */
     public List<Columns> findAllForMain() {
         return columnRepository.findAll(PageRequest.of(0, 9, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 전체 칼럼 조회(관리자)
+     */
     public List<Columns> findAll(int page) {
-        List<Columns> list = columnRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
-        return list;
+        return columnRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 전체 칼럼 조회(사용자)
+     */
     public List<Columns> findAllForUser(int page) {
-        List<Columns> list = columnRepository.findAll(PageRequest.of(page, 15, Sort.by("id").descending())).getContent();
-        return list;
+        return columnRepository.findAll(PageRequest.of(page, 15, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 칼럼 한개 조회
+     */
     public Columns findOne(Long id) {
         Optional<Columns> byId = columnRepository.findById(id);
         if (!byId.isPresent()) {
@@ -54,6 +67,9 @@ public class ColumnService {
         return byId.get();
     }
 
+    /**
+     * 칼럼작성자 한개 조회
+     */
     public ColumnWriter findOneCw(Long id) {
         Optional<ColumnWriter> byId = cwRepository.findById(id);
         if (!byId.isPresent()) {
@@ -62,6 +78,9 @@ public class ColumnService {
         return byId.get();
     }
 
+    /**
+     * 칼럼 상세 정보 조회
+     */
     public ColumnsDto findOneDto(Long id) {
         Columns origin = findOne(id);
         ColumnWriter originCw = findOneCw(origin.getColumnWriter().getId());
@@ -83,6 +102,9 @@ public class ColumnService {
         return column;
     }
 
+    /**
+     * 칼럼 등록
+     */
     @Transactional
     public Long save(ColumnsDto columns) {
         // 현재 로그인한 아이디 정보 조회
@@ -124,6 +146,9 @@ public class ColumnService {
         return entity.getId();
     }
 
+    /**
+     * 칼럼 수정
+     */
     @Transactional
     public void update(Long id, ColumnsDto column) {
         // 현재 로그인한 아이디 정보 조회
@@ -153,6 +178,9 @@ public class ColumnService {
         origin.setUpdateId(loginId);
     }
 
+    /**
+     * 칼럼 삭제
+     */
     @Transactional
     public void delete(Long id) {
         columnRepository.deleteById(id);

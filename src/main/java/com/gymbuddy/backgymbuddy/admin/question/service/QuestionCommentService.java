@@ -25,14 +25,23 @@ public class QuestionCommentService {
     private final QuestionCommentRepository questionCommentRepository;
     private final QuestionRepository questionRepository;
 
+    /**
+     * 전체 1:1 문의 댓글 조회
+     */
     public List<QuestionComment> findAll(Long id) {
         return questionCommentRepository.findAll();
     }
 
+    /**
+     * 1:1 문의 번호로 문의 댓글 조회
+     */
     public List<QuestionComment> findAllByQuestionId(Long id) {
         return questionCommentRepository.findByQuestionId(id);
     }
 
+    /**
+     * 1:1 문의 댓글 한개 조회
+     */
     public QuestionComment findOne(Long id) {
         Optional<QuestionComment> byId = questionCommentRepository.findById(id);
         if (!byId.isPresent()) {
@@ -41,18 +50,9 @@ public class QuestionCommentService {
         return byId.get();
     }
 
-    private QuestionCommentDto commentToDto(QuestionComment comment) {
-        QuestionCommentDto dto = new QuestionCommentDto();
-
-        if (comment.getId() != null) {
-            dto.setId(comment.getId());
-        }
-        if (comment.getContents() != null) {
-            dto.setContents(dto.getContents());
-        }
-        return dto;
-    }
-
+    /**
+     * 1:1 문의 댓글 등록
+     */
     @Transactional
     public Long save(Long id, QuestionCommentDto dto) {
         /*Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -77,6 +77,9 @@ public class QuestionCommentService {
         return comment.getId();
     }
 
+    /**
+     * 1:1 문의 댓글 수정(관리자)
+     */
     @Transactional
     public void update(Long id, QuestionCommentDto dto) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -92,6 +95,9 @@ public class QuestionCommentService {
         comment.setUpdateId(loginId);
     }
 
+    /**
+     * 1:1 문의 댓글 삭제(관리자)
+     */
     @Transactional
     public void delete(Long id) {
         questionCommentRepository.deleteById(id);

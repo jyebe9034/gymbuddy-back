@@ -32,10 +32,16 @@ public class ProgramService {
     private final ProgramRepository programRepository;
     private final ProgramOptionRepository optionRepository;
 
+    /**
+     * 전체 프로그램 갯수 조회
+     */
     public int selectTotalCount() {
         return programRepository.findAll().size();
     }
 
+    /**
+     * 메인에 노출 될 전체 프로그램 조회
+     */
     public List<ProgramDto> findAllForMain() {
         List<Program> list = programRepository.findAllByMainYn("Y");
         List<ProgramDto> dtoList = new ArrayList<>();
@@ -67,10 +73,16 @@ public class ProgramService {
         return dtoList;
     }
 
+    /**
+     * 전체 프로그램 조회
+     */
     public List<Program> findAll(int page) {
         return programRepository.findAllByMainYnAndCreateDate(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 전체 프로그램 및 프로그램 갯수 조회
+     */
     public Map<String, Object> findAllDto(int page) {
         List<Program> list = findAll(page);
         List<ProgramDto> dtoList = new ArrayList<>();
@@ -87,6 +99,9 @@ public class ProgramService {
         return result;
     }
 
+    /**
+     * 프로그램 한개 조회
+     */
     public Program findOne(Long id) {
         Optional<Program> byId = programRepository.findById(id);
         if (!byId.isPresent()) {
@@ -99,11 +114,17 @@ public class ProgramService {
         return program;
     }
 
+    /**
+     * 프로그램 DTO 한개 조회
+     */
     public ProgramDto findOneDto(Long id) {
         Program one = findOne(id);
         return entityToDto(one);
     }
 
+    /**
+     * 프로그램 엔티티 -> DTO로 변환
+     */
     private ProgramDto entityToDto(Program one) {
         ProgramDto dto = new ProgramDto();
         if (one.getId() != null) {
@@ -168,14 +189,9 @@ public class ProgramService {
         return dto;
     }
 
-    public ProgramOption findOneOption(Long id) {
-        Optional<ProgramOption> byId = optionRepository.findById(id);
-        if (!byId.isPresent()) {
-            throw new DMException("존재하지 않는 프로그램 옵션입니다.");
-        }
-        return byId.get();
-    }
-
+    /**
+     * 프로그램 등록
+     */
     @Transactional
     public Long save(ProgramDto program) {
         // 현재 로그인한 아이디 정보 조회
@@ -253,6 +269,9 @@ public class ProgramService {
         return entity.getId();
     }
 
+    /**
+     * 프로그램 상태 수정
+     */
     @Transactional
     public void updateStatus(Long id, ProgramStatus status) {
         Program program = findOne(id);
@@ -261,6 +280,9 @@ public class ProgramService {
         }
     }
 
+    /**
+     * 프로그램 메인 노출여부 수정
+     */
     @Transactional
     public void setMainYn(Long id, String mainYn) {
         Program program = findOne(id);
@@ -269,6 +291,9 @@ public class ProgramService {
         }
     }
 
+    /**
+     * 프로그램 수정
+     */
     @Transactional
     public void update(Long id, ProgramDto program) {
         // 현재 로그인한 아이디 정보 조회
@@ -301,16 +326,16 @@ public class ProgramService {
         if (program.getStatus() != null) {
             origin.setStatus(program.getStatus());
         }
-        if (origin.getThumbnailImgPath() != null) {
+        if (program.getThumbnailImgPath() != null) {
             origin.setThumbnailImgPath(program.getThumbnailImgPath());
         }
-        if (origin.getThumbnailImgName() != null) {
+        if (program.getThumbnailImgName() != null) {
             origin.setThumbnailImgName(program.getThumbnailImgName());
         }
-        if (origin.getDetailImgPath() != null) {
+        if (program.getDetailImgPath() != null) {
             origin.setDetailImgPath(program.getDetailImgPath());
         }
-        if (origin.getDetailImgName() != null) {
+        if (program.getDetailImgName() != null) {
             origin.setDetailImgName(program.getDetailImgName());
         }
         origin.setUpdateId(loginId);
@@ -329,7 +354,7 @@ public class ProgramService {
     }
 
     /**
-     * 옵션 저장
+     * 옵션 등록
      * @param loginId 로그인된 아이디
      * @param origin 프로그램 정보
      * @param optionList 새로운 옵션 목록
@@ -357,10 +382,13 @@ public class ProgramService {
         }
     }
 
+    /**
+     * 프로그램 삭제
+     */
     @Transactional
     public void delete(long id) {
         programRepository.deleteById(id);
-        // 옵션 목록 삭제..
+        // 옵션 목록 삭제
         optionRepository.deleteByProgramId(id);
     }
 }

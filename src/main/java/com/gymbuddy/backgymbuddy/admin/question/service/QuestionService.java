@@ -29,6 +29,9 @@ public class QuestionService {
     private final QuestionCommentRepository qcRepository;
     private final QuestionCommentService questionCommentService;
 
+    /**
+     * 전체 1:1 문의글 조회(관리자)
+     */
     public Map<String, Object> findAll(int page) {
         List<Question> questionList = questionRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
         List<QuestionDto> dtoList = new ArrayList<>();
@@ -45,6 +48,9 @@ public class QuestionService {
         return result;
     }
 
+    /**
+     * 문의글 카테고리 조회
+     */
     public List<QuestionEnum> categoryList() {
         List<QuestionEnum> categoryList = new ArrayList<>();
         categoryList.add(QuestionEnum.PY);
@@ -57,6 +63,9 @@ public class QuestionService {
         return categoryList;
     }
 
+    /**
+     * 1:1 문의 한개 조회
+     */
     public Question findOne(Long id) {
         Optional<Question> byId = questionRepository.findById(id);
         if (!byId.isPresent()) {
@@ -67,11 +76,17 @@ public class QuestionService {
         return byId.get();
     }
 
+    /**
+     * 1:1 문의 한개 DTO로 조회
+     */
     public QuestionDto findOneByDto(Long id) {
         Question question = findOne(id);
         return questionToDto(question);
     }
 
+    /**
+     * 문의글 엔티티 -> DTO로 변환
+     */
     private QuestionDto questionToDto(Question question) {
         QuestionDto dto = new QuestionDto();
         if (question.getId() != null) {
@@ -133,6 +148,9 @@ public class QuestionService {
         return dto;
     }
 
+    /**
+     * 전체 문의글 갯수 조회
+     */
     public int selectTotalCount() {
         return questionRepository.findAll().size();
     }
@@ -160,6 +178,9 @@ public class QuestionService {
         return result;
     }
 
+    /**
+     * 1:1 문의 등록
+     */
     @Transactional
     public Long save(QuestionDto dto) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -207,6 +228,9 @@ public class QuestionService {
         return question.getId();
     }
 
+    /**
+     * 1:1 문의 수정
+     */
     @Transactional
     public void update(Long id, QuestionDto dto) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -244,11 +268,17 @@ public class QuestionService {
         question.setUpdateId(loginId);
     }
 
+    /**
+     * 1:1 문의 삭제
+     */
     @Transactional
     public void delete(Long id) {
         questionRepository.deleteById(id);
     }
 
+    /**
+     * 문의글 검색(관리자)
+     */
     @Transactional
     public List<QuestionDto> search(QuestionEnum categoryId, String keyword, String type, int page) {
         List<Question> result = new ArrayList<>();

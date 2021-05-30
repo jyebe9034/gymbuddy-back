@@ -26,18 +26,30 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
 
+    /**
+     * 전체 공지사항 갯수 조회
+     */
     public int selectTotalCount() {
         return noticeRepository.findAll().size();
     }
 
+    /**
+     * 전체 공지사항 조회(관리자)
+     */
     public List<Notice> findAll(int page) {
         return noticeRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 메인에 노출 될 전체 공지사항 조회
+     */
     public List<Notice> findAllForMain() {
         return noticeRepository.findAll(PageRequest.of(0, 5, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 공지사항 한개 조회
+     */
     public Notice findOne(Long id) {
         Optional<Notice> byId = noticeRepository.findById(id);
         if (!byId.isPresent()) {
@@ -46,6 +58,9 @@ public class NoticeService {
         return byId.get();
     }
 
+    /**
+     * 공지사항 등록
+     */
     @Transactional
     public Long save(NoticeDto notice) {
         // 현재 로그인한 아이디 정보 조회
@@ -77,6 +92,9 @@ public class NoticeService {
         return entity.getId();
     }
 
+    /**
+     * 공지사항 수정
+     */
     @Transactional
     public void update(Long id, NoticeDto notice) {
         // 현재 로그인한 아이디 정보 조회
@@ -100,6 +118,9 @@ public class NoticeService {
         origin.setUpdateId(loginId);
     }
 
+    /**
+     * 공지사항 삭제
+     */
     @Transactional
     public void delete(Long id) {
         noticeRepository.deleteById(id);

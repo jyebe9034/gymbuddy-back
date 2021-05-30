@@ -49,8 +49,6 @@ public class ColumnController extends BaseController {
 
     /**
      * 전체 컬럼 조회 (사용자 화면 목록, 15개씩)
-     * @param page
-     * @return
      */
     @GetMapping(COLUMN_PREFIX + "/allForUser/{page}")
     public ResponseEntity<List<Columns>> selectColumnListForUser(@PathVariable("page") int page) {

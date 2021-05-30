@@ -32,10 +32,16 @@ public class MissionService {
     private final HistoryRepository historyRepository;
     private final BiRepository biRepository;
 
+    /**
+     * 전체 미션 조회
+     */
     public List<Mission> findAll() {
         return missionRepository.findAll();
     }
 
+    /**
+     * 미션 한개 조회
+     */
     public Mission findOne(Long id) {
         Optional<Mission> byId = missionRepository.findById(id);
         if (!byId.isPresent()) {
@@ -44,6 +50,9 @@ public class MissionService {
         return byId.get();
     }
 
+    /**
+     * 히스토리, BI, 미션을 맵으로 조회
+     */
     public Map<String, Object> findAllByMap() {
         List<History> histories = historyRepository.findAll(PageRequest.of(0, 10, Sort.by("id").descending())).getContent();
         List<BusinessIdentity> biList = biRepository.findAll();
@@ -56,6 +65,9 @@ public class MissionService {
         return result;
     }
 
+    /**
+     * 미션 등록
+     */
     @Transactional
     public Long save(MissionDto dto) {
         // 현재 로그인한 아이디 정보 조회
@@ -94,6 +106,9 @@ public class MissionService {
         return mission.getId();
     }
 
+    /**
+     * 미션 수정
+     */
     @Transactional
     public void update(Long id, MissionDto dto) {
         // 현재 로그인한 아이디 정보 조회
@@ -126,6 +141,9 @@ public class MissionService {
         mission.setUpdateId(loginId);
     }
 
+    /**
+     * 미션 삭제
+     */
     @Transactional
     public void delete(Long id) {
         missionRepository.deleteById(id);

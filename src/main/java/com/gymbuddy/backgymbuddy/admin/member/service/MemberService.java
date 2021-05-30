@@ -22,10 +22,16 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    /**
+     * 전체 멤버이미지 조회
+     */
     public List<Member> findAll() {
         return memberRepository.findAll();
     }
 
+    /**
+     * 멤버이미지 한개 조회
+     */
     public Member findOne(Long id) {
         Optional<Member> byId = memberRepository.findById(id);
         if (!byId.isPresent()) {
@@ -34,6 +40,9 @@ public class MemberService {
         return byId.get();
     }
 
+    /**
+     * 멤버이미지 등록
+     */
     @Transactional
     public Long save(MemberDto dto) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -61,6 +70,9 @@ public class MemberService {
         return member.getId();
     }
 
+    /**
+     * 멤버이미지 수정
+     */
     @Transactional
     public void update(Long id, MemberDto dto) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -24,22 +24,37 @@ public class YoutubeService {
 
     private final YoutubeRepository youtubeRepository;
 
+    /**
+     * 전체 유튜브 갯수 조회
+     */
     public int selectTotalCount() {
         return youtubeRepository.findAll().size();
     }
 
+    /**
+     * 메인에 노출 될 유튜브 조회
+     */
     public List<Youtube> findAllForMain() {
         return youtubeRepository.findAll(PageRequest.of(0, 9, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 전체 유튜브 조회 (관리자 화면 목록, 10개씩)
+     */
     public List<Youtube> findAll(int page) {
         return youtubeRepository.findAll(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 전체 유튜브 조회 (사용자 화면 목록, 15개씩)
+     */
     public List<Youtube> findAllForUser(int page) {
         return youtubeRepository.findAll(PageRequest.of(page, 15, Sort.by("id").descending())).getContent();
     }
 
+    /**
+     * 유튜브 한개 조회
+     */
     public Youtube findOne(Long id) {
         Optional<Youtube> byId = youtubeRepository.findById(id);
         if (!byId.isPresent()) {
@@ -48,6 +63,9 @@ public class YoutubeService {
         return byId.get();
     }
 
+    /**
+     * 유튜브 등록
+     */
     @Transactional
     public Long save(YoutubeDto youtube) {
         // 현재 로그인한 아이디 정보 조회
@@ -93,6 +111,9 @@ public class YoutubeService {
         return entity.getId();
     }
 
+    /**
+     * 유튜브 수정
+     */
     @Transactional
     public void update(Long id, YoutubeDto youtube) {
         // 현재 로그인한 아이디 정보 조회
@@ -122,6 +143,9 @@ public class YoutubeService {
         origin.setUpdateId(loginId);
     }
 
+    /**
+     * 유튜브 삭제
+     */
     @Transactional
     public void delete(Long id) {
         youtubeRepository.deleteById(id);

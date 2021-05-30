@@ -46,7 +46,6 @@ public class ProgramController extends BaseController {
 
     /**
      * 전체 프로그램 갯수 조회
-     * @return
      */
     @GetMapping(PROGRAM_PREFIX + "/totalCount")
     public ResponseEntity<Map<String, Object>> selectProgramTotalCount() {

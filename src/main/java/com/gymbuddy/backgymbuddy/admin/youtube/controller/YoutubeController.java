@@ -97,7 +97,7 @@ public class YoutubeController extends BaseController {
     }
 
     /**
-     * 업로드 날짜, 제목, 내용, 링크, 이미지 수정
+     * 유튜브 수정
      */
     @PutMapping(ADMIN_YOUTUBE_PREFIX + "/update/{id}")
     public ResponseEntity<Map<String, Object>> updateYoutube(@PathVariable("id") Long id, @ModelAttribute YoutubeDto youtube) {
