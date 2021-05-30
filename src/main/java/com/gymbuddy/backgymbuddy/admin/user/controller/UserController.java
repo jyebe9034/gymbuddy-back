@@ -36,6 +36,9 @@ public class UserController extends BaseController {
     private static String HOSTMAIL = "undongchingu@gmail.com";
     private static String HOSTPW = "gymbuddy1234";
 
+    /**
+     * 세선 가져오기
+     */
     private Session getSession(){
         // SMTP 서버 정보를 설정한다.
         Properties prop = new Properties();
