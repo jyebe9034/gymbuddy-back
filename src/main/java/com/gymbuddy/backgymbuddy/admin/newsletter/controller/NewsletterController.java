@@ -66,7 +66,9 @@ public class NewsletterController extends BaseController {
         return createResponseEntity(true, result);
     }
 
-    제
+    /**
+     * 뉴스레터 구독 이메일 검색
+     */
     @GetMapping(NEWSLETTER_PREFIX + "/search/{start}/{end}")
     public ResponseEntity<List<Newsletter>> searchCreateDate(
             @PathVariable("start") String start,@PathVariable("end") String end) {
