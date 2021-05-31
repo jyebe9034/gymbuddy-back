@@ -55,8 +55,6 @@ public class QuestionCommentService {
      */
     @Transactional
     public Long save(Long id, QuestionCommentDto dto) {
-        String loginId = "test";
-
         QuestionComment comment = new QuestionComment();
         Optional<Question> findQuestion = questionRepository.findById(id);
         if (findQuestion.get() != null) {
@@ -67,8 +65,8 @@ public class QuestionCommentService {
                 throw new DMException("내용을 입력해주세요.");
             }
         }
-        comment.setCreateId(loginId);
-        comment.setUpdateId(loginId);
+        comment.setCreateId(dto.getCreateId());
+        comment.setUpdateId(dto.getCreateId());
         questionCommentRepository.save(comment);
         return comment.getId();
     }
@@ -78,17 +76,13 @@ public class QuestionCommentService {
      */
     @Transactional
     public void update(Long id, QuestionCommentDto dto) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = (UserDetails) principal;
-        String loginId = userDetails.getUsername();
-
         QuestionComment comment = findOne(id);
         if (!comment.getContents().equals(dto.getContents())) {
             comment.setContents(dto.getContents());
         } else {
             throw new DMException("내용을 입력해주세요.");
         }
-        comment.setUpdateId(loginId);
+        comment.setUpdateId(dto.getCreateId());
     }
 
     /**
