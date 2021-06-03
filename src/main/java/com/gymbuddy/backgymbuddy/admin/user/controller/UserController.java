@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static com.gymbuddy.backgymbuddy.admin.base.Constants.*;
 
@@ -313,6 +314,43 @@ public class UserController extends BaseController {
     @PostMapping(USER_API + "/join")
     public ResponseEntity<Map<String, Object>> join(@RequestBody UserDto user) {
         log.info("회원가입: {}", user);
+
+        // 아이디 유효성 검사
+        String idPattern = "^[a-zA-Z0-9]{4,16}$";
+        boolean isIdentityOk = Pattern.matches(idPattern, user.getIdentity());
+        if (!isIdentityOk) {
+            throw new DMException("아이디 형식이 잘못되었습니다.");
+        }
+
+        // 비밀번호 유효성 검사
+//        String pwPattern = "^[a-z0-9!~@#$%^&*()?+=/]{4,20}$";
+//        boolean isPwOk = Pattern.matches(pwPattern, user.getPassword());
+//        if (!isPwOk) {
+//            throw new DMException("비밀번호 형식이 잘못되었습니다.");
+//        }
+
+        // 이메일 유효성 검사
+        String emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+//        String emailPattern2 = "^(([^<>()[\\]\\\\.,;:\\s@\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        boolean isEmailOk = Pattern.matches(emailPattern, user.getEmail());
+        if (!isEmailOk) {
+            throw new DMException("이메일 형식이 잘못되었습니다.");
+        }
+
+        // 이름 유효성 검사
+        String namePattern = "^[가-힣]{2,8}$";
+        boolean isNameOk = Pattern.matches(namePattern, user.getName());
+        if (!isNameOk) {
+            throw new DMException("이름의 형식이 잘못되었습니다.");
+        }
+
+        // 전화번호 유효성 검사
+        String phonePattern = "^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$";
+        boolean isPhoneOk = Pattern.matches(phonePattern, user.getPhone());
+        if (!isPhoneOk) {
+            throw new DMException("전화번호의 형식이 잘못되었습니다.");
+        }
+
         return createResponseEntity(true, logicService.join(user));
     }
 
@@ -322,6 +360,14 @@ public class UserController extends BaseController {
     @PostMapping(USER_API + "/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserDto user) {
         log.info("회원 로그인: {}", user.getIdentity());
+
+        // 아이디 유효성 검사
+        String idPattern = "^[a-zA-Z0-9]{4,16}$";
+        boolean isIdentityOk = Pattern.matches(idPattern, user.getIdentity());
+        if (!isIdentityOk) {
+            throw new DMException("아이디 형식이 잘못되었습니다.");
+        }
+
         return createResponseEntity(true, logicService.login(user));
     }
 

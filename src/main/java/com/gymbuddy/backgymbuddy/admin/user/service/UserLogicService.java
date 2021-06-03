@@ -155,11 +155,12 @@ public class UserLogicService {
         Map<String, Object> result = new HashMap<>();
         Optional<User> tmpMember = userRepository.findByIdentity(user.getIdentity());
         if (!tmpMember.isPresent()) {
-            throw new DMException("가입되지 않은 이메일입니다.");
+            throw new DMException("아이디나 비밀번호가 잘못되었습니다.");
         }
         User member = tmpMember.get();
-        if (!passwordEncoder.matches(user.getPassword(), member.getPassword())) {
-            throw new DMException("잘못된 비밀번호 입니다.");
+        String encodePw= passwordEncoder.encode(user.getPassword());
+        if (!passwordEncoder.matches(encodePw, member.getPassword())) {
+            throw new DMException("아이디나 비밀번호가 잘못되었습니다.");
         }
 
         result.put("id", member.getId());
@@ -252,14 +253,14 @@ public class UserLogicService {
     @Transactional
     public void update(Long id, UserDto user) {
         User origin = findOne(id);
-        if (origin.getName() != null) {
+        if (user.getName() != null) {
             origin.setName(user.getName());
         }
         if (user.getPassword() != null) {
             String newPw = passwordEncoder.encode(user.getPassword());
             origin.setPassword(newPw);
         }
-        if (origin.getPhone() != null) {
+        if (user.getPhone() != null) {
             origin.setPhone(user.getPhone());
         }
         if (user.getStreet1() != null && user.getStreet2() != null && user.getZipcode() != null) {
@@ -268,7 +269,7 @@ public class UserLogicService {
                 origin.setAddress(address);
             }
         }
-        if (origin.getAgreeYn() != null) {
+        if (user.getAgreeYn() != null) {
             origin.setAgreeYn(user.getAgreeYn());
         }
     }
