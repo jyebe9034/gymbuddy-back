@@ -158,8 +158,7 @@ public class UserLogicService {
             throw new DMException("아이디나 비밀번호가 잘못되었습니다.");
         }
         User member = tmpMember.get();
-        String encodePw= passwordEncoder.encode(user.getPassword());
-        if (!passwordEncoder.matches(encodePw, member.getPassword())) {
+        if (!passwordEncoder.matches(user.getPassword(), member.getPassword())) {
             throw new DMException("아이디나 비밀번호가 잘못되었습니다.");
         }
 
