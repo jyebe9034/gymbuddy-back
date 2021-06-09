@@ -131,7 +131,6 @@ public class UserController extends BaseController {
             logicService.saveAuthNum(user.getEmail(), authNum);
             Auth oneAuth = logicService.findOneAuthByEmail(user.getEmail());
 
-            result.put("authNum", authNum);
             result.put("authId", oneAuth.getId());
             result.put("successYn", "Y");
             return createResponseEntity(true, result);
@@ -198,7 +197,6 @@ public class UserController extends BaseController {
             // 인증 id 조회
             Auth oneAuth = logicService.findOneAuthByEmail(user.getEmail());
 
-            result.put("authNum", authNum);
             result.put("authId", oneAuth.getId());
             result.put("successYn", "Y");
             return createResponseEntity(true, result);
@@ -273,7 +271,7 @@ public class UserController extends BaseController {
                 "<div><img src='test21.gymbuddy.co.kr/resources/img/logo.png' alt='운동친구 로고' style='margin:60px 0 50px 0;' width='140px'></div>" +
                 "<div style='font: 700 16pt sans-serif; line-height: 140%;'>" +
                 "안녕하세요, " + origin.get().getName() + " 님!<br>" + "임시 비밀번호가 발급되었습니다.</div>" +
-                "임시로 발급해드린 비밀번호는 <span style='color: yellow;'>" + authNum + "<span>입니다.<br>" +
+                "임시로 발급해드린 비밀번호는 " + authNum + "입니다.<br>" +
                 "로그인 후 마이페이지에서 비밀번호를 변경해주세요." +
                 "<a href='" + getDomainName(request.getRequestURL().toString()) + "/join/login'>"+
                 "<div style='text-decoration:none; width: 300px; padding:10px 0; background-color: white; border: 4px solid #231815; margin:50px auto 60px; font: 700 10pt sans-serif; color: #231815;'>인증하기</div></a></div>";
@@ -295,7 +293,6 @@ public class UserController extends BaseController {
 
             // 사용자의 비밀번호 변경
             logicService.updatePassword(origin.get(), authNum);
-            result.put("onetimePw", authNum);
             result.put("successYn", "Y");
             return createResponseEntity(true, result);
         } catch (AddressException e) {
@@ -323,11 +320,11 @@ public class UserController extends BaseController {
         }
 
         // 비밀번호 유효성 검사
-//        String pwPattern = "^[a-z0-9!~@#$%^&*()?+=/]{4,20}$";
-//        boolean isPwOk = Pattern.matches(pwPattern, user.getPassword());
-//        if (!isPwOk) {
-//            throw new DMException("비밀번호 형식이 잘못되었습니다.");
-//        }
+        String pwPattern = "^[a-z0-9!~@#$%^&*()?+=/]{4,20}$";
+        boolean isPwOk = Pattern.matches(pwPattern, user.getPassword());
+        if (!isPwOk) {
+            throw new DMException("비밀번호 형식이 잘못되었습니다.");
+        }
 
         // 이메일 유효성 검사
         String emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";

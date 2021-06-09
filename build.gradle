@@ -12,7 +12,7 @@ plugins {
 // }
 
 group = 'com.gymbuddy'
-version = '0.0.35'
+version = '0.0.36'
 sourceCompatibility = '1.8'
 
 configurations {
