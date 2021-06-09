@@ -54,7 +54,8 @@ public class MissionService {
      * 히스토리, BI, 미션을 맵으로 조회
      */
     public Map<String, Object> findAllByMap() {
-        List<History> histories = historyRepository.findAll(PageRequest.of(0, 10, Sort.by("id").descending())).getContent();
+        List<History> histories = historyRepository
+                .findAll(PageRequest.of(0, 10, Sort.by("id").ascending())).getContent();
         List<BusinessIdentity> biList = biRepository.findAll();
         List<Mission> mission = findAll();
 
