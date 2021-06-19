@@ -79,7 +79,7 @@ public class NewsletterService {
     }
 
     /**
-     * 뉴스레터 구독 이메일 등록
+     * 뉴스레터 구독 이메일 검색
      */
     @Transactional
     public List<Newsletter> search(String start, String end) {
