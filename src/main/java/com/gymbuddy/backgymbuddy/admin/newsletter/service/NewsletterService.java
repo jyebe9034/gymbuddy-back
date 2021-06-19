@@ -4,6 +4,7 @@ import com.gymbuddy.backgymbuddy.admin.exception.DMException;
 import com.gymbuddy.backgymbuddy.admin.newsletter.domain.Newsletter;
 import com.gymbuddy.backgymbuddy.admin.newsletter.domain.NewsletterDto;
 import com.gymbuddy.backgymbuddy.admin.newsletter.repository.NewsletterRepository;
+import com.gymbuddy.backgymbuddy.admin.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -44,12 +46,28 @@ public class NewsletterService {
     public Long save(NewsletterDto dto) {
         Newsletter newsletter = new Newsletter();
         if (dto.getEmail() != null) {
-            newsletter.setEmail(dto.getEmail());
+            // 이메일 중복 확인
+            if (checkDuplicateEmail(dto.getEmail()) == true) {
+                throw new DMException("이미 가입된 이메일입니다.");
+            } else {
+                newsletter.setEmail(dto.getEmail());
+            }
         }  else {
             throw new DMException("이메일을 입력해주세요.");
         }
         newsletterRepository.save(newsletter);
         return newsletter.getId();
+    }
+
+    /**
+     * 뉴스레터 구독 이메일 중복 체크
+     */
+    public boolean checkDuplicateEmail(String email) {
+        Optional<Newsletter> check = newsletterRepository.findByEmail(email);
+        if (check.isPresent()) {
+            return true;
+        }
+        return false;
     }
 
     /**

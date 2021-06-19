@@ -40,9 +40,10 @@ dependencies {
     implementation 'org.springframework.session:spring-session-core'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
-    compileOnly 'org.projectlombok:lombok'
+    providedCompile group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    //compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
+    //annotationProcessor 'org.projectlombok:lombok'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface FQRepository extends JpaRepository<FrequencyQuestion, Long> {
 
-    @Query("select f from FrequencyQuestion f order by f.categoryId")
+    @Query("select f from FrequencyQuestion f order by f.categoryId, f.createDate desc")
     List<FrequencyQuestion> findAllByCategoryId();
 }

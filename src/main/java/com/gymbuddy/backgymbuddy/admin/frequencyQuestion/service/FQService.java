@@ -39,7 +39,8 @@ public class FQService {
     }
 
     /**
-     * 카테고리 별 자주묻는질문 조회
+     * 카테고리별 자주묻는질문 조회
+     * 카테고리, 등록순 desc
      */
     public List<FrequencyQuestion> findAllByCategoryId() {
         return fqRepository.findAllByCategoryId();

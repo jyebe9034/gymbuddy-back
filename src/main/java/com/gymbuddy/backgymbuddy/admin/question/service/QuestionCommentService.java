@@ -25,23 +25,14 @@ public class QuestionCommentService {
     private final QuestionCommentRepository questionCommentRepository;
     private final QuestionRepository questionRepository;
 
-    /**
-     * 전체 1:1 문의 댓글 조회
-     */
     public List<QuestionComment> findAll(Long id) {
         return questionCommentRepository.findAll();
     }
 
-    /**
-     * 1:1 문의 번호로 문의 댓글 조회
-     */
     public List<QuestionComment> findAllByQuestionId(Long id) {
         return questionCommentRepository.findByQuestionId(id);
     }
 
-    /**
-     * 1:1 문의 댓글 한개 조회
-     */
     public QuestionComment findOne(Long id) {
         Optional<QuestionComment> byId = questionCommentRepository.findById(id);
         if (!byId.isPresent()) {
@@ -50,44 +41,63 @@ public class QuestionCommentService {
         return byId.get();
     }
 
-    /**
-     * 1:1 문의 댓글 등록
-     */
+    private QuestionCommentDto commentToDto(QuestionComment comment) {
+        QuestionCommentDto dto = new QuestionCommentDto();
+
+        if (comment.getId() != null) {
+            dto.setId(comment.getId());
+        }
+        if (comment.getContents() != null) {
+            dto.setContents(dto.getContents());
+        }
+        if (comment.getCreateId() != null) {
+            dto.setCreateId(dto.getCreateId());
+        }
+        if (comment.getCreateDate() != null) {
+            dto.setCreateDate(dto.getCreateDate());
+        }
+        return dto;
+    }
+
     @Transactional
     public Long save(Long id, QuestionCommentDto dto) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
         QuestionComment comment = new QuestionComment();
         Optional<Question> findQuestion = questionRepository.findById(id);
         if (findQuestion.get() != null) {
             comment.setQuestion(findQuestion.get());
+
             if (dto.getContents() != null) {
                 comment.setContents(dto.getContents());
             } else {
                 throw new DMException("내용을 입력해주세요.");
             }
         }
-        comment.setCreateId(dto.getCreateId());
-        comment.setUpdateId(dto.getCreateId());
+        comment.setCreateId(loginId);
+        comment.setUpdateId(loginId);
+
         questionCommentRepository.save(comment);
         return comment.getId();
     }
 
-    /**
-     * 1:1 문의 댓글 수정(관리자)
-     */
     @Transactional
     public void update(Long id, QuestionCommentDto dto) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        String loginId = userDetails.getUsername();
+
         QuestionComment comment = findOne(id);
         if (!comment.getContents().equals(dto.getContents())) {
             comment.setContents(dto.getContents());
         } else {
             throw new DMException("내용을 입력해주세요.");
         }
-        comment.setUpdateId(dto.getCreateId());
+        comment.setUpdateId(loginId);
     }
 
-    /**
-     * 1:1 문의 댓글 삭제(관리자)
-     */
     @Transactional
     public void delete(Long id) {
         questionCommentRepository.deleteById(id);

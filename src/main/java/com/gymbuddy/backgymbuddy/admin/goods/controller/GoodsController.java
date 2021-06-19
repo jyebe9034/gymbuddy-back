@@ -120,40 +120,44 @@ public class GoodsController extends BaseController {
 
         // 썸네일 이미지 수정
         if (dto.getThumbnailFile() != null) {
-            try {
-                String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
-                File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
-                dto.getThumbnailFile().transferTo(thumbnail);
-                dto.setThumbnailImgName(thumbnail.getName());
-                dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
+            String thumbnailName = dto.getThumbnailFile().getOriginalFilename();
+            if(!goods.getThumbnailImgName().equals(thumbnailName)) {
+                try {
+                    File thumbnail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + thumbnailName);
+                    dto.getThumbnailFile().transferTo(thumbnail);
+                    dto.setThumbnailImgName(thumbnail.getName());
+                    dto.setThumbnailImgPath(goodsPath + "/" + thumbnail.getName());
 
-                if (goods.getThumbnailImgPath() != null) {
-                    File originThumbnail = new File(goods.getThumbnailImgPath());
-                    if (originThumbnail.exists()) {
-                        originThumbnail.delete();
+                    if (goods.getThumbnailImgPath() != null) {
+                        File originThumbnail = new File(goods.getThumbnailImgPath());
+                        if (originThumbnail.exists()) {
+                            originThumbnail.delete();
+                        }
                     }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
         // 상세 이미지 수정
         if (dto.getDetailFile() != null) {
-            try {
-                String detailName = dto.getThumbnailFile().getOriginalFilename();
-                File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
-                dto.getDetailFile().transferTo(detail);
-                dto.setDetailImgName(detail.getName());
-                dto.setDetailImgPath(goodsPath + "/" + detail.getName());
+            String detailName = dto.getThumbnailFile().getOriginalFilename();
+            if(!goods.getDetailImgName().equals(detailName)) {
+                try {
+                    File detail = new File(saveFile + "/" + System.currentTimeMillis() + "_" + detailName);
+                    dto.getDetailFile().transferTo(detail);
+                    dto.setDetailImgName(detail.getName());
+                    dto.setDetailImgPath(goodsPath + "/" + detail.getName());
 
-                if (goods.getThumbnailImgPath() != null) {
-                    File originDetail = new File(goods.getDetailImgPath());
-                    if (originDetail.exists()) {
-                        originDetail.delete();
+                    if (goods.getThumbnailImgPath() != null) {
+                        File originDetail = new File(goods.getDetailImgPath());
+                        if (originDetail.exists()) {
+                            originDetail.delete();
+                        }
                     }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage());
             }
         }
 

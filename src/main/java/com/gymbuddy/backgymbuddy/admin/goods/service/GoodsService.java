@@ -35,7 +35,8 @@ public class GoodsService {
      * 전체 굿즈 조회
      */
     public List<Goods> findAll(int page) {
-        return goodsRepository.findAllByMainYnAndCreateDate(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
+        return goodsRepository
+                .findAllByMainYnAndCreateDate(PageRequest.of(page, 10, Sort.by("id").descending())).getContent();
     }
 
     /**

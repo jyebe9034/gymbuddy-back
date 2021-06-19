@@ -15,8 +15,4 @@ public class QuestionCommentDto {
     private String createId;
     @Column(nullable = true)
     private LocalDateTime createDate;
-    @Column(nullable = true)
-    private String updateId;
-    @Column(nullable = true)
-    private LocalDateTime updateDate;
 }
