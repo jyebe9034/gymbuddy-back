@@ -1,4 +1,5 @@
 # back-gymbuddy
+유튜버 운동친구 웹사이트의 백단 구현
 
 ### API 사용법
 * [메인](https://github.com/Hyenasystem/back-gymbuddy/blob/develop/document/Main.md)
